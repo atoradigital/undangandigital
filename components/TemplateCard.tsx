@@ -68,7 +68,7 @@ export default function TemplateCard({
             onClick={onPreview}
             className="flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-[#C9A961]/40 text-[#5C4A37] rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase"
           >
-            <Eye size={16} />
+            <Eye className="h-[18px] w-[18px] shrink-0 text-[#5C4A37]" strokeWidth={1.5} />
             Lihat Demo
           </button>
           <a
@@ -77,7 +77,7 @@ export default function TemplateCard({
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 px-6 py-3 bg-[#3A3429] text-[#F9F7F2] rounded-full font-light text-sm tracking-wider hover:bg-[#5C4A37] transition-all uppercase"
           >
-            <MessageCircle size={16} />
+            <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#F9F7F2] opacity-90" strokeWidth={1.5} />
             Pesan Sekarang
           </a>
         </div>

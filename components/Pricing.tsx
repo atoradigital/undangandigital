@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check, MessageCircle } from "lucide-react";
+import { waAskPackage, waCustomPackage } from "@/data/contact";
 
 const plans = [
   {
@@ -57,8 +58,6 @@ const plans = [
 ];
 
 export default function Pricing() {
-  const whatsappLink = "https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20paket%20";
-
   return (
     <section id="harga" className="py-32 px-6 lg:px-12 bg-[#F9F7F2]">
       <div className="container mx-auto">
@@ -128,7 +127,7 @@ export default function Pricing() {
               </ul>
 
               <a
-                href={`${whatsappLink}${encodeURIComponent(plan.name)}`}
+                href={waAskPackage(plan.name)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-full font-light text-sm tracking-wider transition-all uppercase ${
@@ -137,7 +136,14 @@ export default function Pricing() {
                     : "bg-transparent border border-[#C9A961]/40 text-[#5C4A37] hover:bg-[#C9A961]/10"
                 }`}
               >
-                <MessageCircle size={16} />
+                <MessageCircle
+                  className={`h-[18px] w-[18px] shrink-0 ${
+                    plan.popular
+                      ? "text-[#F9F7F2] opacity-90"
+                      : "text-[#5C4A37]"
+                  }`}
+                  strokeWidth={1.5}
+                />
                 Pesan Paket {plan.name}
               </a>
             </motion.div>
@@ -155,7 +161,7 @@ export default function Pricing() {
             Butuh paket khusus atau ada pertanyaan?
           </p>
           <a
-            href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20paket%20khusus"
+            href={waCustomPackage()}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-10 py-4 bg-transparent border border-[#C9A961]/40 text-[#5C4A37] rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase"

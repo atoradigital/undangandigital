@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { waOrderDigital } from "@/data/contact";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const whatsappLink = "https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20memesan%20undangan%20digital";
+  const whatsappLink = waOrderDigital();
 
   return (
     <header 
@@ -62,7 +63,7 @@ export default function Header() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-[#3A3429] px-6 py-2.5 border border-[#C9A961]/30 rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase"
             >
-              <MessageCircle size={16} />
+              <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#5C4A37]" strokeWidth={1.5} />
               Pesan Sekarang
             </a>
           </div>
@@ -109,7 +110,7 @@ export default function Header() {
                 className="flex items-center justify-center gap-2 text-[#3A3429] px-6 py-3 border border-[#C9A961]/30 rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase mt-4"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <MessageCircle size={16} />
+                <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#5C4A37]" strokeWidth={1.5} />
                 Pesan Sekarang
               </a>
             </div>

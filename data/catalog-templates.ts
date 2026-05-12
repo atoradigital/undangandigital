@@ -1,3 +1,5 @@
+import { waOrderWithTemplate, waSeeMoreTemplates } from "./contact";
+
 export type TemplatePreviewMode = "image" | "iframe";
 
 export type CatalogTemplate = {
@@ -12,12 +14,8 @@ export type CatalogTemplate = {
   iframeSrc?: string;
 };
 
-const WA_BASE =
-  "https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20memesan%20template%20";
-
-/** CTA “Lihat semua template” — pesan umum ke WhatsApp */
-export const WHATSAPP_SEE_ALL_TEMPLATES =
-  "https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20melihat%20katalog%20template%20lainnya";
+/** CTA “Lihat semua template” */
+export const WHATSAPP_SEE_ALL_TEMPLATES = waSeeMoreTemplates();
 
 /** Placeholder long-screenshot asset — replace per template when assets exist */
 const PLACEHOLDER_LONG = "/templates/template-undangan-1.png";
@@ -63,5 +61,5 @@ export const CATALOG_TEMPLATES: CatalogTemplate[] = [
 ];
 
 export function getTemplateOrderHref(template: CatalogTemplate): string {
-  return `${WA_BASE}${encodeURIComponent(template.name)}`;
+  return waOrderWithTemplate(template.name);
 }

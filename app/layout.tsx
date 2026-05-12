@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
+import { ATORA } from "@/data/contact";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-serif",
@@ -15,8 +16,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Atora - Undangan Digital Premium",
-  description: "Buat undangan digital yang elegan dan modern untuk acara spesial Anda",
+  title: `${ATORA.brand} — Undangan Digital Premium`,
+  description: `${ATORA.brand}: undangan digital elegan dan modern untuk pernikahan serta acara spesial. WhatsApp ${ATORA.phoneDisplay} · ${ATORA.email}`,
 };
 
 export default function RootLayout({
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="id">
       <body
         className={`${playfairDisplay.variable} ${montserrat.variable} font-sans antialiased`}
       >

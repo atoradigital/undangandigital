@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { waOrderDigital } from "@/data/contact";
 
 export default function Hero() {
+  const whatsappHref = waOrderDigital();
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 lg:px-12 pt-32 pb-20 overflow-hidden bg-[#F9F7F2]">
       {/* Organic Shapes Background */}
@@ -27,7 +29,7 @@ export default function Hero() {
           >
             <div className="mb-8">
               <p className="text-[#C9A961] text-sm font-light tracking-[0.2em] uppercase mb-6">
-                Undangan Digital Premium
+                Atora — Undangan Digital Premium
               </p>
               <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-[#3A3429] leading-[1.1] mb-8">
                 Rayakan Momen{" "}
@@ -36,14 +38,14 @@ export default function Hero() {
                 dalam Hidup Anda
               </h1>
               <p className="text-[#5C4A37] text-lg sm:text-xl font-light leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Setiap detail dirancang dengan cermat untuk menciptakan pengalaman yang tak terlupakan. 
-                Undangan digital yang elegan, modern, dan penuh makna.
+                Setiap detail dirancang dengan cermat untuk menciptakan pengalaman yang tak terlupakan.
+                Undangan digital Atora yang elegan, modern, dan penuh makna.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a
-                href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20memesan%20undangan%20digital"
+                href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-10 py-4 bg-[#3A3429] text-[#F9F7F2] rounded-full font-light text-sm tracking-wider hover:bg-[#5C4A37] transition-all uppercase"
