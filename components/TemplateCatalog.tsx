@@ -1,37 +1,36 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import TemplateCard from "./TemplateCard";
-
-const templates = [
-  {
-    name: "Elegant Rose",
-    image: "/templates/elegant-rose.jpg",
-  },
-  {
-    name: "Classic Gold",
-    image: "/templates/classic-gold.jpg",
-  },
-  {
-    name: "Modern Minimalist",
-    image: "/templates/modern-minimalist.jpg",
-  },
-  {
-    name: "Romantic Blush",
-    image: "/templates/romantic-blush.jpg",
-  },
-  {
-    name: "Luxury Marble",
-    image: "/templates/luxury-marble.jpg",
-  },
-  {
-    name: "Garden Party",
-    image: "/templates/garden-party.jpg",
-  },
-];
+import TemplatePreviewModal from "./TemplatePreviewModal";
+import {
+  CATALOG_TEMPLATES,
+  getTemplateOrderHref,
+  WHATSAPP_SEE_ALL_TEMPLATES,
+} from "@/data/catalog-templates";
+import type { CatalogTemplate } from "@/data/catalog-templates";
 
 export default function TemplateCatalog() {
-  const whatsappLink = "https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20memesan%20template%20";
+  const [previewTemplate, setPreviewTemplate] = useState<CatalogTemplate | null>(
+    null
+  );
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewOpenRef = useRef(previewOpen);
+  previewOpenRef.current = previewOpen;
+
+  const openPreview = (t: CatalogTemplate) => {
+    setPreviewTemplate(t);
+    setPreviewOpen(true);
+  };
+
+  const closePreview = () => setPreviewOpen(false);
+
+  const handlePreviewExitComplete = () => {
+    if (!previewOpenRef.current) {
+      setPreviewTemplate(null);
+    }
+  };
 
   return (
     <section id="katalog" className="py-32 px-6 lg:px-12 bg-white">
@@ -51,21 +50,21 @@ export default function TemplateCatalog() {
             <span className="block italic text-[#C9A961]">Terbaik</span>
           </h2>
           <p className="text-[#5C4A37] font-light text-lg max-w-2xl mx-auto leading-relaxed">
-            Setiap template dirancang dengan cermat untuk menciptakan pengalaman yang tak terlupakan. 
+            Setiap template dirancang dengan cermat untuk menciptakan pengalaman yang tak terlupakan.
             Dapat dikustomisasi sesuai kebutuhan Anda.
           </p>
           <div className="w-24 h-px bg-[#C9A961]/40 mx-auto mt-8"></div>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {templates.map((template, index) => (
+          {CATALOG_TEMPLATES.map((template, index) => (
             <TemplateCard
-              key={index}
+              key={template.id}
               name={template.name}
-              image={template.image}
-              demoUrl="/v/demo?to=Tamu+Undangan"
-              whatsappLink={`${whatsappLink}${encodeURIComponent(template.name)}`}
+              cardImage={template.cardImage}
+              whatsappLink={getTemplateOrderHref(template)}
               index={index}
+              onPreview={() => openPreview(template)}
             />
           ))}
         </div>
@@ -81,7 +80,7 @@ export default function TemplateCatalog() {
             Ingin melihat lebih banyak template?
           </p>
           <a
-            href={whatsappLink}
+            href={WHATSAPP_SEE_ALL_TEMPLATES}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-10 py-4 bg-transparent border border-[#C9A961]/40 text-[#5C4A37] rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase"
@@ -90,6 +89,13 @@ export default function TemplateCatalog() {
           </a>
         </motion.div>
       </div>
+
+      <TemplatePreviewModal
+        isOpen={previewOpen}
+        template={previewTemplate}
+        onClose={closePreview}
+        onExitComplete={handlePreviewExitComplete}
+      />
     </section>
   );
 }

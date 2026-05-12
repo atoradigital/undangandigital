@@ -57,7 +57,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 mt-0.5 text-[#C9A961] flex-shrink-0" />
-                <a href="mailto:info@undangankita.com" className="text-[#E8D5A3]/70 hover:text-[#C9A961] transition-colors font-light text-sm">
+                <a href="mailto:info@atora.id" className="text-[#E8D5A3]/70 hover:text-[#C9A961] transition-colors font-light text-sm">
                   info@undangankita.com
                 </a>
               </li>
@@ -117,7 +117,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="border-t border-[#5C4A37]/50 pt-8 text-center">
           <p className="text-[#E8D5A3]/50 font-light text-xs">
-            © {currentYear} UndanganKita. All rights reserved.
+            © {currentYear} Atora. All rights reserved.
           </p>
         </div>
       </div>
