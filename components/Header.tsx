@@ -20,39 +20,43 @@ export default function Header() {
   const whatsappLink = waOrderDigital();
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-[#F9F7F2]/80 backdrop-blur-md border-b border-[#E8D5A3]/20" 
-          : "bg-transparent"
+        scrolled || mobileMenuOpen
+          ? "border-b border-[#E8D5A3]/25 bg-[#F9F7F2]/75 backdrop-blur-lg backdrop-saturate-150"
+          : "border-b border-transparent bg-transparent"
       }`}
     >
       <nav className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-24">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-serif italic text-[#3A3429] tracking-wide">
-              Atora
+          <Link
+            href="/"
+            aria-label="ATORA — beranda"
+            className="flex min-w-0 shrink-0 items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9A961]/60"
+          >
+            <span className="font-serif text-xl font-bold uppercase tracking-[0.2em] text-[#3A3429] sm:text-2xl sm:tracking-[0.22em]">
+              ATORA
             </span>
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-12">
-            <Link 
-              href="#fitur" 
-              className="text-[#5C4A37] hover:text-[#C9A961] transition-colors font-light text-sm tracking-wider uppercase"
+            <Link
+              href="#fitur"
+              className="font-sans text-xs text-[#5C4A37] transition-colors hover:text-[#C9A961] sm:text-[0.8125rem] font-light tracking-wider uppercase"
             >
               Fitur
             </Link>
-            <Link 
-              href="#katalog" 
-              className="text-[#5C4A37] hover:text-[#C9A961] transition-colors font-light text-sm tracking-wider uppercase"
+            <Link
+              href="#katalog"
+              className="font-sans text-xs text-[#5C4A37] transition-colors hover:text-[#C9A961] sm:text-[0.8125rem] font-light tracking-wider uppercase"
             >
               Katalog
             </Link>
-            <Link 
-              href="#harga" 
-              className="text-[#5C4A37] hover:text-[#C9A961] transition-colors font-light text-sm tracking-wider uppercase"
+            <Link
+              href="#harga"
+              className="font-sans text-xs text-[#5C4A37] transition-colors hover:text-[#C9A961] sm:text-[0.8125rem] font-light tracking-wider uppercase"
             >
               Harga
             </Link>
@@ -61,7 +65,7 @@ export default function Header() {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[#3A3429] px-6 py-2.5 border border-[#C9A961]/30 rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase"
+              className="font-sans flex items-center gap-2 rounded-full border border-[#C9A961]/30 px-5 py-2.5 text-xs font-light tracking-wider text-[#3A3429] transition-all hover:bg-[#C9A961]/10 sm:px-6 sm:text-sm uppercase"
             >
               <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#5C4A37]" strokeWidth={1.5} />
               Pesan Sekarang
@@ -80,25 +84,25 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-6 border-t border-[#E8D5A3]/20">
-            <div className="flex flex-col space-y-4">
+          <div className="md:hidden border-t border-[#E8D5A3]/20 bg-[#F9F7F2]/90 py-6 backdrop-blur-md">
+            <div className="flex flex-col space-y-1">
               <Link
                 href="#fitur"
-                className="text-[#5C4A37] hover:text-[#C9A961] transition-colors font-light text-sm tracking-wider uppercase py-2"
+                className="font-sans rounded-lg px-2 py-2.5 text-xs font-light tracking-wider text-[#5C4A37] uppercase transition-colors hover:bg-[#C9A961]/10 hover:text-[#C9A961] sm:text-[0.8125rem]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Fitur
               </Link>
               <Link
                 href="#katalog"
-                className="text-[#5C4A37] hover:text-[#C9A961] transition-colors font-light text-sm tracking-wider uppercase py-2"
+                className="font-sans rounded-lg px-2 py-2.5 text-xs font-light tracking-wider text-[#5C4A37] uppercase transition-colors hover:bg-[#C9A961]/10 hover:text-[#C9A961] sm:text-[0.8125rem]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Katalog
               </Link>
               <Link
                 href="#harga"
-                className="text-[#5C4A37] hover:text-[#C9A961] transition-colors font-light text-sm tracking-wider uppercase py-2"
+                className="font-sans rounded-lg px-2 py-2.5 text-xs font-light tracking-wider text-[#5C4A37] uppercase transition-colors hover:bg-[#C9A961]/10 hover:text-[#C9A961] sm:text-[0.8125rem]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Harga
@@ -107,7 +111,7 @@ export default function Header() {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-[#3A3429] px-6 py-3 border border-[#C9A961]/30 rounded-full font-light text-sm tracking-wider hover:bg-[#C9A961]/10 transition-all uppercase mt-4"
+                className="font-sans mt-3 flex items-center justify-center gap-2 rounded-full border border-[#C9A961]/30 px-6 py-3 text-xs font-light tracking-wider text-[#3A3429] uppercase transition-all hover:bg-[#C9A961]/10 sm:text-sm"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <MessageCircle className="h-[18px] w-[18px] shrink-0 text-[#5C4A37]" strokeWidth={1.5} />

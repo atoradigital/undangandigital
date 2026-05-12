@@ -13,8 +13,8 @@ export default function Footer() {
       <div className="container mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>
-            <h3 className="font-serif text-2xl italic text-[#C9A961] mb-6 tracking-wide">
-              Atora
+            <h3 className="mb-6 font-serif text-2xl font-bold uppercase tracking-[0.2em] text-[#C9A961] sm:text-[1.65rem] sm:tracking-[0.22em]">
+              ATORA
             </h3>
             <p className="text-[#E8D5A3]/70 font-light text-sm leading-relaxed">
               Membuat momen spesial Anda lebih berkesan dengan undangan digital yang elegan dan modern.
@@ -130,7 +130,7 @@ export default function Footer() {
 
         <div className="border-t border-[#5C4A37]/50 pt-8 text-center">
           <p className="text-[#E8D5A3]/50 font-light text-xs">
-            © {currentYear} Atora. All rights reserved.
+            © {currentYear} ATORA. All rights reserved.
           </p>
         </div>
       </div>
