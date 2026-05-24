@@ -1,5 +1,9 @@
 "use client";
 
+// Paksa halaman menjadi dynamic — tidak di-prerender saat build
+// karena Supabase membutuhkan env vars yang hanya ada di runtime
+export const dynamic = "force-dynamic";
+
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

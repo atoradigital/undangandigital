@@ -1,5 +1,8 @@
 "use client";
 
+// Paksa halaman menjadi dynamic — tidak di-prerender saat build
+export const dynamic = "force-dynamic";
+
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
