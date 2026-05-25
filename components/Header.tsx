@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { waOrderDigital } from "@/data/contact";
 
 export default function Header() {
@@ -35,9 +36,14 @@ export default function Header() {
             aria-label="ATORA — beranda"
             className="flex min-w-0 shrink-0 items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C9A961]/60"
           >
-            <span className="font-serif text-xl font-bold uppercase tracking-[0.2em] text-[#3A3429] sm:text-2xl sm:tracking-[0.22em]">
-              ATORA
-            </span>
+            <Image
+              src="/logo/logo-atora-lanscape.png"
+              alt="Atora Logo"
+              height={64}
+              width={213}
+              className="h-16 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop Menu */}

@@ -18,6 +18,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: `${ATORA.brand} — Undangan Digital Premium`,
   description: `${ATORA.brand}: undangan digital elegan dan modern untuk pernikahan serta acara spesial. WhatsApp ${ATORA.phoneDisplay} · ${ATORA.email}`,
+  icons: {
+    icon: "/logo/logo-atora-square.png",
+    apple: "/logo/logo-atora-square.png",
+  },
 };
 
 export default function RootLayout({

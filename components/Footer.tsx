@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ATORA, waOrderDigital } from "@/data/contact";
 
 const contactIcon = "h-5 w-5 shrink-0 text-[#C9A961] mt-0.5";
@@ -13,9 +14,15 @@ export default function Footer() {
       <div className="container mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>
-            <h3 className="mb-6 font-serif text-2xl font-bold uppercase tracking-[0.2em] text-[#C9A961] sm:text-[1.65rem] sm:tracking-[0.22em]">
-              ATORA
-            </h3>
+            <div className="mb-6">
+              <Image
+                src="/logo/logo-atora-lanscape.png"
+                alt="Atora Logo"
+                height={64}
+                width={213}
+                className="h-16 w-auto object-contain brightness-0 invert opacity-90"
+              />
+            </div>
             <p className="text-[#E8D5A3]/70 font-light text-sm leading-relaxed">
               Membuat momen spesial Anda lebih berkesan dengan undangan digital yang elegan dan modern.
             </p>

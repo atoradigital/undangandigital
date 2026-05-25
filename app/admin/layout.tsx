@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -122,11 +123,18 @@ export default function AdminLayout({
             <div>
               <Link
                 href="/admin/dashboard"
-                className="font-serif text-xl font-bold uppercase tracking-[0.3em] text-[#F9F7F2] hover:text-[#C9A961] transition-colors"
+                className="inline-block focus-visible:outline-none"
               >
-                ATORA
+                <Image
+                  src="/logo/logo-atora-lanscape.png"
+                  alt="Atora Logo"
+                  height={64}
+                  width={213}
+                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
+                  priority
+                />
               </Link>
-              <p className="font-sans text-[9px] text-[#C9A961]/60 tracking-[0.3em] uppercase mt-1 font-light">
+              <p className="font-sans text-[9px] text-[#C9A961]/60 tracking-[0.3em] uppercase mt-2 font-light">
                 Admin Panel
               </p>
             </div>
@@ -223,9 +231,13 @@ export default function AdminLayout({
           >
             <Menu size={20} />
           </button>
-          <span className="font-serif text-base font-bold uppercase tracking-[0.3em] text-[#3A3429]">
-            ATORA
-          </span>
+          <Image
+              src="/logo/logo-atora-lanscape.png"
+              alt="Atora Logo"
+              height={64}
+              width={213}
+              className="h-16 w-auto object-contain"
+            />
           <Sparkles size={16} className="text-[#C9A961]/50" />
         </header>
 

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, AlertCircle, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -55,7 +56,7 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-[440px] relative z-10">
-        {/* Editorial Logo Header */}
+        {/* Logo Header */}
         <div className="text-center mb-8">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -64,12 +65,19 @@ export default function LoginPage() {
           >
             <Link
               href="/"
-              className="inline-block font-serif text-3xl font-bold uppercase tracking-[0.25em] text-[#3A3429] hover:text-[#C9A961] transition-colors"
+              className="inline-block mx-auto mb-3 focus-visible:outline-none"
             >
-              ATORA
+              <Image
+                src="/logo/logo-atora-square.png"
+                alt="Atora Logo"
+                width={72}
+                height={72}
+                className="w-[72px] h-[72px] mx-auto object-contain"
+                priority
+              />
             </Link>
             <p className="font-sans text-[10px] text-[#5C4A37] tracking-[0.3em] uppercase mt-2 font-light">
-              Portal Administrasi
+              Admin Panel
             </p>
             <div className="w-12 h-px bg-[#C9A961]/40 mx-auto mt-4"></div>
           </motion.div>
