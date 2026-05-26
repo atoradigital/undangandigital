@@ -38,7 +38,7 @@ export default function InvitationForm({ initialData, onSuccess, onCancel }: Pro
   const [form, setForm] = useState<FormState>({
     title:    initialData?.title    ?? "",
     slug:     initialData?.slug     ?? "",
-    template: initialData?.template ?? "modern",
+    template: (initialData?.template as Template) ?? "modern",
   });
 
   const [templateOpen, setTemplateOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function InvitationForm({ initialData, onSuccess, onCancel }: Pro
     setForm({
       title:    initialData?.title    ?? "",
       slug:     initialData?.slug     ?? "",
-      template: initialData?.template ?? "modern",
+      template: (initialData?.template as Template) ?? "modern",
     });
     setSlugError("");
     setGlobalError("");

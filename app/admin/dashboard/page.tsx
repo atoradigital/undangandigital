@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Plus,
   Users,
@@ -15,7 +15,6 @@ import {
   Trash2,
   ChevronRight,
   CalendarDays,
-  X,
   LayoutGrid,
   Loader2,
   Search,
@@ -25,12 +24,8 @@ import {
 } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import { TEMPLATE_OPTIONS, type Invitation } from "@/types/admin";
-import InvitationForm from "@/components/admin/InvitationForm";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
-/* ────────────────────────────────────────────────── */
-
-type ModalMode = "create" | "edit" | null;
 
 const TEMPLATE_ICON: Record<string, React.ElementType> = {
   modern: Sparkles,
@@ -102,10 +97,6 @@ export default function DashboardPage() {
   const [loading,     setLoading]       = useState(true);
   const [search,      setSearch]        = useState("");
 
-  /* Modal */
-  const [modalMode,   setModalMode]     = useState<ModalMode>(null);
-  const [editTarget,  setEditTarget]    = useState<Invitation | null>(null);
-
   /* Delete */
   const [deleteTarget, setDeleteTarget] = useState<Invitation | null>(null);
   const [deleting,     setDeleting]     = useState(false);
@@ -137,20 +128,6 @@ export default function DashboardPage() {
       i.slug.toLowerCase().includes(search.toLowerCase())
   );
 
-  /* ── Modal helpers ── */
-  const openCreate = () => { setEditTarget(null); setModalMode("create"); };
-  const openEdit   = (inv: Invitation) => { setEditTarget(inv); setModalMode("edit"); };
-  const closeModal = () => { setModalMode(null); setEditTarget(null); };
-
-  const handleFormSuccess = (saved: Invitation) => {
-    closeModal();
-    if (modalMode === "create") {
-      setInvitations((prev) => [saved, ...prev]);
-    } else {
-      setInvitations((prev) => prev.map((i) => (i.id === saved.id ? saved : i)));
-    }
-  };
-
   /* ── Delete ── */
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -166,13 +143,6 @@ export default function DashboardPage() {
     setDeleting(false);
     setDeleteTarget(null);
   };
-
-  /* ── Modal Close on Escape ── */
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
-    document.addEventListener("keydown", h);
-    return () => document.removeEventListener("keydown", h);
-  }, []);
 
   return (
     <>
@@ -190,7 +160,7 @@ export default function DashboardPage() {
           </div>
           <button
             id="add-client-btn"
-            onClick={openCreate}
+            onClick={() => router.push("/admin/dashboard/new")}
             className="flex items-center gap-2 px-5 py-2.5 bg-[#3A3429] hover:bg-[#5C4A37] text-[#F9F7F2] rounded-xl font-sans text-sm font-light tracking-wider transition-all duration-200 shadow-md shrink-0"
           >
             <Plus size={15} strokeWidth={2} />
@@ -288,7 +258,7 @@ export default function DashboardPage() {
                 ) : filtered.length === 0 && !search ? (
                   <tr>
                     <td colSpan={6}>
-                      <EmptyState onAdd={openCreate} />
+                      <EmptyState onAdd={() => router.push("/admin/dashboard/new")} />
                     </td>
                   </tr>
                 ) : filtered.length === 0 ? (
@@ -363,7 +333,7 @@ export default function DashboardPage() {
                             {/* Edit */}
                             <button
                               id={`edit-inv-${inv.id}`}
-                              onClick={() => openEdit(inv)}
+                              onClick={() => router.push(`/admin/dashboard/${inv.id}/edit`)}
                               className="p-1.5 rounded-lg hover:bg-[#C9A961]/10 text-[#5C4A37]/40 hover:text-[#C9A961] transition-colors"
                               title="Edit data klien"
                             >
@@ -402,70 +372,6 @@ export default function DashboardPage() {
         </motion.div>
       </div>
 
-      {/* ══════════════════════════════
-          MODAL — Create / Edit
-      ══════════════════════════════ */}
-      <AnimatePresence>
-        {modalMode && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              key="modal-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={closeModal}
-              className="fixed inset-0 z-50 bg-[#2C2416]/50 backdrop-blur-sm"
-            />
-
-            {/* Modal panel */}
-            <motion.div
-              key="modal-panel"
-              initial={{ opacity: 0, scale: 0.96, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 16 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              className="fixed inset-0 z-[55] flex items-center justify-center px-4 pointer-events-none"
-            >
-              <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#E8D5A3]/30 pointer-events-auto overflow-hidden">
-                {/* Gold accent line */}
-                <div className="h-[3px] bg-gradient-to-r from-transparent via-[#C9A961] to-transparent" />
-
-                {/* Modal header */}
-                <div className="flex items-center justify-between px-7 pt-6 pb-5 border-b border-[#F5F1E8]">
-                  <div>
-                    <h2 className="font-serif text-lg font-semibold text-[#3A3429]">
-                      {modalMode === "create" ? "Buat Klien Baru" : "Edit Data Klien"}
-                    </h2>
-                    <p className="font-sans text-xs text-[#5C4A37]/50 font-light mt-0.5">
-                      {modalMode === "create"
-                        ? "Isi detail acara untuk halaman undangan digital"
-                        : `Mengedit: ${editTarget?.title}`}
-                    </p>
-                  </div>
-                  <button
-                    onClick={closeModal}
-                    className="text-[#5C4A37]/30 hover:text-[#5C4A37] transition-colors"
-                    aria-label="Tutup modal"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-
-                {/* Form */}
-                <div className="px-7 py-6">
-                  <InvitationForm
-                    initialData={editTarget ?? undefined}
-                    onSuccess={handleFormSuccess}
-                    onCancel={closeModal}
-                  />
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* ══════════════════════════════
           DIALOG — Konfirmasi Hapus
@@ -481,3 +387,4 @@ export default function DashboardPage() {
     </>
   );
 }
+

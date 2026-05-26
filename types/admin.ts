@@ -15,11 +15,51 @@ export const TEMPLATE_OPTIONS: {
   { value: "floral",  label: "Floral",  desc: "Romantis & natural",      color: "#C9A961" },
 ];
 
+/* ── Paket Basic — 5 template choices ── */
+export const BASIC_TEMPLATES = [
+  { value: "elegant-rose",       label: "Elegant Rose",       desc: "Floral & romantis" },
+  { value: "classic-gold",       label: "Classic Gold",       desc: "Elegan & timeless" },
+  { value: "modern-minimalist",  label: "Modern Minimalist",  desc: "Bersih & kontemporer" },
+  { value: "romantic-blush",     label: "Romantic Blush",     desc: "Lembut & intim" },
+  { value: "luxury-marble",      label: "Luxury Marble",      desc: "Mewah & premium" },
+] as const;
+
+export type BasicTemplateValue = (typeof BASIC_TEMPLATES)[number]["value"];
+
+/* ── EventData JSONB structure ── */
+export interface EventData {
+  mempelai_pria: {
+    nama: string;
+    foto_url: string;
+  };
+  mempelai_wanita: {
+    nama: string;
+    foto_url: string;
+  };
+  foto_cover: string;
+  jadwal_akad: {
+    tanggal: string;
+    jam_mulai: string;
+    jam_selesai: string;
+  };
+  jadwal_resepsi: {
+    tanggal: string;
+    jam_mulai: string;
+    jam_selesai: string;
+  };
+  lokasi: {
+    alamat: string;
+    maps_url: string;
+  };
+  galeri: string[];
+}
+
 export interface Invitation {
   id: string;
   title: string;
   slug: string;
-  template: Template;
+  template: string;
+  event_data?: EventData | null;
   created_at: string;
 }
 
