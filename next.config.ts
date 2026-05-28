@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        // Link tamu: /r/[slug]?to=... → diarahkan ke template /v/[slug]
+        source:      '/r/:clientSlug',
+        destination: '/v/:clientSlug',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

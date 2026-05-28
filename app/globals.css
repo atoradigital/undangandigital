@@ -37,3 +37,43 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* ── Template Basic-1: Split-Screen ── */
+
+/* Left panel: fixed full-height with background-attachment:fixed behaviour */
+.template-left-panel {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Right panel: scrollable independently */
+.template-right-panel {
+  overflow-y: auto;
+  height: 100dvh;
+}
+
+/* Text shadow for legibility over photos */
+.text-shadow-soft {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
+}
+
+.text-shadow-strong {
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Thin shimmer divider used in template */
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #8B9E4A, transparent);
+}
+
+/* Backdrop glass card */
+.glass-dark {
+  background: rgba(15, 25, 50, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 158, 74, 0.25);
+}
+

@@ -15,13 +15,14 @@ export const TEMPLATE_OPTIONS: {
   { value: "floral",  label: "Floral",  desc: "Romantis & natural",      color: "#C9A961" },
 ];
 
-/* ── Paket Basic — 5 template choices ── */
+/* ── Paket Basic — template choices ── */
 export const BASIC_TEMPLATES = [
-  { value: "elegant-rose",       label: "Elegant Rose",       desc: "Floral & romantis" },
-  { value: "classic-gold",       label: "Classic Gold",       desc: "Elegan & timeless" },
-  { value: "modern-minimalist",  label: "Modern Minimalist",  desc: "Bersih & kontemporer" },
-  { value: "romantic-blush",     label: "Romantic Blush",     desc: "Lembut & intim" },
-  { value: "luxury-marble",      label: "Luxury Marble",      desc: "Mewah & premium" },
+  { value: "basic-1",          label: "Basic 1",          desc: "Split-screen elegan" },
+  { value: "elegant-rose",     label: "Elegant Rose",     desc: "Floral & romantis" },
+  { value: "classic-gold",     label: "Classic Gold",     desc: "Elegan & timeless" },
+  { value: "modern-minimalist",label: "Modern Minimalist",desc: "Bersih & kontemporer" },
+  { value: "romantic-blush",   label: "Romantic Blush",   desc: "Lembut & intim" },
+  { value: "luxury-marble",    label: "Luxury Marble",    desc: "Mewah & premium" },
 ] as const;
 
 export type BasicTemplateValue = (typeof BASIC_TEMPLATES)[number]["value"];
