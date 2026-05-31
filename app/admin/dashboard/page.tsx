@@ -18,26 +18,21 @@ import {
   LayoutGrid,
   Loader2,
   Search,
-  Flower2,
+  Layers,
   Sparkles,
-  BookOpen,
+  Crown,
 } from "lucide-react";
 import { supabase } from "@/utils/supabase";
-import { TEMPLATE_OPTIONS, type Invitation } from "@/types/admin";
+import { type Invitation } from "@/types/admin";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 
-const TEMPLATE_ICON: Record<string, React.ElementType> = {
-  modern: Sparkles,
-  klasik: BookOpen,
-  floral: Flower2,
-};
-
-const TEMPLATE_BADGE: Record<string, string> = {
-  modern: "bg-[#3A3429]/8 text-[#3A3429] border-[#3A3429]/10",
-  klasik: "bg-[#5C4A37]/8 text-[#5C4A37] border-[#5C4A37]/10",
-  floral: "bg-[#C9A961]/10 text-[#7A5E2A] border-[#C9A961]/20",
-};
+/* ── Package tiers for stats ── */
+const PACKAGE_STATS = [
+  { key: "basic",   label: "Paket Basic",   prefix: "basic-",   Icon: Layers },
+  { key: "premium", label: "Paket Premium", prefix: "premium-", Icon: Sparkles },
+  { key: "vip",     label: "Paket VIP",     prefix: "vip-",     Icon: Crown },
+];
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("id-ID", {
@@ -115,10 +110,10 @@ export default function DashboardPage() {
 
   useEffect(() => { fetchInvitations(); }, [fetchInvitations]);
 
-  /* ── Stats ── */
-  const stats = TEMPLATE_OPTIONS.map((t) => ({
-    ...t,
-    count: invitations.filter((i) => i.template === t.value).length,
+  /* ── Package stats ── */
+  const stats = PACKAGE_STATS.map((p) => ({
+    ...p,
+    count: invitations.filter((i) => i.template.startsWith(p.prefix)).length,
   }));
 
   /* ── Filtered list ── */
@@ -188,12 +183,12 @@ export default function DashboardPage() {
             </p>
           </motion.div>
 
-          {/* Per template */}
+          {/* Per package */}
           {stats.map((s, i) => {
-            const Icon = TEMPLATE_ICON[s.value] ?? Sparkles;
+            const Icon = s.Icon;
             return (
               <motion.div
-                key={s.value}
+                key={s.key}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.08 + i * 0.04 }}
@@ -271,8 +266,12 @@ export default function DashboardPage() {
                   </tr>
                 ) : (
                   filtered.map((inv, idx) => {
-                    const TplIcon = TEMPLATE_ICON[inv.template] ?? Sparkles;
-                    const tplOpt = TEMPLATE_OPTIONS.find((t) => t.value === inv.template);
+                    /* Derive package tier from template prefix */
+                    const tier =
+                      inv.template.startsWith("basic-")   ? { label: "Basic",   cls: "bg-[#6B1A2A]/10 text-[#6B1A2A] border-[#6B1A2A]/20",   Icon: Layers    } :
+                      inv.template.startsWith("premium-") ? { label: "Premium", cls: "bg-[#5C4A37]/10 text-[#5C4A37] border-[#5C4A37]/20",   Icon: Sparkles  } :
+                      inv.template.startsWith("vip-")     ? { label: "VIP",     cls: "bg-[#C9A961]/10 text-[#7A5E2A] border-[#C9A961]/25",   Icon: Crown     } :
+                                                            { label: inv.template, cls: "bg-[#F5F1E8] text-[#5C4A37] border-[#E8D5A3]/30",   Icon: Sparkles  };
                     return (
                       <motion.tr
                         key={inv.id}
@@ -300,13 +299,14 @@ export default function DashboardPage() {
                           </span>
                         </td>
 
-                        {/* Template */}
+                        {/* Template badge */}
                         <td className="px-5 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium border ${TEMPLATE_BADGE[inv.template] ?? ""}`}>
-                            <TplIcon size={9} strokeWidth={2} />
-                            {tplOpt?.label ?? inv.template}
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium border ${tier.cls}`}>
+                            <tier.Icon size={9} strokeWidth={2} />
+                            {tier.label}
                           </span>
                         </td>
+
 
                         {/* Created */}
                         <td className="px-5 py-4 hidden sm:table-cell">

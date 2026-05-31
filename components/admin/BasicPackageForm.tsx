@@ -27,8 +27,10 @@ interface FormState {
   slug: string;
   template: BasicTemplateValue;
   /* B — Mempelai */
-  pria_nama: string;
+  pria_nama:  string;
+  pria_ortu:  string;          // "Putra ke-N dari Bapak X & Ibu Y"
   wanita_nama: string;
+  wanita_ortu: string;         // "Putri ke-N dari Bapak X & Ibu Y"
   /* C — Jadwal */
   akad_tanggal: string;
   akad_jam_mulai: string;
@@ -36,21 +38,23 @@ interface FormState {
   resepsi_tanggal: string;
   resepsi_jam_mulai: string;
   resepsi_jam_selesai: string;
-  /* C — Lokasi */
+  /* D — Lokasi */
   lokasi_alamat: string;
   lokasi_maps_url: string;
 }
 
 interface ImageFiles {
-  pria_foto: File | null;
+  pria_foto:  File | null;
   wanita_foto: File | null;
   foto_cover: File | null;
+  foto_quote: File | null;  // foto untuk card ayat
 }
 
 interface ImagePreviews {
-  pria_foto: string | null;
+  pria_foto:   string | null;
   wanita_foto: string | null;
-  foto_cover: string | null;
+  foto_cover:  string | null;
+  foto_quote:  string | null;  // foto untuk card ayat
 }
 
 interface UploadProgress {
@@ -272,32 +276,36 @@ export default function BasicPackageForm({ initialData }: Props) {
   const existing = initialData?.event_data;
 
   const [form, setForm] = useState<FormState>({
-    title:              initialData?.title ?? "",
-    slug:               initialData?.slug ?? "",
-    template:           (initialData?.template as BasicTemplateValue) ?? "elegant-rose",
-    pria_nama:          existing?.mempelai_pria?.nama ?? "",
-    wanita_nama:        existing?.mempelai_wanita?.nama ?? "",
-    akad_tanggal:       existing?.jadwal_akad?.tanggal ?? "",
-    akad_jam_mulai:     existing?.jadwal_akad?.jam_mulai ?? "",
-    akad_jam_selesai:   existing?.jadwal_akad?.jam_selesai ?? "",
-    resepsi_tanggal:    existing?.jadwal_resepsi?.tanggal ?? "",
-    resepsi_jam_mulai:  existing?.jadwal_resepsi?.jam_mulai ?? "",
-    resepsi_jam_selesai:existing?.jadwal_resepsi?.jam_selesai ?? "",
-    lokasi_alamat:      existing?.lokasi?.alamat ?? "",
-    lokasi_maps_url:    existing?.lokasi?.maps_url ?? "",
+    title:               initialData?.title ?? "",
+    slug:                initialData?.slug ?? "",
+    template:            (initialData?.template as BasicTemplateValue) ?? "basic-1",
+    pria_nama:           existing?.mempelai_pria?.nama  ?? "",
+    pria_ortu:           existing?.mempelai_pria?.ortu  ?? "",
+    wanita_nama:         existing?.mempelai_wanita?.nama ?? "",
+    wanita_ortu:         existing?.mempelai_wanita?.ortu ?? "",
+    akad_tanggal:        existing?.jadwal_akad?.tanggal     ?? "",
+    akad_jam_mulai:      existing?.jadwal_akad?.jam_mulai   ?? "",
+    akad_jam_selesai:    existing?.jadwal_akad?.jam_selesai ?? "",
+    resepsi_tanggal:     existing?.jadwal_resepsi?.tanggal     ?? "",
+    resepsi_jam_mulai:   existing?.jadwal_resepsi?.jam_mulai   ?? "",
+    resepsi_jam_selesai: existing?.jadwal_resepsi?.jam_selesai ?? "",
+    lokasi_alamat:       existing?.lokasi?.alamat   ?? "",
+    lokasi_maps_url:     existing?.lokasi?.maps_url ?? "",
   });
 
   /* ── Image state ── */
   const [imageFiles, setImageFiles] = useState<ImageFiles>({
-    pria_foto: null,
+    pria_foto:   null,
     wanita_foto: null,
-    foto_cover: null,
+    foto_cover:  null,
+    foto_quote:  null,
   });
 
   const [imagePreviews, setImagePreviews] = useState<ImagePreviews>({
-    pria_foto:   existing?.mempelai_pria?.foto_url ?? null,
+    pria_foto:   existing?.mempelai_pria?.foto_url  ?? null,
     wanita_foto: existing?.mempelai_wanita?.foto_url ?? null,
     foto_cover:  existing?.foto_cover ?? null,
+    foto_quote:  existing?.foto_quote ?? null,
   });
 
   /* ── Gallery state ── */
@@ -400,6 +408,7 @@ export default function BasicPackageForm({ initialData }: Props) {
     if (imageFiles.pria_foto)   filesToUpload.push({ key: "pria",   file: imageFiles.pria_foto,   path: `${slug}/pria.${imageFiles.pria_foto.name.split(".").pop()}` });
     if (imageFiles.wanita_foto) filesToUpload.push({ key: "wanita", file: imageFiles.wanita_foto, path: `${slug}/wanita.${imageFiles.wanita_foto.name.split(".").pop()}` });
     if (imageFiles.foto_cover)  filesToUpload.push({ key: "cover",  file: imageFiles.foto_cover,  path: `${slug}/cover.${imageFiles.foto_cover.name.split(".").pop()}` });
+    if (imageFiles.foto_quote)  filesToUpload.push({ key: "quote",  file: imageFiles.foto_quote,  path: `${slug}/quote.${imageFiles.foto_quote.name.split(".").pop()}` });
     galleryFiles.forEach((file, i) => {
       filesToUpload.push({ key: `galeri_${i}`, file, path: `${slug}/galeri-${Date.now()}-${i}.${file.name.split(".").pop()}` });
     });
@@ -435,13 +444,15 @@ export default function BasicPackageForm({ initialData }: Props) {
       const pria_foto_url   = uploadedUrls["pria"]   ?? imagePreviews.pria_foto   ?? "";
       const wanita_foto_url = uploadedUrls["wanita"] ?? imagePreviews.wanita_foto ?? "";
       const foto_cover_url  = uploadedUrls["cover"]  ?? imagePreviews.foto_cover  ?? "";
+      const foto_quote_url  = uploadedUrls["quote"]  ?? imagePreviews.foto_quote  ?? "";
       const galeri_all      = [...existingGallery, ...galeriNewUrls];
 
       /* ── Build event_data ── */
       const event_data: EventData = {
-        mempelai_pria:   { nama: form.pria_nama,   foto_url: pria_foto_url },
-        mempelai_wanita: { nama: form.wanita_nama, foto_url: wanita_foto_url },
+        mempelai_pria:   { nama: form.pria_nama,   foto_url: pria_foto_url,   ortu: form.pria_ortu   || undefined },
+        mempelai_wanita: { nama: form.wanita_nama, foto_url: wanita_foto_url, ortu: form.wanita_ortu || undefined },
         foto_cover:      foto_cover_url,
+        foto_quote:      foto_quote_url || undefined,
         jadwal_akad: {
           tanggal:     form.akad_tanggal,
           jam_mulai:   form.akad_jam_mulai,
@@ -601,7 +612,7 @@ export default function BasicPackageForm({ initialData }: Props) {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -6, scale: 0.98 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full mt-1.5 left-0 right-0 z-20 bg-white border border-[#E8D5A3]/40 rounded-xl shadow-xl overflow-hidden"
+                      className="absolute top-full mt-1.5 left-0 right-0 z-50 bg-white border border-[#E8D5A3]/40 rounded-xl shadow-xl overflow-hidden"
                     >
                       {BASIC_TEMPLATES.map((t) => (
                         <li key={t.value}>
@@ -649,6 +660,16 @@ export default function BasicPackageForm({ initialData }: Props) {
                   />
                 </div>
                 <div>
+                  <FieldLabel htmlFor="f-pria-ortu">Info Orang Tua</FieldLabel>
+                  <TextInput
+                    id="f-pria-ortu"
+                    value={form.pria_ortu}
+                    onChange={(v) => setForm((f) => ({ ...f, pria_ortu: v }))}
+                    placeholder="Putra ke-1 dari Bapak X & Ibu Y"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
                   <FieldLabel htmlFor="f-pria-foto">Foto Mempelai Pria</FieldLabel>
                   <div className="w-40">
                     <PhotoUploadBox
@@ -679,6 +700,16 @@ export default function BasicPackageForm({ initialData }: Props) {
                   />
                 </div>
                 <div>
+                  <FieldLabel htmlFor="f-wanita-ortu">Info Orang Tua</FieldLabel>
+                  <TextInput
+                    id="f-wanita-ortu"
+                    value={form.wanita_ortu}
+                    onChange={(v) => setForm((f) => ({ ...f, wanita_ortu: v }))}
+                    placeholder="Putri ke-1 dari Bapak X & Ibu Y"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
                   <FieldLabel htmlFor="f-wanita-foto">Foto Mempelai Wanita</FieldLabel>
                   <div className="w-40">
                     <PhotoUploadBox
@@ -693,45 +724,94 @@ export default function BasicPackageForm({ initialData }: Props) {
               </div>
             </div>
 
-            {/* Cover */}
+            {/* Foto Cover & Quote — dua input berdampingan */}
             <div>
               <div className="flex items-center gap-2 pb-1 mb-4 border-b border-[#F5F1E8]">
                 <Users size={13} strokeWidth={1.5} className="text-[#C9A961]" />
-                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Foto Cover / Hero</span>
+                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Aset Visual Utama</span>
               </div>
-              <FieldLabel htmlFor="f-cover-foto">Foto Kedua Mempelai Bersama</FieldLabel>
-              <div className="w-72 aspect-video">
-                <div
-                  onClick={() => !isLoading && document.getElementById("f-cover-foto")?.click()}
-                  className={`relative group w-full h-full flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all duration-200 overflow-hidden cursor-pointer
-                    ${imagePreviews.foto_cover ? "border-[#C9A961]/40" : "border-[#E8D5A3]/50 bg-[#F9F7F2]/60 hover:border-[#C9A961]/50"}
-                    ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-                  `}
-                >
-                  <input
-                    id="f-cover-foto"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    disabled={isLoading}
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePhotoSelect("foto_cover", f); }}
-                  />
-                  {imagePreviews.foto_cover ? (
-                    <>
-                      <Image src={imagePreviews.foto_cover} alt="Foto cover" fill className="object-cover" sizes="288px" />
-                      <div className="absolute inset-0 bg-[#2C2416]/0 group-hover:bg-[#2C2416]/40 transition-all flex items-center justify-center">
-                        <Camera size={28} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Input 1: Foto Cover */}
+                <div className="space-y-2">
+                  <FieldLabel htmlFor="f-cover-foto">Foto Cover Utama &amp; Penutup</FieldLabel>
+                  <p className="font-sans text-[10px] text-[#5C4A37]/45 font-light -mt-1 mb-2">
+                    Ditampilkan di panel kiri (desktop) dan latar opening.
+                  </p>
+                  <div
+                    onClick={() => !isLoading && document.getElementById("f-cover-foto")?.click()}
+                    className={`relative group w-full flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all duration-200 overflow-hidden cursor-pointer
+                      ${imagePreviews.foto_cover ? "border-[#C9A961]/40" : "border-[#E8D5A3]/50 bg-[#F9F7F2]/60 hover:border-[#C9A961]/50"}
+                      ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
+                    style={{ aspectRatio: "3/4" }}
+                  >
+                    <input
+                      id="f-cover-foto"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isLoading}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePhotoSelect("foto_cover", f); }}
+                    />
+                    {imagePreviews.foto_cover ? (
+                      <>
+                        <Image src={imagePreviews.foto_cover} alt="Foto cover" fill className="object-cover" sizes="280px" />
+                        <div className="absolute inset-0 bg-[#2C2416]/0 group-hover:bg-[#2C2416]/40 transition-all flex items-center justify-center">
+                          <Camera size={28} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 text-center p-4">
+                        <div className="w-10 h-10 rounded-xl bg-[#3A3429]/5 border border-[#E8D5A3]/40 flex items-center justify-center">
+                          <Upload size={16} strokeWidth={1.5} className="text-[#5C4A37]/50" />
+                        </div>
+                        <p className="font-sans text-xs text-[#5C4A37]/50 font-light">Klik untuk upload</p>
+                        <p className="font-sans text-[10px] text-[#5C4A37]/35">JPG / PNG / WEBP</p>
                       </div>
-                    </>
-                  ) : (
-                    <div className="flex flex-col items-center gap-2 text-center p-4">
-                      <div className="w-10 h-10 rounded-xl bg-[#3A3429]/5 border border-[#E8D5A3]/40 flex items-center justify-center">
-                        <Upload size={16} strokeWidth={1.5} className="text-[#5C4A37]/50" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Input 2: Foto Quote/Ayat */}
+                <div className="space-y-2">
+                  <FieldLabel htmlFor="f-quote-foto">Foto Background Quote / Ayat</FieldLabel>
+                  <p className="font-sans text-[10px] text-[#5C4A37]/45 font-light -mt-1 mb-2">
+                    Ditampilkan di dalam card ayat (potrait). Jika kosong, gunakan foto cover.
+                  </p>
+                  <div
+                    onClick={() => !isLoading && document.getElementById("f-quote-foto")?.click()}
+                    className={`relative group w-full flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all duration-200 overflow-hidden cursor-pointer
+                      ${imagePreviews.foto_quote ? "border-[#C9A961]/40" : "border-[#E8D5A3]/50 bg-[#F9F7F2]/60 hover:border-[#C9A961]/50"}
+                      ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
+                    style={{ aspectRatio: "3/4" }}
+                  >
+                    <input
+                      id="f-quote-foto"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isLoading}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePhotoSelect("foto_quote", f); }}
+                    />
+                    {imagePreviews.foto_quote ? (
+                      <>
+                        <Image src={imagePreviews.foto_quote} alt="Foto quote" fill className="object-cover" sizes="280px" />
+                        <div className="absolute inset-0 bg-[#2C2416]/0 group-hover:bg-[#2C2416]/40 transition-all flex items-center justify-center">
+                          <Camera size={28} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 text-center p-4">
+                        <div className="w-10 h-10 rounded-xl bg-[#3A3429]/5 border border-[#E8D5A3]/40 flex items-center justify-center">
+                          <ImagePlus size={16} strokeWidth={1.5} className="text-[#5C4A37]/50" />
+                        </div>
+                        <p className="font-sans text-xs text-[#5C4A37]/50 font-light">Klik untuk upload</p>
+                        <p className="font-sans text-[10px] text-[#5C4A37]/35">JPG / PNG / WEBP</p>
                       </div>
-                      <p className="font-sans text-xs text-[#5C4A37]/50 font-light">Klik untuk upload foto cover</p>
-                      <p className="font-sans text-[10px] text-[#5C4A37]/35">Format: JPG, PNG, WEBP</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

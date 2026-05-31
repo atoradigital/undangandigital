@@ -17,12 +17,7 @@ export const TEMPLATE_OPTIONS: {
 
 /* ── Paket Basic — template choices ── */
 export const BASIC_TEMPLATES = [
-  { value: "basic-1",          label: "Basic 1",          desc: "Split-screen elegan" },
-  { value: "elegant-rose",     label: "Elegant Rose",     desc: "Floral & romantis" },
-  { value: "classic-gold",     label: "Classic Gold",     desc: "Elegan & timeless" },
-  { value: "modern-minimalist",label: "Modern Minimalist",desc: "Bersih & kontemporer" },
-  { value: "romantic-blush",   label: "Romantic Blush",   desc: "Lembut & intim" },
-  { value: "luxury-marble",    label: "Luxury Marble",    desc: "Mewah & premium" },
+  { value: "basic-1", label: "Basic 1", desc: "Split-screen elegan · Maroon & Cream" },
 ] as const;
 
 export type BasicTemplateValue = (typeof BASIC_TEMPLATES)[number]["value"];
@@ -32,12 +27,15 @@ export interface EventData {
   mempelai_pria: {
     nama: string;
     foto_url: string;
+    ortu?: string;          // "Putra ke-N dari Bapak X & Ibu Y"
   };
   mempelai_wanita: {
     nama: string;
     foto_url: string;
+    ortu?: string;          // "Putri ke-N dari Bapak X & Ibu Y"
   };
   foto_cover: string;
+  foto_quote?: string;       // foto untuk background card ayat/quote
   jadwal_akad: {
     tanggal: string;
     jam_mulai: string;
