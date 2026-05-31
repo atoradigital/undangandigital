@@ -385,7 +385,7 @@ export default function BasicPackageForm({ initialData }: Props) {
       .upload(path, file, { upsert: true, cacheControl: "3600" });
     if (error) throw new Error(`Upload gagal: ${error.message}`);
     const { data } = supabase.storage.from("atora-assets").getPublicUrl(path);
-    return data.publicUrl;
+    return `${data.publicUrl}?t=${Date.now()}`;
   };
 
   /* ════════════════════════════════════════════════
