@@ -791,7 +791,7 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
       >
         <SectionLabel>Momen Bersama</SectionLabel>
         <GoldLineShort className="my-3" />
-        <SectionTitle style={{ color: "#3D2B1F" }}>Galeri</SectionTitle>
+        <SectionTitle><span className="text-[#3D2B1F]">Galeri</span></SectionTitle>
       </div>
 
       {/* Grid */}
