@@ -46,11 +46,20 @@ export interface EventData {
     jam_mulai: string;
     jam_selesai: string;
   };
-  lokasi: {
+  /* ── Lokasi terpisah per acara (new) ── */
+  akad_lokasi?:    string;   // nama gedung / tempat akad
+  akad_alamat?:    string;   // alamat lengkap akad
+  akad_maps_url?:  string;   // Google Maps URL akad
+  resepsi_lokasi?: string;   // nama gedung / tempat resepsi
+  resepsi_alamat?: string;   // alamat lengkap resepsi
+  resepsi_maps_url?: string; // Google Maps URL resepsi
+  /* ── Backward compat (data lama) ── */
+  lokasi?: {
     alamat: string;
     maps_url: string;
   };
   galeri: string[];
+
 }
 
 export interface Invitation {

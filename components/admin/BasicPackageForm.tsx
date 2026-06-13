@@ -28,9 +28,9 @@ interface FormState {
   template: BasicTemplateValue;
   /* B — Mempelai */
   pria_nama:  string;
-  pria_ortu:  string;          // "Putra ke-N dari Bapak X & Ibu Y"
+  pria_ortu:  string;
   wanita_nama: string;
-  wanita_ortu: string;         // "Putri ke-N dari Bapak X & Ibu Y"
+  wanita_ortu: string;
   /* C — Jadwal */
   akad_tanggal: string;
   akad_jam_mulai: string;
@@ -38,9 +38,14 @@ interface FormState {
   resepsi_tanggal: string;
   resepsi_jam_mulai: string;
   resepsi_jam_selesai: string;
-  /* D — Lokasi */
-  lokasi_alamat: string;
-  lokasi_maps_url: string;
+  /* D — Lokasi Akad */
+  akad_lokasi:    string;   // nama gedung
+  akad_alamat:    string;   // alamat lengkap
+  akad_maps_url:  string;   // google maps url
+  /* E — Lokasi Resepsi */
+  resepsi_lokasi:    string;
+  resepsi_alamat:    string;
+  resepsi_maps_url:  string;
 }
 
 interface ImageFiles {
@@ -289,8 +294,14 @@ export default function BasicPackageForm({ initialData }: Props) {
     resepsi_tanggal:     existing?.jadwal_resepsi?.tanggal     ?? "",
     resepsi_jam_mulai:   existing?.jadwal_resepsi?.jam_mulai   ?? "",
     resepsi_jam_selesai: existing?.jadwal_resepsi?.jam_selesai ?? "",
-    lokasi_alamat:       existing?.lokasi?.alamat   ?? "",
-    lokasi_maps_url:     existing?.lokasi?.maps_url ?? "",
+    /* Lokasi akad — new fields, fallback ke lokasi lama jika ada */
+    akad_lokasi:    existing?.akad_lokasi    ?? "",
+    akad_alamat:    existing?.akad_alamat    ?? existing?.lokasi?.alamat ?? "",
+    akad_maps_url:  existing?.akad_maps_url  ?? existing?.lokasi?.maps_url ?? "",
+    /* Lokasi resepsi */
+    resepsi_lokasi:    existing?.resepsi_lokasi    ?? "",
+    resepsi_alamat:    existing?.resepsi_alamat    ?? existing?.lokasi?.alamat ?? "",
+    resepsi_maps_url:  existing?.resepsi_maps_url  ?? existing?.lokasi?.maps_url ?? "",
   });
 
   /* ── Image state ── */
@@ -463,10 +474,13 @@ export default function BasicPackageForm({ initialData }: Props) {
           jam_mulai:   form.resepsi_jam_mulai,
           jam_selesai: form.resepsi_jam_selesai,
         },
-        lokasi: {
-          alamat:   form.lokasi_alamat,
-          maps_url: form.lokasi_maps_url,
-        },
+        /* Lokasi terpisah per acara */
+        akad_lokasi:       form.akad_lokasi    || undefined,
+        akad_alamat:       form.akad_alamat    || undefined,
+        akad_maps_url:     form.akad_maps_url  || undefined,
+        resepsi_lokasi:    form.resepsi_lokasi    || undefined,
+        resepsi_alamat:    form.resepsi_alamat    || undefined,
+        resepsi_maps_url:  form.resepsi_maps_url  || undefined,
         galeri: galeri_all,
       };
 
@@ -867,31 +881,86 @@ export default function BasicPackageForm({ initialData }: Props) {
               </div>
             </div>
 
-            {/* Lokasi */}
+            {/* Lokasi — dua grup terpisah: Akad & Resepsi */}
+
+            {/* LOKASI AKAD */}
             <div>
               <div className="flex items-center gap-2 pb-1 mb-4 border-b border-[#F5F1E8]">
                 <MapPin size={12} strokeWidth={1.5} className="text-[#C9A961]" />
-                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Tempat</span>
+                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Lokasi Akad Nikah</span>
               </div>
               <div className="space-y-4">
                 <div>
-                  <FieldLabel htmlFor="f-lokasi-alamat">Alamat Lengkap</FieldLabel>
+                  <FieldLabel htmlFor="f-akad-lokasi">Nama Lokasi / Gedung</FieldLabel>
+                  <TextInput
+                    id="f-akad-lokasi"
+                    value={form.akad_lokasi}
+                    onChange={(v) => setForm((f) => ({ ...f, akad_lokasi: v }))}
+                    placeholder="Contoh: Gedung Sasana Budaya"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-akad-alamat">Alamat Lengkap</FieldLabel>
                   <textarea
-                    id="f-lokasi-alamat"
-                    value={form.lokasi_alamat}
-                    onChange={(e) => setForm((f) => ({ ...f, lokasi_alamat: e.target.value }))}
-                    placeholder="Contoh: Gedung Serbaguna, Jl. Raya Kebon Jeruk No. 12, Jakarta Barat"
-                    rows={3}
+                    id="f-akad-alamat"
+                    value={form.akad_alamat}
+                    onChange={(e) => setForm((f) => ({ ...f, akad_alamat: e.target.value }))}
+                    placeholder="Jl. Raya Contoh No. 1, Kota, Provinsi"
+                    rows={2}
                     disabled={isLoading}
                     className="w-full px-4 py-3 bg-[#F9F7F2] border border-[#E8D5A3]/60 rounded-xl font-sans text-sm text-[#3A3429] placeholder-[#5C4A37]/30 focus:outline-none focus:border-[#C9A961] focus:ring-2 focus:ring-[#C9A961]/10 transition-all resize-none disabled:opacity-60 leading-relaxed"
                   />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="f-maps-url">URL Google Maps</FieldLabel>
+                  <FieldLabel htmlFor="f-akad-maps">URL Google Maps Akad</FieldLabel>
                   <TextInput
-                    id="f-maps-url"
-                    value={form.lokasi_maps_url}
-                    onChange={(v) => setForm((f) => ({ ...f, lokasi_maps_url: v }))}
+                    id="f-akad-maps"
+                    value={form.akad_maps_url}
+                    onChange={(v) => setForm((f) => ({ ...f, akad_maps_url: v }))}
+                    placeholder="https://maps.google.com/..."
+                    disabled={isLoading}
+                    mono
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* LOKASI RESEPSI */}
+            <div>
+              <div className="flex items-center gap-2 pb-1 mb-4 border-b border-[#F5F1E8]">
+                <MapPin size={12} strokeWidth={1.5} className="text-[#C9A961]" />
+                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Lokasi Resepsi Nikah</span>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <FieldLabel htmlFor="f-resepsi-lokasi">Nama Lokasi / Gedung</FieldLabel>
+                  <TextInput
+                    id="f-resepsi-lokasi"
+                    value={form.resepsi_lokasi}
+                    onChange={(v) => setForm((f) => ({ ...f, resepsi_lokasi: v }))}
+                    placeholder="Contoh: Ballroom Hotel Mulia"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-resepsi-alamat">Alamat Lengkap</FieldLabel>
+                  <textarea
+                    id="f-resepsi-alamat"
+                    value={form.resepsi_alamat}
+                    onChange={(e) => setForm((f) => ({ ...f, resepsi_alamat: e.target.value }))}
+                    placeholder="Jl. Raya Contoh No. 2, Kota, Provinsi"
+                    rows={2}
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 bg-[#F9F7F2] border border-[#E8D5A3]/60 rounded-xl font-sans text-sm text-[#3A3429] placeholder-[#5C4A37]/30 focus:outline-none focus:border-[#C9A961] focus:ring-2 focus:ring-[#C9A961]/10 transition-all resize-none disabled:opacity-60 leading-relaxed"
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-resepsi-maps">URL Google Maps Resepsi</FieldLabel>
+                  <TextInput
+                    id="f-resepsi-maps"
+                    value={form.resepsi_maps_url}
+                    onChange={(v) => setForm((f) => ({ ...f, resepsi_maps_url: v }))}
                     placeholder="https://maps.google.com/..."
                     disabled={isLoading}
                     mono

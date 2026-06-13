@@ -167,7 +167,9 @@ function CoverWithText({ ed }: { ed: EventData }) {
           fill
           className="object-cover object-center"
           sizes="65vw"
-          priority
+          priority={true}
+          quality={100}
+          unoptimized={true}
         />
       ) : (
         <div className="absolute inset-0" style={{ background: C.maroonDeep }} />
@@ -245,7 +247,9 @@ function OpeningSection({
             fill
             className="object-cover object-center"
             sizes="35vw"
-            priority
+            priority={true}
+            quality={100}
+            unoptimized={true}
           />
           <div
             className="absolute inset-0"
@@ -336,6 +340,8 @@ function QuoteSection({ ed }: { ed: EventData }) {
               fill
               className="object-cover object-center"
               sizes="320px"
+              quality={100}
+              unoptimized
             />
             {/* Bottom gradient for smooth transition into card body */}
             <div
@@ -410,120 +416,97 @@ function BiodataSection({ ed }: { ed: EventData }) {
     },
   ];
 
-  return (
-    <section className="px-5 pt-8 pb-14">
-      {/* Ayat pembuka */}
-      <div
-        className="max-w-xs mx-auto mb-10 px-5 py-4 rounded-xl text-center"
-        style={{
-          background: "rgba(255,255,255,0.82)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          boxShadow: "0 4px 14px rgba(0,0,0,0.10)",
-        }}
-      >
-        <p className="font-sans text-[11px] italic leading-relaxed" style={{ color: "#5C4A37" }}>
+   return (
+    <div className="w-full px-6 py-8 flex flex-col items-center text-center">
+        {/* Ayat pembuka */}
+        <p
+          className="font-sans text-[11px] italic leading-relaxed max-w-xs mx-auto mb-10"
+          style={{ color: "#5C4A37" }}
+        >
           Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan.
           Ya Allah semoga ridho-Mu tercurah mengiringi pernikahan kami:
         </p>
-      </div>
 
-      {/* Mempelai cards — stacked single column */}
-      <div className="space-y-14 max-w-[260px] mx-auto">
-        {mempelai.map((m) => (
-          <div key={m.role} className="text-center">
+        {/* Mempelai — stacked, locked width w-[260px] */}
+        <div className="space-y-14 w-[260px] mx-auto">
+          {mempelai.map((m) => (
+            <div key={m.role} className="flex flex-col items-center">
 
-            {/* Arch-shaped photo */}
-            <div
-              className="relative mx-auto overflow-hidden"
-              style={{
-                width: "220px",
-                height: "292px",
-                borderRadius: "110px 110px 0 0",
-                border: `2px solid ${C.gold}`,
-                background: "#2D1A0A",
-              }}
-            >
-              {m.foto ? (
-                <Image
-                  src={m.foto}
-                  alt={m.nama}
-                  fill
-                  className="object-cover object-top"
-                  sizes="220px"
-                />
-              ) : (
+              {/* Wrapper Foto & Nama — width locked at w-[260px] from parent */}
+              <div className="flex flex-col items-center w-full">
+                {/* Kontainer Foto */}
                 <div
-                  className="w-full h-full flex items-center justify-center"
-                  style={{ background: "#2D1A0A" }}
-                >
-                  <Heart size={32} style={{ color: C.gold }} strokeWidth={1.5} />
-                </div>
-              )}
-
-              {/* Bottom gradient — dark neutral, no red */}
-              <div
-                className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
-                style={{
-                  background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)",
-                }}
-              />
-
-              {/* Floral ornaments */}
-              <span className="absolute bottom-2 left-3 text-2xl select-none" style={{ opacity: 0.88 }}>
-                🌿
-              </span>
-              <span
-                className="absolute bottom-2 right-3 text-2xl select-none"
-                style={{ opacity: 0.88, display: "inline-block", transform: "scaleX(-1)" }}
-              >
-                🌿
-              </span>
-            </div>
-
-            {/* Glassmorphism card: name + parent info */}
-            <div
-              className="mx-auto mt-4 px-5 py-4 rounded-xl"
-              style={{
-                maxWidth: "220px",
-                background: "rgba(255,255,255,0.85)",
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-                boxShadow: "0 4px 14px rgba(0,0,0,0.12)",
-              }}
-            >
-              {/* Name row: ──── NAMA */}
-              <div className="flex items-center justify-end gap-2">
-                <div
-                  className="flex-1 h-px"
+                  className="w-[260px] h-[380px] relative overflow-hidden"
                   style={{
-                    background: `linear-gradient(to right, transparent, ${C.gold})`,
+                    borderRadius: "24px 24px 0 0",
+                    border: `2px solid ${C.gold}`,
+                    background: "#2D1A0A",
                   }}
-                />
-                <p
-                  className="font-serif font-bold uppercase tracking-widest text-sm whitespace-nowrap"
-                  style={{ color: "#3D2B1F" }}
                 >
-                  {m.nama}
-                </p>
-              </div>
+                  {m.foto ? (
+                    <Image
+                      src={m.foto}
+                      alt={m.nama}
+                      fill
+                      className="w-full h-full object-cover object-top"
+                      sizes="(max-width: 768px) 260px, 260px"
+                      quality={100}
+                      unoptimized
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{ background: "#2D1A0A" }}
+                    >
+                      <Heart size={32} style={{ color: C.gold }} strokeWidth={1.5} />
+                    </div>
+                  )}
 
-              {/* Parent info */}
-              {m.ortu && (
-                <p
-                  className="font-sans text-[11px] font-light leading-relaxed mt-2 text-center"
-                  style={{ color: "#5C4A37" }}
-                >
-                  {m.ortu}
-                </p>
-              )}
+                  {/* Bottom gradient */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)",
+                    }}
+                  />
+
+                  {/* Floral ornaments */}
+                  <span className="absolute bottom-2 left-3 text-2xl select-none" style={{ opacity: 0.88 }}>
+                    🌿
+                  </span>
+                  <span
+                    className="absolute bottom-2 right-3 text-2xl select-none"
+                    style={{ opacity: 0.88, display: "inline-block", transform: "scaleX(-1)" }}
+                  >
+                    🌿
+                  </span>
+                </div>
+
+                {/* Kontainer Nama — w-full follows parent w-[260px], wraps neatly */}
+                <div className="w-full mt-4">
+                  <p
+                    className="font-serif font-bold uppercase tracking-widest text-xl break-words leading-tight"
+                    style={{ color: "#3D2B1F" }}
+                  >
+                    {m.nama}
+                  </p>
+                  {m.ortu && (
+                    <p
+                      className="font-sans text-[11px] font-light leading-relaxed mt-2"
+                      style={{ color: "#5C4A37" }}
+                    >
+                      {m.ortu}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+    </div>
   );
 }
+
 
 /* ════════════════════════════════════════════════════
    SECTION 4 — Save The Date + Countdown + Jadwal
@@ -552,224 +535,215 @@ function JadwalSection({ ed }: { ed: EventData }) {
 
   const events = [
     {
-      id:         "akad",
-      label:      "Akad",
-      labelSub:   "Nikah",
-      hari:       formatHari(ed.jadwal_akad?.tanggal ?? ""),
-      tanggal:    formatTanggalPanjang(ed.jadwal_akad?.tanggal ?? ""),
-      jamMulai:   fj(ed.jadwal_akad?.jam_mulai ?? ""),
-      jamSelesai: fj(ed.jadwal_akad?.jam_selesai ?? ""),
-      alamat:     ed.lokasi?.alamat ?? "",
-      maps:       ed.lokasi?.maps_url ?? "",
+      id:           "akad",
+      label:        "Akad Nikah ",
+      labelSub:     "",
+      hari:         formatHari(ed.jadwal_akad?.tanggal ?? ""),
+      tanggal:      formatTanggalPanjang(ed.jadwal_akad?.tanggal ?? ""),
+      jamMulai:     fj(ed.jadwal_akad?.jam_mulai ?? ""),
+      jamSelesai:   fj(ed.jadwal_akad?.jam_selesai ?? ""),
+      namaLokasi:   ed.akad_lokasi   ?? "",
+      alamat:       ed.akad_alamat   ?? ed.lokasi?.alamat ?? "",
+      maps:         ed.akad_maps_url ?? ed.lokasi?.maps_url ?? "",
     },
     {
-      id:         "resepsi",
-      label:      "Resepsi",
-      labelSub:   "Nikah",
-      hari:       formatHari(ed.jadwal_resepsi?.tanggal ?? ""),
-      tanggal:    formatTanggalPanjang(ed.jadwal_resepsi?.tanggal ?? ""),
-      jamMulai:   fj(ed.jadwal_resepsi?.jam_mulai ?? ""),
-      jamSelesai: fj(ed.jadwal_resepsi?.jam_selesai ?? ""),
-      alamat:     ed.lokasi?.alamat ?? "",
-      maps:       ed.lokasi?.maps_url ?? "",
+      id:           "resepsi",
+      label:        "Resepsi",
+      labelSub:     "",
+      hari:         formatHari(ed.jadwal_resepsi?.tanggal ?? ""),
+      tanggal:      formatTanggalPanjang(ed.jadwal_resepsi?.tanggal ?? ""),
+      jamMulai:     fj(ed.jadwal_resepsi?.jam_mulai ?? ""),
+      jamSelesai:   fj(ed.jadwal_resepsi?.jam_selesai ?? ""),
+      namaLokasi:   ed.resepsi_lokasi   ?? "",
+      alamat:       ed.resepsi_alamat   ?? ed.lokasi?.alamat ?? "",
+      maps:         ed.resepsi_maps_url ?? ed.lokasi?.maps_url ?? "",
     },
   ];
 
   return (
-    <section className="px-5 pt-10 pb-14">
+    <div className="w-full px-6 py-8 flex flex-col items-center">
 
-      {/* ── Save The Date header ── */}
-      <div className="text-center mb-7">
-        <h2
-          className="font-serif italic font-bold"
-          style={{
-            color: C.cream,
-            fontSize: "clamp(2rem, 7vw, 2.5rem)",
-            textShadow: "0 2px 12px rgba(0,0,0,0.25)",
-          }}
-        >
-          Save The Date
-        </h2>
-        <div
-          className="h-px mx-auto mt-3 max-w-[140px]"
-          style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
-        />
-      </div>
+        {/* ── Save The Date header ── */}
 
-      {/* ── Countdown ── */}
-      <div className="grid grid-cols-4 gap-2.5 max-w-[280px] mx-auto mb-8">
-        {([
-          { value: countdown.hari,  label: "Hari"  },
-          { value: countdown.jam,   label: "Jam"   },
-          { value: countdown.menit, label: "Menit" },
-          { value: countdown.detik, label: "Detik" },
-        ] as { value: number; label: string }[]).map((item) => (
-          <div
-            key={item.label}
-            className="text-center py-3 rounded-xl"
-            style={{ background: C.cream }}
+        <div className="text-center mb-7">
+          <h2
+            className="font-serif italic font-bold"
+            style={{
+              color: "#3D2B1F",
+              fontSize: "clamp(2rem, 7vw, 2.5rem)",
+            }}
           >
-            <p
-              className="font-serif text-xl font-bold leading-none"
-              style={{ color: C.maroon }}
-            >
-              {String(item.value).padStart(2, "0")}
-            </p>
-            <p
-              className="font-sans text-[8px] uppercase tracking-wider mt-1.5 font-semibold"
-              style={{ color: C.maroon }}
-            >
-              {item.label}
-            </p>
-          </div>
-        ))}
-      </div>
+            Save The Date
+          </h2>
+          <div
+            className="h-px mx-auto mt-3 max-w-[140px]"
+            style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
+          />
+        </div>
 
-      {/* ── Deskripsi ── */}
-      <div
-        className="max-w-xs mx-auto mb-10 px-5 py-4 rounded-xl text-center"
-        style={{
-          background: "rgba(255,255,255,0.82)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          boxShadow: "0 4px 14px rgba(0,0,0,0.10)",
-        }}
-      >
+        {/* ── Countdown — kotak individual TETAP dipertahankan ── */}
+        <div className="flex justify-center items-center gap-4 w-full mb-8">
+          {([
+            { value: countdown.hari,  label: "Hari"  },
+            { value: countdown.jam,   label: "Jam"   },
+            { value: countdown.menit, label: "Menit" },
+            { value: countdown.detik, label: "Detik" },
+          ] as { value: number; label: string }[]).map((item) => (
+            <div
+              key={item.label}
+              className="min-w-[76px] px-4 py-3 flex flex-col items-center justify-center rounded-xl"
+              style={{ background: C.cream }}
+            >
+              <p
+                className="font-serif text-xl font-bold leading-none"
+                style={{ color: C.maroon }}
+              >
+                {String(item.value).padStart(2, "0")}
+              </p>
+              <p
+                className="font-sans text-[8px] uppercase tracking-wider mt-1.5 font-semibold"
+                style={{ color: C.maroon }}
+              >
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Deskripsi — langsung di dalam unified container, tanpa bg sendiri ── */}
         <p
-          className="font-sans text-[11px] italic leading-relaxed"
+          className="font-sans text-[11px] italic text-center leading-relaxed max-w-xs mx-auto mb-10"
           style={{ color: "#5C4A37" }}
         >
           Dengan memohon rahmat dan ridho Allah SWT, kami mengundang
           Bapak/Ibu/Saudara/i, untuk menghadiri acara pernikahan kami:
         </p>
-      </div>
 
-      {/* ── Event cards ── */}
-      <div className="space-y-6 max-w-[300px] mx-auto">
-        {events.map((ev) => (
-          <div
-            key={ev.id}
-            className="rounded-2xl overflow-hidden"
-            style={{
-              border: `2px solid rgba(201,160,74,0.65)`,
-              boxShadow:
-                `0 0 0 5px rgba(74,15,28,1), 0 0 0 7px rgba(201,160,74,0.22), 0 8px 32px rgba(0,0,0,0.40)`,
-            }}
-          >
+        {/* ── Event cards — desain gelap TETAP dipertahankan ── */}
+        <div className="space-y-6 max-w-[300px] mx-auto">
+          {events.map((ev) => (
             <div
-              className="px-6 py-8 text-center"
+              key={ev.id}
+              className="rounded-2xl overflow-hidden"
               style={{
-                background: "linear-gradient(160deg, #2D1A0A 0%, #1A0A03 50%, #2D1A0A 100%)",
-                outline: "1px solid rgba(245,237,216,0.10)",
-                outlineOffset: "-8px",
+                border: `2px solid rgba(201,160,74,0.65)`,
+                boxShadow:
+                  `0 0 0 5px rgba(74,15,28,1), 0 0 0 7px rgba(201,160,74,0.22), 0 8px 32px rgba(0,0,0,0.40)`,
               }}
             >
-              {/* Akad/Resepsi label */}
-              <div className="mb-5">
-                <p
-                  className="font-serif font-bold italic leading-none"
-                  style={{ color: C.cream, fontSize: "2rem" }}
-                >
-                  {ev.label}
-                </p>
-                <p
-                  className="font-serif italic font-light leading-none -mt-1"
-                  style={{ color: C.creamDim, fontSize: "1.35rem" }}
-                >
-                  {ev.labelSub}
-                </p>
-              </div>
-
-              {/* Gold divider */}
               <div
-                className="h-px mx-auto mb-5 max-w-[80px]"
+                className="px-6 py-8 text-center"
                 style={{
-                  background: `linear-gradient(to right, transparent, ${C.gold}, transparent)`,
+                  background: "linear-gradient(160deg, #2D1A0A 0%, #1A0A03 50%, #2D1A0A 100%)",
+                  outline: "1px solid rgba(245,237,216,0.10)",
+                  outlineOffset: "-8px",
                 }}
-              />
+              >
+                {/* Akad/Resepsi label */}
+                <div className="mb-5">
+                  <p
+                    className="font-serif font-bold italic leading-none"
+                    style={{ color: C.cream, fontSize: "2rem" }}
+                  >
+                    {ev.label}
+                  </p>
+                  <p
+                    className="font-serif italic font-light leading-none -mt-1"
+                    style={{ color: C.creamDim, fontSize: "1.35rem" }}
+                  >
+                    {ev.labelSub}
+                  </p>
+                </div>
 
-              {/* Hari */}
-              {ev.hari && (
-                <p
-                  className="font-sans text-[10px] uppercase tracking-[0.35em] font-bold mb-0.5"
-                  style={{ color: C.cream }}
-                >
-                  {ev.hari}
-                </p>
-              )}
+                {/* Gold divider */}
+                <div
+                  className="h-px mx-auto mb-5 max-w-[80px]"
+                  style={{
+                    background: `linear-gradient(to right, transparent, ${C.gold}, transparent)`,
+                  }}
+                />
 
-              {/* Tanggal */}
-              {ev.tanggal && (
-                <p
-                  className="font-serif text-base font-bold mb-0.5"
-                  style={{ color: C.cream }}
-                >
-                  {ev.tanggal}
-                </p>
-              )}
+                {/* Hari */}
+                {ev.hari && (
+                  <p
+                    className="font-sans text-[10px] uppercase tracking-[0.35em] font-bold mb-0.5"
+                    style={{ color: C.cream }}
+                  >
+                    {ev.hari}
+                  </p>
+                )}
 
-              {/* Jam */}
-              {(ev.jamMulai || ev.jamSelesai) && (
-                <p
-                  className="font-sans text-sm font-light mb-6"
-                  style={{ color: C.creamDim }}
-                >
-                  {ev.jamMulai}
-                  {ev.jamMulai && ev.jamSelesai && " - "}
-                  {ev.jamSelesai}
-                </p>
-              )}
+                {/* Tanggal */}
+                {ev.tanggal && (
+                  <p
+                    className="font-serif text-base font-bold mb-0.5"
+                    style={{ color: C.cream }}
+                  >
+                    {ev.tanggal}
+                  </p>
+                )}
 
-              {/* Lokasi */}
-              {ev.alamat && (() => {
-                const parts      = ev.alamat.split(",");
-                const namaGedung = parts[0]?.trim() ?? "";
-                const sisa       = parts.slice(1).join(",").trim();
-                return (
+                {/* Jam */}
+                {(ev.jamMulai || ev.jamSelesai) && (
+                  <p
+                    className="font-sans text-sm font-light mb-6"
+                    style={{ color: C.creamDim }}
+                  >
+                    {ev.jamMulai}
+                    {ev.jamMulai && ev.jamSelesai && " - "}
+                    {ev.jamSelesai}
+                  </p>
+                )}
+
+                {/* Lokasi */}
+                {(ev.namaLokasi || ev.alamat) && (
                   <div className="mb-5">
                     <div className="flex justify-center mb-2">
                       <MapPin size={14} strokeWidth={1.5} style={{ color: C.gold }} />
                     </div>
-                    {namaGedung && (
+                    {ev.namaLokasi && (
                       <p
                         className="font-sans text-sm font-bold uppercase tracking-wide"
                         style={{ color: C.cream }}
                       >
-                        {namaGedung}
+                        {ev.namaLokasi}
                       </p>
                     )}
-                    {sisa && (
+                    {ev.alamat && (
                       <p
                         className="font-sans text-xs font-light leading-relaxed mt-1"
                         style={{ color: C.creamDim }}
                       >
-                        {sisa}
+                        {ev.alamat}
                       </p>
                     )}
                   </div>
-                );
-              })()}
+                )}
 
-              {/* Google Map button */}
-              {ev.maps && (
-                <a
-                  href={ev.maps}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-sans text-[11px] font-semibold tracking-wider transition-all hover:opacity-85"
-                  style={{ background: C.cream, color: C.maroon }}
-                >
-                  <MapPin size={11} strokeWidth={2} />
-                  Google Map
-                </a>
-              )}
+                {/* Google Map button */}
+                {ev.maps && (
+                  <a
+                    href={ev.maps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-sans text-[11px] font-semibold tracking-wider transition-all hover:opacity-85"
+                    style={{ background: C.cream, color: C.maroon }}
+                  >
+                    <MapPin size={11} strokeWidth={2} />
+                    Google Map
+                  </a>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+
+        {/* Spacer breathing room di akhir section */}
+        <div className="h-12 w-full"></div>
+    </div>
   );
 }
+
 
 /* ════════════════════════════════════════════════════
    SECTION 5 — Galeri
@@ -794,14 +768,14 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
         <SectionTitle><span className="text-[#3D2B1F]">Galeri</span></SectionTitle>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-md mx-auto">
+      {/* Grid — landscape full width */}
+      <div className="space-y-3 max-w-md mx-auto">
         {galeri.slice(0, 8).map((url, idx) => (
           <div
             key={idx}
-            className={`relative overflow-hidden rounded-xl ${idx === 0 ? "row-span-2" : ""}`}
+            className="relative w-full overflow-hidden rounded-xl"
             style={{
-              aspectRatio: "1/1",
+              aspectRatio: "16/9",
               border: `1px solid ${C.creamBorder}`,
             }}
           >
@@ -810,7 +784,7 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
               alt={`Galeri ${idx + 1}`}
               fill
               className="object-cover"
-              sizes="200px"
+              sizes="(max-width: 768px) 100vw, 414px"
             />
           </div>
         ))}
@@ -1032,8 +1006,42 @@ export default function InvitationPage() {
       <div id="sec-quote">
         <QuoteSection ed={ed} />
       </div>
-      <BiodataSection ed={ed} />
-      <JadwalSection ed={ed} />
+
+      {/* ═══════════════════════════════════════════════════
+          UNIFIED CONTAINER — Mukaddimah + Save The Date
+          Deep Warm Beige (#E9DCC7) — full-width, no margin
+      ═══════════════════════════════════════════════════ */}
+      <div className="w-full bg-[#E9DCC7]/95 pb-0 overflow-hidden flex flex-col relative">
+
+        {/* 1. PEMBATAS ATAS (mentok karena parent px-0) */}
+        <img
+          src="/templates/basic/basic-1/basic-1-pembatas.png"
+          alt="pembatas"
+          aria-hidden="true"
+          className="w-full h-6 md:h-8 object-cover"
+        />
+
+        {/* Seksi Mukaddimah (Biodata) */}
+        <BiodataSection ed={ed} />
+
+        {/* 2. PEMBATAS TENGAH */}
+        <img
+          src="/templates/basic/basic-1/basic-1-pembatas.png"
+          alt="pembatas"
+          aria-hidden="true"
+          className="w-full h-6 md:h-8 object-cover"
+        />
+
+        {/* Seksi Save The Date (Jadwal) */}
+        <JadwalSection ed={ed} />
+
+        {/* Spacer agar tombol/kartu di atasnya tidak nabrak pembatas */}
+        <div className="h-10 md:h-14 w-full"></div>
+
+        {/* Gambar Pembatas Mentok Bawah */}
+        <img src="/templates/basic/basic-1/basic-1-pembatas.png" className="w-full h-6 md:h-8 object-cover block" alt="pembatas bawah" />
+      </div>
+
       <GaleriSection galeri={ed?.galeri ?? []} />
       <PenutupSection pria={pria} wanita={wanita} ed={ed} />
     </>
