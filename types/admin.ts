@@ -60,6 +60,16 @@ export interface EventData {
   };
   galeri: string[];
 
+  /* ── Wedding Gift ── */
+  rek_1_bank?: string;    // Jenis Bank/E-Wallet 1
+  rek_1_no?: string;      // Nomor Rekening 1
+  rek_1_nama?: string;    // Nama Pemilik Rekening 1
+  rek_2_bank?: string;    // Jenis Bank/E-Wallet 2
+  rek_2_no?: string;      // Nomor Rekening 2
+  rek_2_nama?: string;    // Nama Pemilik Rekening 2
+  gift_penerima?: string; // Nama Penerima Hadiah Fisik
+  gift_alamat?: string;   // Alamat Lengkap Pengiriman Hadiah
+
 }
 
 export interface Invitation {

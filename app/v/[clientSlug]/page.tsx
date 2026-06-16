@@ -7,6 +7,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/utils/supabase";
 import type { EventData } from "@/types/admin";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   Heart,
@@ -794,6 +795,247 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
 }
 
 /* ════════════════════════════════════════════════════
+   SECTION 5B — Wedding Gift  (floating card)
+════════════════════════════════════════════════════ */
+function WeddingGiftSection({
+  ed,
+  isGiftOpen,
+  setIsGiftOpen,
+  handleCopy,
+}: {
+  ed: EventData;
+  isGiftOpen: boolean;
+  setIsGiftOpen: (v: boolean) => void;
+  handleCopy: (text: string) => void;
+}) {
+  const hasRek1 = ed?.rek_1_bank || ed?.rek_1_no || ed?.rek_1_nama;
+  const hasRek2 = ed?.rek_2_bank || ed?.rek_2_no || ed?.rek_2_nama;
+  const hasGift = ed?.gift_penerima || ed?.gift_alamat;
+
+  // Don't render if no gift data at all
+  if (!hasRek1 && !hasRek2 && !hasGift) return null;
+
+  /* Ornate corner flourish for premium cards */
+  const cornerFlourish = (pos: "tl" | "tr" | "bl" | "br") => {
+    const styles: Record<string, React.CSSProperties> = {
+      tl: { top: 6, left: 6 },
+      tr: { top: 6, right: 6, transform: "scaleX(-1)" },
+      bl: { bottom: 6, left: 6, transform: "scaleY(-1)" },
+      br: { bottom: 6, right: 6, transform: "scale(-1,-1)" },
+    };
+    return (
+      <svg
+        width="18" height="18" viewBox="0 0 24 24" fill="none"
+        style={{ position: "absolute", ...styles[pos], opacity: 0.35 }}
+      >
+        <path d="M2 22 C2 12 12 2 22 2" stroke={C.gold} strokeWidth="1" />
+        <circle cx="22" cy="2" r="1.5" fill={C.gold} />
+        <circle cx="2" cy="22" r="1.5" fill={C.gold} />
+      </svg>
+    );
+  };
+
+  /* Premium ATM card renderer */
+  const renderAtmCard = (bank: string, no: string, nama: string) => (
+    <div
+      className="rounded-2xl p-6 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(145deg, #2D1A0A 0%, #1A0A03 40%, #2D1A0A 80%, #1A0A03 100%)",
+        border: `1.5px solid ${C.gold}`,
+        boxShadow: `0 12px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(201,160,74,0.12), inset 0 -1px 0 rgba(201,160,74,0.06)`,
+      }}
+    >
+      {/* Gold filigree corner flourishes */}
+      {cornerFlourish("tl")}
+      {cornerFlourish("tr")}
+      {cornerFlourish("bl")}
+      {cornerFlourish("br")}
+
+      {/* Subtle center decorative line */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 top-14 w-24 h-px opacity-20"
+        style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
+      />
+
+      {/* Row: Chip + Bank Name */}
+      <div className="flex justify-between items-start mb-8 relative z-10">
+        {/* Premium gold chip */}
+        <div
+          className="w-11 h-8 rounded-md flex items-center justify-center relative"
+          style={{
+            background: "linear-gradient(135deg, #C9A04A 0%, #8B6914 50%, #C9A04A 100%)",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+          }}
+        >
+          <div
+            className="w-7 h-4 rounded-sm"
+            style={{ border: "1px solid rgba(255,255,255,0.3)" }}
+          />
+          {/* Chip circuit lines */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-px h-full" style={{ background: "rgba(255,255,255,0.15)" }} />
+          </div>
+        </div>
+
+        {/* Bank name — elegant serif */}
+        <span
+          className="font-serif font-bold text-2xl"
+          style={{ color: C.gold, letterSpacing: "0.05em" }}
+        >
+          {bank}
+        </span>
+      </div>
+
+      {/* Account number — clean monospace */}
+      <div
+        className="font-mono text-lg tracking-[0.2em] mb-2 relative z-10"
+        style={{ color: C.cream }}
+      >
+        {no}
+      </div>
+
+      {/* Account name — uppercase, spaced */}
+      <div
+        className="text-[11px] uppercase tracking-[0.25em] font-medium relative z-10"
+        style={{ color: C.creamDim }}
+      >
+        {nama}
+      </div>
+
+      {/* Copy button — premium dark + gold */}
+      {no && (
+        <button
+          onClick={() => handleCopy(no)}
+          className="absolute bottom-5 right-5 text-[11px] px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all font-medium z-10"
+          style={{
+            background: "#2D1A0A",
+            border: `1px solid ${C.gold}`,
+            color: C.gold,
+          }}
+        >
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2" strokeWidth="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" strokeWidth="2" />
+          </svg>
+          Salin
+        </button>
+      )}
+
+      {/* Bottom decorative line */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-1 opacity-40"
+        style={{ background: `linear-gradient(to right, transparent 10%, ${C.gold} 50%, transparent 90%)` }}
+      />
+    </div>
+  );
+
+  return (
+    <div className="w-full px-4 py-12 flex justify-center relative z-10">
+
+      {/* THE MAIN CARD — Floating Card */}
+      <div className="bg-[#FDFBF7] border border-[#C5A880] rounded-3xl shadow-xl w-full max-w-md p-8 flex flex-col items-center relative overflow-hidden">
+
+        <div className="text-center mb-7">
+          <h2
+            className="font-serif italic font-bold"
+            style={{
+              color: "#3D2B1F",
+              fontSize: "clamp(2rem, 7vw, 2.5rem)",
+            }}
+          >
+            Wedding Gift
+          </h2>
+          <div
+            className="h-px mx-auto mt-3 max-w-[140px]"
+            style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
+          />
+        </div>
+
+        <p className="font-sans text-sm font-light leading-[2] text-center text-[#3D2B1F] max-w-xs mx-auto mb-6">
+          Bagi Bapak/Ibu/Saudara/i yang ingin mengirimkan hadiah pernikahan dapat melalui virtual account atau e-wallet di bawah ini:
+        </p>
+
+        {/* Toggle Button */}
+        <button
+          onClick={() => setIsGiftOpen(!isGiftOpen)}
+          className="bg-[#3D2B1F] hover:bg-[#2A1D15] text-white px-8 py-2.5 rounded-full flex items-center justify-center gap-2 shadow-md transition-all font-medium text-sm tracking-wide mx-auto"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          {isGiftOpen ? "TUTUP" : "KLIK DISINI"}
+        </button>
+
+        {/* EXPANDED CONTENT — vertical stack inside card */}
+        <AnimatePresence initial={false}>
+          {isGiftOpen && (
+            <motion.div
+              key="gift-content"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="overflow-hidden w-full"
+            >
+              <div className="mt-8 flex flex-col gap-4 w-full">
+
+                {/* Kartu Rekening 1 */}
+                {hasRek1 && renderAtmCard(
+                  ed.rek_1_bank ?? "",
+                  ed.rek_1_no ?? "",
+                  ed.rek_1_nama ?? "",
+                )}
+
+                {/* Kartu Rekening 2 */}
+                {hasRek2 && renderAtmCard(
+                  ed.rek_2_bank ?? "",
+                  ed.rek_2_no ?? "",
+                  ed.rek_2_nama ?? "",
+                )}
+
+                {/* Kotak Kirim Hadiah — always visible */}
+                {hasGift && (
+                  <div
+                    className="rounded-2xl p-6 text-center relative"
+                    style={{
+                      background: "linear-gradient(145deg, #2D1A0A 0%, #1A0A03 50%, #2D1A0A 100%)",
+                      border: `1px solid ${C.gold}`,
+                      boxShadow: `0 8px 32px rgba(0,0,0,0.25)`,
+                    }}
+                  >
+                    <div className="flex justify-center mb-3">
+                      <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" style={{ color: C.gold }}>
+                        <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clipRule="evenodd" />
+                        <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
+                      </svg>
+                    </div>
+                    <h4 className="font-serif font-bold italic text-lg mb-3" style={{ color: C.cream }}>
+                      Kirim Hadiah
+                    </h4>
+                    {ed?.gift_penerima && (
+                      <p className="text-sm mb-1 font-sans font-medium break-words w-full max-w-full" style={{ color: C.creamDim }}>
+                        Nama Penerima : <strong style={{ color: C.cream }}>{ed.gift_penerima}</strong>
+                      </p>
+                    )}
+                    {ed?.gift_alamat && (
+                      <p className="text-sm leading-relaxed font-sans font-normal mt-2 break-words whitespace-normal text-center w-full px-2 max-w-full overflow-hidden" style={{ color: C.creamDim }}>
+                        Alamat Kirim Hadiah : {ed.gift_alamat}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════
    SECTION 6 — Penutup (foto_cover sebagai background)
 ════════════════════════════════════════════════════ */
 function PenutupSection({
@@ -897,9 +1139,16 @@ export default function InvitationPage() {
   const [notFound, setNotFound] = useState(false);
   const [opened, setOpened] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isGiftOpen, setIsGiftOpen] = useState(false);
 
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const audioRef      = useRef<HTMLAudioElement>(null);
+
+  /* ── Copy to clipboard ── */
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    alert("Nomor rekening disalin!");
+  };
 
   /* ── Fetch ── */
   useEffect(() => {
@@ -1043,6 +1292,17 @@ export default function InvitationPage() {
       </div>
 
       <GaleriSection galeri={ed?.galeri ?? []} />
+
+      {/* ═══════════════════════════════════════════════════
+          WEDDING GIFT
+      ═══════════════════════════════════════════════════ */}
+      <WeddingGiftSection
+        ed={ed}
+        isGiftOpen={isGiftOpen}
+        setIsGiftOpen={setIsGiftOpen}
+        handleCopy={handleCopy}
+      />
+
       <PenutupSection pria={pria} wanita={wanita} ed={ed} />
     </>
   );

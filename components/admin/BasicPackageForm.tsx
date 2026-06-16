@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles, Link2, Layers, ChevronDown, CheckCircle2,
   AlertCircle, Save, Loader2, Upload, X, ImagePlus,
-  Heart, Clock, MapPin, Camera, User, Users,
+  Heart, Clock, MapPin, Camera, User, Users, Gift,
 } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import {
@@ -46,6 +46,15 @@ interface FormState {
   resepsi_lokasi:    string;
   resepsi_alamat:    string;
   resepsi_maps_url:  string;
+  /* F — Wedding Gift */
+  rek_1_bank:   string;
+  rek_1_no:     string;
+  rek_1_nama:   string;
+  rek_2_bank:   string;
+  rek_2_no:     string;
+  rek_2_nama:   string;
+  gift_penerima: string;
+  gift_alamat:   string;
 }
 
 interface ImageFiles {
@@ -302,6 +311,15 @@ export default function BasicPackageForm({ initialData }: Props) {
     resepsi_lokasi:    existing?.resepsi_lokasi    ?? "",
     resepsi_alamat:    existing?.resepsi_alamat    ?? existing?.lokasi?.alamat ?? "",
     resepsi_maps_url:  existing?.resepsi_maps_url  ?? existing?.lokasi?.maps_url ?? "",
+    /* Wedding Gift */
+    rek_1_bank:   existing?.rek_1_bank   ?? "",
+    rek_1_no:     existing?.rek_1_no     ?? "",
+    rek_1_nama:   existing?.rek_1_nama   ?? "",
+    rek_2_bank:   existing?.rek_2_bank   ?? "",
+    rek_2_no:     existing?.rek_2_no     ?? "",
+    rek_2_nama:   existing?.rek_2_nama   ?? "",
+    gift_penerima: existing?.gift_penerima ?? "",
+    gift_alamat:   existing?.gift_alamat   ?? "",
   });
 
   /* ── Image state ── */
@@ -482,6 +500,15 @@ export default function BasicPackageForm({ initialData }: Props) {
         resepsi_alamat:    form.resepsi_alamat    || undefined,
         resepsi_maps_url:  form.resepsi_maps_url  || undefined,
         galeri: galeri_all,
+        /* Wedding Gift */
+        rek_1_bank:    form.rek_1_bank    || undefined,
+        rek_1_no:      form.rek_1_no      || undefined,
+        rek_1_nama:    form.rek_1_nama    || undefined,
+        rek_2_bank:    form.rek_2_bank    || undefined,
+        rek_2_no:      form.rek_2_no      || undefined,
+        rek_2_nama:    form.rek_2_nama    || undefined,
+        gift_penerima: form.gift_penerima || undefined,
+        gift_alamat:   form.gift_alamat   || undefined,
       };
 
       /* ── DB save ── */
@@ -1031,6 +1058,127 @@ export default function BasicPackageForm({ initialData }: Props) {
               <> · Masih bisa menambahkan {MAX_GALLERY - galleryPreviews.length} foto lagi</>
             )}
           </p>
+        </SectionCard>
+      </motion.div>
+
+      {/* ════════════════════════════════════════════
+          SECTION E — Wedding Gift
+      ════════════════════════════════════════════ */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.20 }}>
+        <SectionCard icon={Gift} title="Wedding Gift" subtitle="Informasi rekening dan alamat pengiriman hadiah pernikahan">
+          <div className="space-y-7">
+            {/* Rekening 1 */}
+            <div>
+              <div className="flex items-center gap-2 pb-1 mb-4 border-b border-[#F5F1E8]">
+                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Rekening / E-Wallet 1</span>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <FieldLabel htmlFor="f-rek1-bank">Jenis Bank / E-Wallet</FieldLabel>
+                  <TextInput
+                    id="f-rek1-bank"
+                    value={form.rek_1_bank}
+                    onChange={(v) => setForm((f) => ({ ...f, rek_1_bank: v }))}
+                    placeholder="BCA, Mandiri, GoPay, OVO, dll"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-rek1-no">Nomor Rekening</FieldLabel>
+                  <TextInput
+                    id="f-rek1-no"
+                    value={form.rek_1_no}
+                    onChange={(v) => setForm((f) => ({ ...f, rek_1_no: v }))}
+                    placeholder="0920065490"
+                    disabled={isLoading}
+                    mono
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-rek1-nama">Nama Pemilik</FieldLabel>
+                  <TextInput
+                    id="f-rek1-nama"
+                    value={form.rek_1_nama}
+                    onChange={(v) => setForm((f) => ({ ...f, rek_1_nama: v }))}
+                    placeholder="MUHAMMAD ALI"
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Rekening 2 */}
+            <div>
+              <div className="flex items-center gap-2 pb-1 mb-4 border-b border-[#F5F1E8]">
+                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Rekening / E-Wallet 2 (Opsional)</span>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <FieldLabel htmlFor="f-rek2-bank">Jenis Bank / E-Wallet</FieldLabel>
+                  <TextInput
+                    id="f-rek2-bank"
+                    value={form.rek_2_bank}
+                    onChange={(v) => setForm((f) => ({ ...f, rek_2_bank: v }))}
+                    placeholder="Mandiri, Dana, ShopeePay, dll"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-rek2-no">Nomor Rekening</FieldLabel>
+                  <TextInput
+                    id="f-rek2-no"
+                    value={form.rek_2_no}
+                    onChange={(v) => setForm((f) => ({ ...f, rek_2_no: v }))}
+                    placeholder="1234567890"
+                    disabled={isLoading}
+                    mono
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-rek2-nama">Nama Pemilik</FieldLabel>
+                  <TextInput
+                    id="f-rek2-nama"
+                    value={form.rek_2_nama}
+                    onChange={(v) => setForm((f) => ({ ...f, rek_2_nama: v }))}
+                    placeholder="SITI AMINA"
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Alamat Kirim Hadiah */}
+            <div>
+              <div className="flex items-center gap-2 pb-1 mb-4 border-b border-[#F5F1E8]">
+                <MapPin size={12} strokeWidth={1.5} className="text-[#C9A961]" />
+                <span className="font-sans text-[10px] font-semibold text-[#5C4A37] uppercase tracking-wider">Kirim Hadiah Fisik</span>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <FieldLabel htmlFor="f-gift-penerima">Nama Penerima</FieldLabel>
+                  <TextInput
+                    id="f-gift-penerima"
+                    value={form.gift_penerima}
+                    onChange={(v) => setForm((f) => ({ ...f, gift_penerima: v }))}
+                    placeholder="Muhammad Ali"
+                    disabled={isLoading}
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="f-gift-alamat">Alamat Lengkap Pengiriman</FieldLabel>
+                  <textarea
+                    id="f-gift-alamat"
+                    value={form.gift_alamat}
+                    onChange={(e) => setForm((f) => ({ ...f, gift_alamat: e.target.value }))}
+                    placeholder="Jl. Tebet Dalam No. 1, RT 01/RW 02, Kel. Tebet, Kec. Tebet, Jakarta Selatan 12810"
+                    rows={3}
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 bg-[#F9F7F2] border border-[#E8D5A3]/60 rounded-xl font-sans text-sm text-[#3A3429] placeholder-[#5C4A37]/30 focus:outline-none focus:border-[#C9A961] focus:ring-2 focus:ring-[#C9A961]/10 transition-all resize-none disabled:opacity-60 leading-relaxed"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </SectionCard>
       </motion.div>
 
