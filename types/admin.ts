@@ -17,10 +17,22 @@ export const TEMPLATE_OPTIONS: {
 
 /* ── Paket Basic — template choices ── */
 export const BASIC_TEMPLATES = [
-  { value: "basic-1", label: "Basic 1", desc: "Split-screen elegan · Maroon & Cream" },
+  { value: "basic-1", label: "Basic 1", desc: "Split-screen elegan · Batik Cokelat & Cream" },
+  { value: "basic-2", label: "Basic 2", desc: "Split-screen Navy · Batik Biru Dongker" },
+  { value: "basic-3", label: "Basic 3", desc: "Soft Sage Damask Royale · Sage Green & Ivory" },
 ] as const;
 
 export type BasicTemplateValue = (typeof BASIC_TEMPLATES)[number]["value"];
+
+/* ── Paket Premium — template choices ── */
+export const PREMIUM_TEMPLATES = [
+  { value: "premium-1", label: "Premium 1", desc: "Royal Maroon Mandala · Maroon & Gold" },
+] as const;
+
+export type PremiumTemplateValue = (typeof PREMIUM_TEMPLATES)[number]["value"];
+
+export type AnyTemplateValue = BasicTemplateValue | PremiumTemplateValue;
+
 
 /* ── EventData JSONB structure ── */
 export interface EventData {
@@ -77,6 +89,7 @@ export interface Invitation {
   title: string;
   slug: string;
   template: string;
+  whatsapp_number?: string | null;   // nomor WA pengantin — untuk RSVP notifikasi
   event_data?: EventData | null;
   created_at: string;
 }

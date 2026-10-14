@@ -11,12 +11,11 @@ const plans = [
     description: "Cocok untuk acara sederhana",
     features: [
       "1 Template Pilihan",
-      "RSVP Online",
       "Google Maps",
       "Sapaan Nama Tamu",
       "Galeri Foto (5 foto)",
       "Dukungan Email",
-      "Valid 3 Bulan",
+      "Valid 1 Bulan",
     ],
     popular: false,
   },

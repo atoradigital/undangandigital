@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/utils/supabase";
+import AutoLogoutTimer from "@/components/admin/AutoLogoutTimer";
 
 const navItems = [
   {
@@ -94,6 +95,9 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[#F9F7F2] flex">
+      {/* Auto-logout after 15 min idle */}
+      <AutoLogoutTimer />
+
       {/* ── Overlay mobile ── */}
       <AnimatePresence>
         {sidebarOpen && (

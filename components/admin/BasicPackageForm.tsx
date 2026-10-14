@@ -12,10 +12,13 @@ import {
 import { supabase } from "@/utils/supabase";
 import {
   BASIC_TEMPLATES,
+  PREMIUM_TEMPLATES,
   type Invitation,
   type EventData,
   type BasicTemplateValue,
+  type AnyTemplateValue,
 } from "@/types/admin";
+
 
 /* ════════════════════════════════════════════════════
    Types
@@ -25,7 +28,8 @@ interface FormState {
   /* A — Info */
   title: string;
   slug: string;
-  template: BasicTemplateValue;
+  template: AnyTemplateValue;
+
   /* B — Mempelai */
   pria_nama:  string;
   pria_ortu:  string;
@@ -55,6 +59,8 @@ interface FormState {
   rek_2_nama:   string;
   gift_penerima: string;
   gift_alamat:   string;
+  /* G — RSVP */
+  whatsapp_number: string;   // format internasional tanpa +, misal 6281234567890
 }
 
 interface ImageFiles {
@@ -115,7 +121,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#E8D5A3]/40 shadow-[0_4px_24px_rgba(58,52,41,0.04)] overflow-hidden">
+    <div className="bg-white rounded-2xl border border-[#E8D5A3]/40 shadow-[0_4px_24px_rgba(58,52,41,0.04)] overflow-visible">
       <div className="flex items-start gap-4 px-8 py-6 border-b border-[#F5F1E8]">
         <div className="w-10 h-10 rounded-xl bg-[#3A3429]/5 border border-[#E8D5A3]/40 flex items-center justify-center shrink-0">
           <Icon size={18} strokeWidth={1.5} className="text-[#C9A961]" />
@@ -292,7 +298,8 @@ export default function BasicPackageForm({ initialData }: Props) {
   const [form, setForm] = useState<FormState>({
     title:               initialData?.title ?? "",
     slug:                initialData?.slug ?? "",
-    template:            (initialData?.template as BasicTemplateValue) ?? "basic-1",
+    template:            (initialData?.template as AnyTemplateValue) ?? "basic-1",
+
     pria_nama:           existing?.mempelai_pria?.nama  ?? "",
     pria_ortu:           existing?.mempelai_pria?.ortu  ?? "",
     wanita_nama:         existing?.mempelai_wanita?.nama ?? "",
@@ -320,6 +327,8 @@ export default function BasicPackageForm({ initialData }: Props) {
     rek_2_nama:   existing?.rek_2_nama   ?? "",
     gift_penerima: existing?.gift_penerima ?? "",
     gift_alamat:   existing?.gift_alamat   ?? "",
+    /* RSVP */
+    whatsapp_number: initialData?.whatsapp_number ?? "",
   });
 
   /* ── Image state ── */
@@ -516,9 +525,10 @@ export default function BasicPackageForm({ initialData }: Props) {
       setProgress({ current: currentStep, total: totalSteps, label: "Menyimpan ke database..." });
 
       const payload = {
-        title:      form.title.trim(),
-        slug:       form.slug.trim(),
-        template:   form.template,
+        title:            form.title.trim(),
+        slug:             form.slug.trim(),
+        template:         form.template,
+        whatsapp_number:  form.whatsapp_number.trim() || null,
         event_data,
       };
 
@@ -565,7 +575,10 @@ export default function BasicPackageForm({ initialData }: Props) {
 
   const isLoading    = progress !== null && progress.label !== "Berhasil disimpan!";
   const progressPct  = progress ? Math.round((progress.current / progress.total) * 100) : 0;
-  const selectedTmpl = BASIC_TEMPLATES.find((t) => t.value === form.template) ?? BASIC_TEMPLATES[0];
+  const ALL_TEMPLATES = [...BASIC_TEMPLATES, ...PREMIUM_TEMPLATES];
+  const selectedTmpl = ALL_TEMPLATES.find((t) => t.value === form.template) ?? BASIC_TEMPLATES[0];
+  const isPremium    = form.template.startsWith("premium-");
+
 
   /* ══════════════════════════════════════════════════
      RENDER
@@ -655,6 +668,10 @@ export default function BasicPackageForm({ initialData }: Props) {
                       transition={{ duration: 0.15 }}
                       className="absolute top-full mt-1.5 left-0 right-0 z-50 bg-white border border-[#E8D5A3]/40 rounded-xl shadow-xl overflow-hidden"
                     >
+                      {/* Basic Templates */}
+                      <li className="px-4 py-2">
+                        <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[#5C4A37]/40 font-semibold">Paket Basic</p>
+                      </li>
                       {BASIC_TEMPLATES.map((t) => (
                         <li key={t.value}>
                           <button
@@ -668,6 +685,24 @@ export default function BasicPackageForm({ initialData }: Props) {
                           </button>
                         </li>
                       ))}
+                      {/* Premium Templates */}
+                      <li className="px-4 pt-3 pb-2 border-t border-[#E8D5A3]/40 mt-1">
+                        <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[#C9A961] font-semibold">✦ Paket Premium</p>
+                      </li>
+                      {PREMIUM_TEMPLATES.map((t) => (
+                        <li key={t.value}>
+                          <button
+                            type="button"
+                            onClick={() => { setForm((f) => ({ ...f, template: t.value })); setTemplateOpen(false); }}
+                            className={`w-full flex items-center gap-3 px-4 py-3 text-left font-sans text-sm transition-colors hover:bg-amber-50 ${form.template === t.value ? "text-[#C9A961] bg-amber-50" : "text-[#3A3429]"}`}
+                          >
+                            <span className="flex-1 font-medium">{t.label}</span>
+                            <span className="text-[#C9A961]/60 text-xs font-light">{t.desc}</span>
+                            {form.template === t.value && <CheckCircle2 size={14} className="text-[#C9A961]" />}
+                          </button>
+                        </li>
+                      ))}
+
                     </motion.ul>
                   )}
                 </AnimatePresence>
@@ -1180,6 +1215,63 @@ export default function BasicPackageForm({ initialData }: Props) {
             </div>
           </div>
         </SectionCard>
+
+        {/* ════════════════════════════════════════════
+            SECTION F — RSVP & WhatsApp
+        ════════════════════════════════════════════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          <SectionCard
+            icon={Users}
+            title="RSVP & Notifikasi"
+            subtitle={isPremium ? "⚠️ Wajib diisi — Template Premium menggunakan nomor ini untuk notifikasi RSVP otomatis." : "Konfirmasi kehadiran tamu akan dikirim otomatis ke WhatsApp pengantin."}
+          >
+            <div className="space-y-5">
+              <div>
+                <FieldLabel htmlFor="f-whatsapp-number">Nomor WhatsApp Pengantin</FieldLabel>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 font-sans text-xs text-[#5C4A37]/40 select-none pointer-events-none">
+                    +
+                  </span>
+                  <input
+                    id="f-whatsapp-number"
+                    type="tel"
+                    inputMode="numeric"
+                    value={form.whatsapp_number}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        whatsapp_number: e.target.value.replace(/\D/g, ""),
+                      }))
+                    }
+                    placeholder="6281234567890"
+                    disabled={isLoading}
+                    maxLength={15}
+                    className="w-full pl-8 pr-4 py-3 bg-[#F9F7F2] border border-[#E8D5A3]/60 rounded-xl font-mono text-sm text-[#3A3429] placeholder-[#5C4A37]/30 focus:outline-none focus:border-[#C9A961] focus:ring-2 focus:ring-[#C9A961]/10 transition-all disabled:opacity-60"
+                  />
+                </div>
+                <p className="mt-1.5 font-sans text-[11px] text-[#5C4A37]/50 font-light">
+                  Format internasional tanpa tanda +. Contoh: <span className="font-mono">6281234567890</span>
+                </p>
+              </div>
+
+              {form.whatsapp_number && (
+                <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 border border-emerald-200/60 rounded-xl">
+                  <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.544 4.076 1.497 5.785L0 24l6.335-1.467A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.87 9.87 0 01-5.017-1.362l-.361-.214-3.741.867.928-3.635-.236-.374A9.847 9.847 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z"/>
+                  </svg>
+                  <span className="font-sans text-xs text-emerald-700 font-medium">
+                    Notifikasi RSVP akan dikirim ke: <strong>+{form.whatsapp_number}</strong>
+                  </span>
+                </div>
+              )}
+            </div>
+          </SectionCard>
+        </motion.div>
       </motion.div>
 
       {/* ════════════════════════════════════════════

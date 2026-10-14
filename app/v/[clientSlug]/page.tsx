@@ -15,6 +15,12 @@ import {
   Music2,
   VolumeX,
 } from "lucide-react";
+import Basic2Template from "./Basic2Template";
+import Basic3Template from "./Basic3Template";
+import Premium1Template from "./Premium1Template";
+
+
+
 
 
 /* ════════════════════════════════════════════════════
@@ -25,8 +31,10 @@ interface InvitationRow {
   title: string;
   slug: string;
   template: string;
+  whatsapp_number?: string | null;
   event_data: EventData;
 }
+
 interface GuestRow {
   id: string;
   name: string;
@@ -1244,10 +1252,46 @@ export default function InvitationPage() {
     );
   }
 
-  const ed = invitation.event_data;
-  const pria = ed?.mempelai_pria?.nama ?? "—";
+  const ed     = invitation.event_data;
+  const pria   = ed?.mempelai_pria?.nama  ?? "—";
   const wanita = ed?.mempelai_wanita?.nama ?? "—";
   const display = guest?.name ?? guestName;
+
+  /* ── Route to Basic-2 template if applicable ── */
+  if (invitation.template === "basic-2") {
+    return (
+      <Basic2Template
+        invitation={invitation}
+        guest={guest}
+        guestName={guestName}
+      />
+    );
+  }
+
+  /* ── Route to Basic-3 template if applicable ── */
+  if (invitation.template === "basic-3") {
+    return (
+      <Basic3Template
+        invitation={invitation}
+        guest={guest}
+        guestName={guestName}
+      />
+    );
+  }
+
+  /* ── Route to Premium-1 template ── */
+  if (invitation.template === "premium-1") {
+    return (
+      <Premium1Template
+        invitation={invitation}
+        guest={guest}
+        guestName={guestName}
+      />
+    );
+  }
+
+
+
 
   /* ── Content stack (Sections 2-6) ── */
   const ContentSections = (
