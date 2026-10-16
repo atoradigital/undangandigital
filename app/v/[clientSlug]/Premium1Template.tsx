@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-
 import { MapPin, Heart, ChevronDown, Send, Users, CheckCircle2, Calendar } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import type { EventData } from "@/types/admin";
@@ -18,7 +17,7 @@ const P = {
   gold:       "#C5A059",
   goldBright: "#D4AF37",
   cream:      "#FDFBF7",
-  creamCard:  "rgba(253,251,247,0.90)",
+  creamCard:  "rgba(253,251,247,0.95)",
   textDark:   "#2C1010",
   textMid:    "#5C3333",
   textSub:    "#8C6060",
@@ -58,6 +57,7 @@ interface InvitationRow {
 interface GuestRow { id: string; name: string; status: string; }
 interface Greeting {
   id: string;
+  invitation_id: string;
   guest_name: string;
   attendance: "hadir" | "tidak_hadir" | "mungkin";
   party_count: number;
@@ -156,12 +156,11 @@ function EyebrowLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* whileInView scroll reveal — DUA ARAH, scale bounce */
+/* ── Scroll Reveal (dua arah, scale bounce) ── */
 const revealVariants: Variants = {
   hidden:  { opacity: 0, y: 40, scale: 0.95 },
   visible: { opacity: 1, y: 0,  scale: 1, transition: { duration: 0.50, ease: "easeOut" } },
 };
-
 function Reveal({ children, delay = 0, className = "" }: {
   children: React.ReactNode; delay?: number; className?: string;
 }) {
@@ -179,7 +178,6 @@ function Reveal({ children, delay = 0, className = "" }: {
   );
 }
 
-
 /* ════════════════════════════════════════════════════
    LEFT PANEL — sticky cover foto + teks overlay
 ════════════════════════════════════════════════════ */
@@ -196,7 +194,6 @@ function CoverPanel({ ed }: { ed: EventData }) {
       ) : (
         <div className="absolute inset-0" style={{ background: P.maroon }} />
       )}
-      {/* Gradient overlay bawah */}
       <div className="absolute inset-0" style={{
         background: "linear-gradient(to bottom, rgba(74,18,26,0) 30%, rgba(74,18,26,0.40) 60%, rgba(50,12,18,0.88) 90%, rgba(30,8,12,0.96) 100%)",
       }} />
@@ -226,7 +223,7 @@ function CoverPanel({ ed }: { ed: EventData }) {
 }
 
 /* ════════════════════════════════════════════════════
-   OPENING GATE — hero layar penutup (right panel)
+   OPENING GATE — hero layar penutup (right/mobile)
 ════════════════════════════════════════════════════ */
 function OpeningGate({
   invitation, guestName, onOpen, opened,
@@ -240,7 +237,6 @@ function OpeningGate({
 
   return (
     <div className="relative flex flex-col items-center justify-between min-h-[100dvh] overflow-hidden">
-      {/* Foto bg + heavy maroon overlay */}
       {ed?.foto_cover && (
         <div className="absolute inset-0">
           <Image src={ed.foto_cover} alt="BG" fill className="object-cover object-center"
@@ -250,7 +246,6 @@ function OpeningGate({
       )}
       {!ed?.foto_cover && <div className="absolute inset-0" style={{ background: P.maroon }} />}
 
-      {/* TOP — Names */}
       <div className="relative z-10 text-center px-8 pt-14">
         <EyebrowLabel>The Wedding of</EyebrowLabel>
         <GoldLineShort className="my-4" />
@@ -266,7 +261,6 @@ function OpeningGate({
         <GoldLineShort className="mt-4" />
       </div>
 
-      {/* BOTTOM — Tamu + CTA */}
       <div className="relative z-10 text-center px-8 pb-16 w-full">
         <p className="font-sans text-[9px] uppercase tracking-[0.45em] font-light mb-1.5"
           style={{ color: "rgba(255,255,255,0.60)" }}>
@@ -283,7 +277,6 @@ function OpeningGate({
         )}
       </div>
 
-      {/* Scroll hint */}
       {opened && (
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2 opacity-40 animate-bounce">
           <ChevronDown size={18} style={{ color: P.gold }} />
@@ -294,11 +287,10 @@ function OpeningGate({
 }
 
 /* ════════════════════════════════════════════════════
-   VINYL WIDGET — floating + breathing + spinning on play
+   VINYL WIDGET — floating + breathing + spinning
 ════════════════════════════════════════════════════ */
 function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: () => void }) {
   return (
-    /* Floating breathing container */
     <motion.button
       onClick={onToggle}
       aria-label={isPlaying ? "Pause musik" : "Play musik"}
@@ -307,7 +299,6 @@ function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: ()
       animate={{ y: [0, -8, 0], rotate: [0, 1.5, -1.5, 0] }}
       transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
     >
-      {/* Vinyl disc — spin saat playing */}
       <motion.div
         className="relative w-14 h-14 rounded-full flex items-center justify-center"
         style={{ background: "#1A0A0E" }}
@@ -317,21 +308,17 @@ function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: ()
           : { duration: 0.3 }
         }
       >
-        {/* Groove rings */}
         {[1, 2.5, 4].map((i) => (
           <div key={i} className="absolute rounded-full"
             style={{ inset: `${i * 4}px`, border: `1px solid rgba(197,160,89,${0.28 - i * 0.06})` }} />
         ))}
-        {/* Center label */}
         <div className="w-6 h-6 rounded-full flex items-center justify-center z-10"
           style={{ background: `radial-gradient(circle, ${P.gold} 0%, ${P.maroon} 70%)` }}>
           <div className="w-1.5 h-1.5 rounded-full bg-black/60" />
         </div>
-        {/* Gold sector */}
         <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-2 h-3 rounded-full opacity-35"
           style={{ background: P.gold }} />
       </motion.div>
-      {/* Pause icon overlay when stopped */}
       {!isPlaying && (
         <div className="absolute inset-0 rounded-full flex items-center justify-center bg-black/30">
           <div className="flex gap-0.5">
@@ -344,12 +331,9 @@ function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: ()
   );
 }
 
-
 /* ════════════════════════════════════════════════════
-   Content Sections (semua pakai Reveal wrapper)
+   SECTION — Quote / Ayat
 ════════════════════════════════════════════════════ */
-
-/* ── Quote / Ayat ── */
 function QuoteSection({ ed }: { ed: EventData }) {
   const pria   = ed?.mempelai_pria?.nama?.split(" ")[0]   ?? "";
   const wanita = ed?.mempelai_wanita?.nama?.split(" ")[0] ?? "";
@@ -391,7 +375,9 @@ function QuoteSection({ ed }: { ed: EventData }) {
   );
 }
 
-/* ── Biodata Mempelai ── */
+/* ════════════════════════════════════════════════════
+   SECTION — Biodata Mempelai
+════════════════════════════════════════════════════ */
 function BiodataSection({ ed }: { ed: EventData }) {
   const mempelai = [
     { role: "Pria",   nama: ed.mempelai_pria?.nama   ?? "—", foto: ed.mempelai_pria?.foto_url,  ortu: ed.mempelai_pria?.ortu   ?? "" },
@@ -410,7 +396,6 @@ function BiodataSection({ ed }: { ed: EventData }) {
         {mempelai.map((m, i) => (
           <Reveal key={m.role} delay={i * 0.12}>
             <div className="text-center">
-              {/* Foto — arch top, floating breathing frame */}
               <motion.div
                 className="relative mx-auto overflow-hidden"
                 style={{
@@ -435,11 +420,10 @@ function BiodataSection({ ed }: { ed: EventData }) {
                 <span className="absolute bottom-2 left-3 text-xl select-none" style={{ color: P.gold, opacity: 0.60 }}>✦</span>
                 <span className="absolute bottom-2 right-3 text-xl select-none" style={{ color: P.gold, opacity: 0.60 }}>✦</span>
               </motion.div>
-              {/* Nama + ortu — di dalam ivory card agar terbaca */}
               <div className="rounded-b-2xl px-5 pt-4 pb-5 backdrop-blur-md"
                 style={{
                   maxWidth: 280, margin: "0 auto",
-                  background: "rgba(253,251,247,0.95)",
+                  background: P.creamCard,
                   border: `1px solid rgba(212,175,55,0.40)`,
                   borderTop: "none",
                   boxShadow: "0 8px 20px rgba(74,18,26,0.10)",
@@ -454,14 +438,15 @@ function BiodataSection({ ed }: { ed: EventData }) {
               </div>
             </div>
           </Reveal>
-
         ))}
       </div>
     </section>
   );
 }
 
-/* ── Save The Date + Countdown + Calendar ── */
+/* ════════════════════════════════════════════════════
+   SECTION — Save The Date + Countdown + Calendar
+════════════════════════════════════════════════════ */
 function SaveTheDateSection({ ed, pria, wanita }: { ed: EventData; pria: string; wanita: string }) {
   const [countdown, setCountdown] = useState({ hari: 0, jam: 0, menit: 0, detik: 0 });
 
@@ -490,7 +475,8 @@ function SaveTheDateSection({ ed, pria, wanita }: { ed: EventData; pria: string;
   return (
     <section className="px-6 py-12" style={{ background: `${P.maroon}08` }}>
       <Reveal>
-        <div className="text-center mb-7">
+        <div className="text-center mx-auto max-w-[300px] mb-7 rounded-2xl px-6 pt-6 pb-5 backdrop-blur-md"
+          style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.40)`, boxShadow: "0 8px 28px rgba(74,18,26,0.10)" }}>
           <h2 className="font-serif font-bold" style={{ color: P.maroon, fontSize: "clamp(2rem, 7vw, 2.5rem)" }}>
             Save The Date
           </h2>
@@ -535,7 +521,9 @@ function SaveTheDateSection({ ed, pria, wanita }: { ed: EventData; pria: string;
   );
 }
 
-/* ── Jadwal Akad & Resepsi ── */
+/* ════════════════════════════════════════════════════
+   SECTION — Jadwal Akad & Resepsi
+════════════════════════════════════════════════════ */
 function JadwalSection({ ed }: { ed: EventData }) {
   const events = [
     {
@@ -563,13 +551,8 @@ function JadwalSection({ ed }: { ed: EventData }) {
   return (
     <section className="px-6 py-12">
       <Reveal>
-        {/* "Waktu & Tempat" header — dibungkus ivory card agar terbaca di atas pattern mandala */}
         <div className="text-center mx-auto max-w-[300px] mb-8 rounded-2xl px-6 pt-6 pb-5 backdrop-blur-md"
-          style={{
-            background: "rgba(253,251,247,0.95)",
-            border: `1px solid rgba(212,175,55,0.40)`,
-            boxShadow: "0 8px 28px rgba(74,18,26,0.10)",
-          }}>
+          style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.40)`, boxShadow: "0 8px 28px rgba(74,18,26,0.10)" }}>
           <EyebrowLabel>Acara Pernikahan</EyebrowLabel>
           <h2 className="font-serif font-bold mt-2" style={{ color: P.maroon, fontSize: "clamp(1.9rem, 7vw, 2.4rem)" }}>
             Waktu &amp; Tempat
@@ -581,16 +564,11 @@ function JadwalSection({ ed }: { ed: EventData }) {
         </div>
       </Reveal>
 
-
       <div className="space-y-6 max-w-[300px] mx-auto">
         {events.map((ev, i) => (
           <Reveal key={ev.id} delay={i * 0.12}>
             <div className="rounded-2xl overflow-hidden backdrop-blur-md"
-              style={{
-                background: P.creamCard,
-                border: `1px solid rgba(212,175,55,0.50)`,
-                boxShadow: "0 8px 32px rgba(74,18,26,0.10)",
-              }}>
+              style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.50)`, boxShadow: "0 8px 32px rgba(74,18,26,0.10)" }}>
               <div className="h-[2px]" style={{ background: `linear-gradient(to right, ${P.gold}, ${P.goldBright}, ${P.gold})` }} />
               <div className="px-6 py-7 text-center">
                 <h3 className="font-serif font-bold mb-1" style={{ color: P.maroon, fontSize: "1.9rem" }}>{ev.label}</h3>
@@ -598,7 +576,7 @@ function JadwalSection({ ed }: { ed: EventData }) {
                 {ev.hari && <p className="font-sans text-[10px] uppercase tracking-[0.40em] font-semibold mb-0.5" style={{ color: P.gold }}>{ev.hari}</p>}
                 {ev.tanggal && <p className="font-serif text-base font-bold mb-0.5" style={{ color: P.maroon }}>{ev.tanggal}</p>}
                 {(ev.jamMulai || ev.jamSelesai) && (
-                  <p className="font-sans text-sm font-light mb-5" style={{ color: P.textSub }}>
+                  <p className="font-sans text-sm font-light mb-5" style={{ color: P.textDark }}>
                     {ev.jamMulai}{ev.jamMulai && ev.jamSelesai && " – "}{ev.jamSelesai}
                   </p>
                 )}
@@ -606,7 +584,7 @@ function JadwalSection({ ed }: { ed: EventData }) {
                   <div className="mb-5">
                     <div className="flex justify-center mb-2"><MapPin size={14} strokeWidth={1.5} style={{ color: P.gold }} /></div>
                     {ev.namaLokasi && <p className="font-sans text-sm font-bold uppercase tracking-wide" style={{ color: P.maroon }}>{ev.namaLokasi}</p>}
-                    {ev.alamat && <p className="font-sans text-xs font-light leading-relaxed mt-1" style={{ color: P.textMid }}>{ev.alamat}</p>}
+                    {ev.alamat && <p className="font-sans text-xs font-light leading-relaxed mt-1" style={{ color: P.textDark }}>{ev.alamat}</p>}
                   </div>
                 )}
                 {ev.maps && (
@@ -623,7 +601,9 @@ function JadwalSection({ ed }: { ed: EventData }) {
   );
 }
 
-/* ── Galeri ── */
+/* ════════════════════════════════════════════════════
+   SECTION — Galeri
+════════════════════════════════════════════════════ */
 function GaleriSection({ galeri }: { galeri: string[] }) {
   if (!galeri?.length) return null;
   return (
@@ -651,7 +631,9 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
   );
 }
 
-/* ── RSVP Form + Greeting Feed ── */
+/* ════════════════════════════════════════════════════
+   SECTION — RSVP + WhatsApp + Realtime Greeting Feed
+════════════════════════════════════════════════════ */
 function RSVPSection({ invitation }: { invitation: InvitationRow }) {
   const [name,        setName]        = useState("");
   const [attendance,  setAttendance]  = useState<"hadir" | "tidak_hadir" | "mungkin">("hadir");
@@ -662,32 +644,80 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
   const [greetings,   setGreetings]   = useState<Greeting[]>([]);
   const [loadingG,    setLoadingG]    = useState(true);
 
+  /* ── 1. Initial fetch ── */
   const fetchGreetings = useCallback(async () => {
     const { data } = await supabase
       .from("greetings")
       .select("*")
       .eq("invitation_id", invitation.id)
       .order("created_at", { ascending: false })
-      .limit(30);
+      .limit(50);
     if (data) setGreetings(data as Greeting[]);
     setLoadingG(false);
   }, [invitation.id]);
 
-  useEffect(() => { fetchGreetings(); }, [fetchGreetings]);
+  /* ── 2. Realtime subscription ── */
+  useEffect(() => {
+    fetchGreetings();
 
+    /* Unique name per effect run */
+    const channelName = `greetings-${invitation.id}-${Date.now()}`;
+    const channel = supabase.channel(channelName);
+
+    // 1. DAFTARKAN .on() TERLEBIH DAHULU SEBELUM .subscribe()
+    channel.on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "greetings",
+        filter: `invitation_id=eq.${invitation.id}`,
+      },
+      (payload) => {
+        const newG = payload.new as Greeting;
+        setGreetings((prev) => {
+          if (prev.some((g) => g.id === newG.id)) return prev;
+          return [newG, ...prev];
+        });
+      }
+    );
+
+    // 2. BARU PANGGIL .subscribe() DI BAGIAN AKHIR
+    channel.subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [invitation.id, fetchGreetings]);
+
+  /* ── 3. Dual-action submit: INSERT to Supabase → then open WhatsApp ── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return;
     setSubmitting(true);
 
-    await supabase.from("greetings").insert({
-      invitation_id: invitation.id,
-      guest_name: name.trim(),
-      attendance,
-      party_count: partyCount,
-      message: message.trim(),
-    });
+    /* Step A — Insert ke Supabase greetings */
+    const { data: inserted } = await supabase
+      .from("greetings")
+      .insert({
+        invitation_id: invitation.id,
+        guest_name:    name.trim(),
+        attendance,
+        party_count:   partyCount,
+        message:       message.trim(),
+      })
+      .select()
+      .single();
 
+    /* Step B — Update local state langsung (instant feed) */
+    if (inserted) {
+      setGreetings((prev) => {
+        if (prev.some((g) => g.id === (inserted as Greeting).id)) return prev;
+        return [inserted as Greeting, ...prev];
+      });
+    }
+
+    /* Step C — Buka WhatsApp pengantin */
     const waNumber = invitation.whatsapp_number?.replace(/\D/g, "");
     if (waNumber) {
       const attLabel = attendance === "hadir" ? "✅ Hadir" : attendance === "tidak_hadir" ? "❌ Tidak Hadir" : "🤔 Mungkin Hadir";
@@ -703,7 +733,6 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
 
     setSubmitted(true);
     setSubmitting(false);
-    fetchGreetings();
   };
 
   const attendanceOptions = [
@@ -714,8 +743,10 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
 
   return (
     <section className="px-5 py-14" style={{ background: `${P.maroon}05` }}>
+      {/* Header */}
       <Reveal>
-        <div className="text-center mb-8">
+        <div className="text-center mx-auto max-w-[300px] mb-8 rounded-2xl px-6 pt-6 pb-5 backdrop-blur-md"
+          style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.40)`, boxShadow: "0 8px 28px rgba(74,18,26,0.10)" }}>
           <EyebrowLabel>Konfirmasi Kehadiran</EyebrowLabel>
           <h2 className="font-serif font-bold mt-2" style={{ color: P.maroon, fontSize: "clamp(1.9rem, 7vw, 2.4rem)" }}>
             RSVP
@@ -724,10 +755,12 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
         </div>
       </Reveal>
 
+      {/* Form Card */}
       <Reveal delay={0.1}>
         <div className="max-w-md mx-auto rounded-2xl overflow-hidden backdrop-blur-md mb-8"
           style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.50)`, boxShadow: "0 12px 40px rgba(74,18,26,0.12)" }}>
           <div className="h-[2px]" style={{ background: `linear-gradient(to right, ${P.gold}, ${P.goldBright}, ${P.gold})` }} />
+
           {submitted ? (
             <div className="px-8 py-12 text-center">
               <CheckCircle2 size={40} className="mx-auto mb-4" style={{ color: P.gold }} strokeWidth={1.5} />
@@ -748,6 +781,7 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                   className="w-full px-4 py-3 rounded-xl text-sm font-sans focus:outline-none"
                   style={{ background: "#F9F6EE", border: `1px solid rgba(212,175,55,0.40)`, color: P.textDark }} />
               </div>
+
               {/* Kehadiran */}
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-[0.3em] font-semibold mb-2" style={{ color: P.maroon }}>
@@ -767,6 +801,7 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                   ))}
                 </div>
               </div>
+
               {/* Jumlah tamu */}
               {attendance === "hadir" && (
                 <div>
@@ -781,10 +816,11 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                     <button type="button" onClick={() => setPartyCount((p) => Math.min(10, p + 1))}
                       className="w-9 h-9 rounded-full text-lg font-bold flex items-center justify-center"
                       style={{ border: `1px solid rgba(212,175,55,0.50)`, color: P.maroon }}>+</button>
-                    <span className="font-sans text-xs" style={{ color: P.textSub }}>orang</span>
+                    <span className="font-sans text-xs" style={{ color: P.textDark }}>orang</span>
                   </div>
                 </div>
               )}
+
               {/* Ucapan */}
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-[0.3em] font-semibold mb-1.5" style={{ color: P.maroon }}>
@@ -795,6 +831,8 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                   className="w-full px-4 py-3 rounded-xl text-sm font-sans focus:outline-none resize-none leading-relaxed"
                   style={{ background: "#F9F6EE", border: `1px solid rgba(212,175,55,0.40)`, color: P.textDark }} />
               </div>
+
+              {/* Submit */}
               <button type="submit" disabled={submitting}
                 className={MAROON_BTN + " w-full justify-center"} style={{ opacity: submitting ? 0.7 : 1 }}>
                 {submitting ? "Mengirim..." : <><Send size={13} strokeWidth={2} /> Kirim RSVP via WhatsApp</>}
@@ -804,15 +842,16 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
         </div>
       </Reveal>
 
-      {/* Greeting Feed */}
+      {/* ── Greeting Feed (Live) ── */}
       <Reveal delay={0.2}>
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-2 mb-5">
             <Users size={14} strokeWidth={1.5} style={{ color: P.gold }} />
             <p className="font-sans text-[10px] uppercase tracking-[0.35em] font-semibold" style={{ color: P.maroon }}>
-              Ucapan & Doa ({greetings.length})
+              Ucapan &amp; Doa ({greetings.length})
             </p>
           </div>
+
           {loadingG ? (
             <div className="text-center py-6">
               <div className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin mx-auto"
@@ -826,16 +865,22 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1 scrollbar-hide">
               {greetings.map((g) => (
                 <div key={g.id} className="rounded-2xl px-5 py-4 backdrop-blur-sm"
-                  style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.35)`, boxShadow: "0 2px 12px rgba(74,18,26,0.05)" }}>
+                  style={{ background: P.creamCard, border: `1px solid rgba(212,175,55,0.35)`, boxShadow: "0 2px 12px rgba(74,18,26,0.06)" }}>
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-                        style={{ background: `${P.maroon}15`, color: P.maroon }}>
+                      {/* Avatar inisial */}
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                        style={{
+                          background: g.attendance === "hadir" ? "rgba(34,139,34,0.12)" : g.attendance === "tidak_hadir" ? "rgba(220,50,50,0.10)" : "rgba(180,160,60,0.12)",
+                          color: g.attendance === "hadir" ? "#1D6B1D" : g.attendance === "tidak_hadir" ? "#B03030" : "#8B7B2A",
+                        }}>
                         {g.guest_name.charAt(0).toUpperCase()}
                       </div>
                       <div>
                         <p className="font-sans text-xs font-semibold" style={{ color: P.maroon }}>{g.guest_name}</p>
-                        <p className="font-sans text-[10px]" style={{ color: P.textSub }}>
+                        <p className="font-sans text-[10px] font-medium" style={{
+                          color: g.attendance === "hadir" ? "#1D6B1D" : g.attendance === "tidak_hadir" ? "#B03030" : "#8B7B2A",
+                        }}>
                           {g.attendance === "hadir" ? "✅ Hadir" : g.attendance === "tidak_hadir" ? "❌ Tidak Hadir" : "🤔 Mungkin"}
                           {g.attendance === "hadir" && g.party_count > 1 && ` · ${g.party_count} orang`}
                         </p>
@@ -843,7 +888,9 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                     </div>
                     <span className="font-sans text-[9px] shrink-0 mt-0.5" style={{ color: P.textSub }}>{timeAgo(g.created_at)}</span>
                   </div>
-                  <p className="font-sans text-xs leading-relaxed italic" style={{ color: P.textMid }}>"{g.message}"</p>
+                  <p className="font-sans text-xs leading-relaxed italic" style={{ color: P.maroon }}>
+                    &ldquo;{g.message}&rdquo;
+                  </p>
                 </div>
               ))}
             </div>
@@ -854,7 +901,9 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
   );
 }
 
-/* ── Wedding Gift ── */
+/* ════════════════════════════════════════════════════
+   SECTION — Wedding Gift
+════════════════════════════════════════════════════ */
 function WeddingGiftSection({ ed, handleCopy }: { ed: EventData; handleCopy: (v: string) => void }) {
   const [open, setOpen] = useState(false);
   const hasRek1 = ed?.rek_1_bank || ed?.rek_1_no;
@@ -931,7 +980,9 @@ function WeddingGiftSection({ ed, handleCopy }: { ed: EventData; handleCopy: (v:
   );
 }
 
-/* ── Penutup ── */
+/* ════════════════════════════════════════════════════
+   SECTION — Penutup
+════════════════════════════════════════════════════ */
 function PenutupSection({ pria, wanita, ed }: { pria: string; wanita: string; ed: EventData }) {
   return (
     <section className="relative overflow-hidden text-center min-h-screen flex flex-col justify-center">
@@ -964,7 +1015,7 @@ function PenutupSection({ pria, wanita, ed }: { pria: string; wanita: string; ed
 }
 
 /* ════════════════════════════════════════════════════
-   MAIN EXPORT — Premium1Template  (Split-Screen)
+   MAIN EXPORT — Premium1Template (Split-Screen)
 ════════════════════════════════════════════════════ */
 export default function Premium1Template({
   invitation, guest, guestName,
@@ -983,7 +1034,6 @@ export default function Premium1Template({
 
   const handleOpen = () => {
     setOpened(true);
-    /* Bypass autoplay policy — must be inside user gesture */
     audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => {});
     setTimeout(() => {
       if (rightPanelRef.current) {
@@ -1006,7 +1056,6 @@ export default function Premium1Template({
   const wanita = ed?.mempelai_wanita?.nama?.split(" ")[0] ?? "—";
   const display = guest?.name ?? guestName;
 
-  /* ── Content stack — semua pakai Reveal wrapper ── */
   const ContentSections = (
     <>
       <div id="sec-p1-quote">
@@ -1024,7 +1073,7 @@ export default function Premium1Template({
 
   return (
     <div style={{ background: P.cream }}>
-      {/* Hidden audio — premium source, fallback ke basic */}
+      {/* Audio — premium music, fallback ke basic */}
       <audio ref={audioRef} loop preload="auto">
         <source src={MUSIC_P1} type="audio/mpeg" />
         <source src={MUSIC_FB}  type="audio/mpeg" />
@@ -1033,16 +1082,16 @@ export default function Premium1Template({
       {/* Floating Vinyl Widget */}
       {opened && <VinylWidget isPlaying={isPlaying} onToggle={toggleMusic} />}
 
-      {/* ══════════════════════════
-          DESKTOP — Split-Screen
-      ══════════════════════════ */}
+      {/* ══════════════════════════════════════════
+          DESKTOP — Split-Screen (lg+)
+      ══════════════════════════════════════════ */}
       <div className="hidden lg:flex h-screen w-screen overflow-hidden">
-        {/* LEFT PANEL — sticky foto cover */}
+        {/* LEFT — Sticky Cover Foto */}
         <div className="template-left-panel flex-1 relative">
           <CoverPanel ed={ed} />
         </div>
 
-        {/* RIGHT PANEL — 414px, mandala bg pattern, scrollable */}
+        {/* RIGHT — 414px, mandala bg, scrollable */}
         <div
           ref={rightPanelRef}
           className="template-right-panel w-[414px] shrink-0 scrollbar-hide relative overflow-y-auto"
@@ -1054,27 +1103,22 @@ export default function Premium1Template({
             backgroundRepeat: "no-repeat",
           }}
         >
-          {/* Ivory overlay — pattern mandala tetap terlihat artistik */}
+          {/* Ivory overlay — mandala tetap terlihat artistik */}
           <div className="absolute inset-0 z-0 pointer-events-none"
-            style={{ background: "rgba(253,251,247,0.88)", backdropFilter: "blur(0px)" }} />
+            style={{ background: "rgba(253,251,247,0.85)" }} />
           <div className="relative z-10">
-            <OpeningGate
-              invitation={invitation}
-              guestName={display}
-              onOpen={handleOpen}
-              opened={opened}
-            />
+            <OpeningGate invitation={invitation} guestName={display} onOpen={handleOpen} opened={opened} />
             {opened && ContentSections}
           </div>
         </div>
       </div>
 
-      {/* ══════════════════════════
-          MOBILE — Single scroll
-      ══════════════════════════ */}
+      {/* ══════════════════════════════════════════
+          MOBILE — Single scroll (< lg)
+      ══════════════════════════════════════════ */}
       <div className="lg:hidden relative">
-        {/* Background mandala */}
-        <div className="absolute inset-0 z-0"
+        {/* Background mandala (fixed) */}
+        <div className="fixed inset-0 z-0"
           style={{
             backgroundImage: `url('${BG_P1}')`,
             backgroundAttachment: "fixed",
@@ -1084,15 +1128,10 @@ export default function Premium1Template({
           }}
         />
         {/* Ivory overlay */}
-        <div className="absolute inset-0 z-0 pointer-events-none"
-          style={{ background: "rgba(253,251,247,0.88)" }} />
+        <div className="fixed inset-0 z-0 pointer-events-none"
+          style={{ background: "rgba(253,251,247,0.85)" }} />
         <div className="relative z-10">
-          <OpeningGate
-            invitation={invitation}
-            guestName={display}
-            onOpen={handleOpen}
-            opened={opened}
-          />
+          <OpeningGate invitation={invitation} guestName={display} onOpen={handleOpen} opened={opened} />
           {opened && ContentSections}
         </div>
       </div>

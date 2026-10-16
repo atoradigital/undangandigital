@@ -18,6 +18,9 @@ import {
 import Basic2Template from "./Basic2Template";
 import Basic3Template from "./Basic3Template";
 import Premium1Template from "./Premium1Template";
+import Premium2Template from "./Premium2Template";
+import Premium3Template from "./Premium3Template";
+
 
 
 
@@ -1290,8 +1293,26 @@ export default function InvitationPage() {
     );
   }
 
+  /* ── Route to Premium-2 template ── */
+  if (invitation.template === "premium-2") {
+    return (
+      <Premium2Template
+        invitation={invitation}
+        guest={guest}
+        guestName={guestName}
+      />
+    );
+  }
 
-
+  if (invitation.template === "premium-3") {
+  return (
+    <Premium3Template
+    invitation={invitation}
+    guest={guest}
+    guestName={guestName}
+    />
+  );
+}
 
   /* ── Content stack (Sections 2-6) ── */
   const ContentSections = (

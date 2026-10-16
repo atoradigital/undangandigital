@@ -11,7 +11,7 @@ export const TEMPLATE_OPTIONS: {
   color: string;
 }[] = [
   { value: "modern",  label: "Modern",  desc: "Minimalis & kontemporer", color: "#3A3429" },
-  { value: "klasik",  label: "Klasik",  desc: "Elegan & timeless",       color: "#5C4A37" },
+  { value: "klasik",  label: "Klasik",  desc: "Elegan & timeless",      color: "#5C4A37" },
   { value: "floral",  label: "Floral",  desc: "Romantis & natural",      color: "#C9A961" },
 ];
 
@@ -24,12 +24,20 @@ export const BASIC_TEMPLATES = [
 
 export type BasicTemplateValue = (typeof BASIC_TEMPLATES)[number]["value"];
 
-/* ── Paket Premium — template choices ── */
+/* ── Paket Premium — template choices (Diperbarui dengan Premium 1 & 2) ── */
 export const PREMIUM_TEMPLATES = [
   { value: "premium-1", label: "Premium 1", desc: "Royal Maroon Mandala · Maroon & Gold" },
+  { value: "premium-2", label: "Premium 2", desc: "Soft Blush & Rose Gold · Mandala Elegan" },
+  { value: "premium-3", label: "Premium 3", desc: "Midnight Black & Luxurious Gold Mandala" },
 ] as const;
 
 export type PremiumTemplateValue = (typeof PREMIUM_TEMPLATES)[number]["value"];
+
+/* ── Gabungan Seluruh Template ── */
+export const ALL_TEMPLATES = [
+  ...BASIC_TEMPLATES,
+  ...PREMIUM_TEMPLATES,
+] as const;
 
 export type AnyTemplateValue = BasicTemplateValue | PremiumTemplateValue;
 
@@ -81,7 +89,6 @@ export interface EventData {
   rek_2_nama?: string;    // Nama Pemilik Rekening 2
   gift_penerima?: string; // Nama Penerima Hadiah Fisik
   gift_alamat?: string;   // Alamat Lengkap Pengiriman Hadiah
-
 }
 
 export interface Invitation {

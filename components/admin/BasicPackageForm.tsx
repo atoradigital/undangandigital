@@ -11,11 +11,9 @@ import {
 } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import {
-  BASIC_TEMPLATES,
-  PREMIUM_TEMPLATES,
+  ALL_TEMPLATES,
   type Invitation,
   type EventData,
-  type BasicTemplateValue,
   type AnyTemplateValue,
 } from "@/types/admin";
 
@@ -31,8 +29,8 @@ interface FormState {
   template: AnyTemplateValue;
 
   /* B — Mempelai */
-  pria_nama:  string;
-  pria_ortu:  string;
+  pria_nama: string;
+  pria_ortu: string;
   wanita_nama: string;
   wanita_ortu: string;
   /* C — Jadwal */
@@ -43,38 +41,38 @@ interface FormState {
   resepsi_jam_mulai: string;
   resepsi_jam_selesai: string;
   /* D — Lokasi Akad */
-  akad_lokasi:    string;   // nama gedung
-  akad_alamat:    string;   // alamat lengkap
-  akad_maps_url:  string;   // google maps url
+  akad_lokasi: string;   // nama gedung
+  akad_alamat: string;   // alamat lengkap
+  akad_maps_url: string;   // google maps url
   /* E — Lokasi Resepsi */
-  resepsi_lokasi:    string;
-  resepsi_alamat:    string;
-  resepsi_maps_url:  string;
+  resepsi_lokasi: string;
+  resepsi_alamat: string;
+  resepsi_maps_url: string;
   /* F — Wedding Gift */
-  rek_1_bank:   string;
-  rek_1_no:     string;
-  rek_1_nama:   string;
-  rek_2_bank:   string;
-  rek_2_no:     string;
-  rek_2_nama:   string;
+  rek_1_bank: string;
+  rek_1_no: string;
+  rek_1_nama: string;
+  rek_2_bank: string;
+  rek_2_no: string;
+  rek_2_nama: string;
   gift_penerima: string;
-  gift_alamat:   string;
+  gift_alamat: string;
   /* G — RSVP */
   whatsapp_number: string;   // format internasional tanpa +, misal 6281234567890
 }
 
 interface ImageFiles {
-  pria_foto:  File | null;
+  pria_foto: File | null;
   wanita_foto: File | null;
   foto_cover: File | null;
   foto_quote: File | null;  // foto untuk card ayat
 }
 
 interface ImagePreviews {
-  pria_foto:   string | null;
+  pria_foto: string | null;
   wanita_foto: string | null;
-  foto_cover:  string | null;
-  foto_quote:  string | null;  // foto untuk card ayat
+  foto_cover: string | null;
+  foto_quote: string | null;  // foto untuk card ayat
 }
 
 interface UploadProgress {
@@ -296,54 +294,54 @@ export default function BasicPackageForm({ initialData }: Props) {
   const existing = initialData?.event_data;
 
   const [form, setForm] = useState<FormState>({
-    title:               initialData?.title ?? "",
-    slug:                initialData?.slug ?? "",
-    template:            (initialData?.template as AnyTemplateValue) ?? "basic-1",
+    title: initialData?.title ?? "",
+    slug: initialData?.slug ?? "",
+    template: (initialData?.template as AnyTemplateValue) ?? "basic-1",
 
-    pria_nama:           existing?.mempelai_pria?.nama  ?? "",
-    pria_ortu:           existing?.mempelai_pria?.ortu  ?? "",
-    wanita_nama:         existing?.mempelai_wanita?.nama ?? "",
-    wanita_ortu:         existing?.mempelai_wanita?.ortu ?? "",
-    akad_tanggal:        existing?.jadwal_akad?.tanggal     ?? "",
-    akad_jam_mulai:      existing?.jadwal_akad?.jam_mulai   ?? "",
-    akad_jam_selesai:    existing?.jadwal_akad?.jam_selesai ?? "",
-    resepsi_tanggal:     existing?.jadwal_resepsi?.tanggal     ?? "",
-    resepsi_jam_mulai:   existing?.jadwal_resepsi?.jam_mulai   ?? "",
+    pria_nama: existing?.mempelai_pria?.nama ?? "",
+    pria_ortu: existing?.mempelai_pria?.ortu ?? "",
+    wanita_nama: existing?.mempelai_wanita?.nama ?? "",
+    wanita_ortu: existing?.mempelai_wanita?.ortu ?? "",
+    akad_tanggal: existing?.jadwal_akad?.tanggal ?? "",
+    akad_jam_mulai: existing?.jadwal_akad?.jam_mulai ?? "",
+    akad_jam_selesai: existing?.jadwal_akad?.jam_selesai ?? "",
+    resepsi_tanggal: existing?.jadwal_resepsi?.tanggal ?? "",
+    resepsi_jam_mulai: existing?.jadwal_resepsi?.jam_mulai ?? "",
     resepsi_jam_selesai: existing?.jadwal_resepsi?.jam_selesai ?? "",
     /* Lokasi akad — new fields, fallback ke lokasi lama jika ada */
-    akad_lokasi:    existing?.akad_lokasi    ?? "",
-    akad_alamat:    existing?.akad_alamat    ?? existing?.lokasi?.alamat ?? "",
-    akad_maps_url:  existing?.akad_maps_url  ?? existing?.lokasi?.maps_url ?? "",
+    akad_lokasi: existing?.akad_lokasi ?? "",
+    akad_alamat: existing?.akad_alamat ?? existing?.lokasi?.alamat ?? "",
+    akad_maps_url: existing?.akad_maps_url ?? existing?.lokasi?.maps_url ?? "",
     /* Lokasi resepsi */
-    resepsi_lokasi:    existing?.resepsi_lokasi    ?? "",
-    resepsi_alamat:    existing?.resepsi_alamat    ?? existing?.lokasi?.alamat ?? "",
-    resepsi_maps_url:  existing?.resepsi_maps_url  ?? existing?.lokasi?.maps_url ?? "",
+    resepsi_lokasi: existing?.resepsi_lokasi ?? "",
+    resepsi_alamat: existing?.resepsi_alamat ?? existing?.lokasi?.alamat ?? "",
+    resepsi_maps_url: existing?.resepsi_maps_url ?? existing?.lokasi?.maps_url ?? "",
     /* Wedding Gift */
-    rek_1_bank:   existing?.rek_1_bank   ?? "",
-    rek_1_no:     existing?.rek_1_no     ?? "",
-    rek_1_nama:   existing?.rek_1_nama   ?? "",
-    rek_2_bank:   existing?.rek_2_bank   ?? "",
-    rek_2_no:     existing?.rek_2_no     ?? "",
-    rek_2_nama:   existing?.rek_2_nama   ?? "",
+    rek_1_bank: existing?.rek_1_bank ?? "",
+    rek_1_no: existing?.rek_1_no ?? "",
+    rek_1_nama: existing?.rek_1_nama ?? "",
+    rek_2_bank: existing?.rek_2_bank ?? "",
+    rek_2_no: existing?.rek_2_no ?? "",
+    rek_2_nama: existing?.rek_2_nama ?? "",
     gift_penerima: existing?.gift_penerima ?? "",
-    gift_alamat:   existing?.gift_alamat   ?? "",
+    gift_alamat: existing?.gift_alamat ?? "",
     /* RSVP */
     whatsapp_number: initialData?.whatsapp_number ?? "",
   });
 
   /* ── Image state ── */
   const [imageFiles, setImageFiles] = useState<ImageFiles>({
-    pria_foto:   null,
+    pria_foto: null,
     wanita_foto: null,
-    foto_cover:  null,
-    foto_quote:  null,
+    foto_cover: null,
+    foto_quote: null,
   });
 
   const [imagePreviews, setImagePreviews] = useState<ImagePreviews>({
-    pria_foto:   existing?.mempelai_pria?.foto_url  ?? null,
+    pria_foto: existing?.mempelai_pria?.foto_url ?? null,
     wanita_foto: existing?.mempelai_wanita?.foto_url ?? null,
-    foto_cover:  existing?.foto_cover ?? null,
-    foto_quote:  existing?.foto_quote ?? null,
+    foto_cover: existing?.foto_cover ?? null,
+    foto_quote: existing?.foto_quote ?? null,
   });
 
   /* ── Gallery state ── */
@@ -355,9 +353,9 @@ export default function BasicPackageForm({ initialData }: Props) {
 
   /* ── UI state ── */
   const [templateOpen, setTemplateOpen] = useState(false);
-  const [progress, setProgress]         = useState<UploadProgress | null>(null);
-  const [globalError, setGlobalError]   = useState("");
-  const [slugError, setSlugError]       = useState("");
+  const [progress, setProgress] = useState<UploadProgress | null>(null);
+  const [globalError, setGlobalError] = useState("");
+  const [slugError, setSlugError] = useState("");
 
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -395,7 +393,7 @@ export default function BasicPackageForm({ initialData }: Props) {
     const arr = Array.from(files);
     setGalleryFiles((prev) => {
       const combined = [...prev, ...arr];
-      const limited  = combined.slice(0, MAX_GALLERY - existingGallery.length);
+      const limited = combined.slice(0, MAX_GALLERY - existingGallery.length);
       return limited;
     });
     setGalleryPreviews((prev) => {
@@ -443,16 +441,16 @@ export default function BasicPackageForm({ initialData }: Props) {
     const filesToUpload: { key: string; file: File; path: string }[] = [];
     const slug = form.slug.trim();
 
-    if (imageFiles.pria_foto)   filesToUpload.push({ key: "pria",   file: imageFiles.pria_foto,   path: `${slug}/pria.${imageFiles.pria_foto.name.split(".").pop()}` });
+    if (imageFiles.pria_foto) filesToUpload.push({ key: "pria", file: imageFiles.pria_foto, path: `${slug}/pria.${imageFiles.pria_foto.name.split(".").pop()}` });
     if (imageFiles.wanita_foto) filesToUpload.push({ key: "wanita", file: imageFiles.wanita_foto, path: `${slug}/wanita.${imageFiles.wanita_foto.name.split(".").pop()}` });
-    if (imageFiles.foto_cover)  filesToUpload.push({ key: "cover",  file: imageFiles.foto_cover,  path: `${slug}/cover.${imageFiles.foto_cover.name.split(".").pop()}` });
-    if (imageFiles.foto_quote)  filesToUpload.push({ key: "quote",  file: imageFiles.foto_quote,  path: `${slug}/quote.${imageFiles.foto_quote.name.split(".").pop()}` });
+    if (imageFiles.foto_cover) filesToUpload.push({ key: "cover", file: imageFiles.foto_cover, path: `${slug}/cover.${imageFiles.foto_cover.name.split(".").pop()}` });
+    if (imageFiles.foto_quote) filesToUpload.push({ key: "quote", file: imageFiles.foto_quote, path: `${slug}/quote.${imageFiles.foto_quote.name.split(".").pop()}` });
     galleryFiles.forEach((file, i) => {
       filesToUpload.push({ key: `galeri_${i}`, file, path: `${slug}/galeri-${Date.now()}-${i}.${file.name.split(".").pop()}` });
     });
 
     const totalSteps = filesToUpload.length + 1; // +1 for DB save
-    let currentStep  = 0;
+    let currentStep = 0;
 
     setProgress({ current: 0, total: totalSteps, label: "Mempersiapkan..." });
 
@@ -479,45 +477,45 @@ export default function BasicPackageForm({ initialData }: Props) {
       }
 
       /* ── Resolve final URLs (new upload OR existing) ── */
-      const pria_foto_url   = uploadedUrls["pria"]   ?? imagePreviews.pria_foto   ?? "";
+      const pria_foto_url = uploadedUrls["pria"] ?? imagePreviews.pria_foto ?? "";
       const wanita_foto_url = uploadedUrls["wanita"] ?? imagePreviews.wanita_foto ?? "";
-      const foto_cover_url  = uploadedUrls["cover"]  ?? imagePreviews.foto_cover  ?? "";
-      const foto_quote_url  = uploadedUrls["quote"]  ?? imagePreviews.foto_quote  ?? "";
-      const galeri_all      = [...existingGallery, ...galeriNewUrls];
+      const foto_cover_url = uploadedUrls["cover"] ?? imagePreviews.foto_cover ?? "";
+      const foto_quote_url = uploadedUrls["quote"] ?? imagePreviews.foto_quote ?? "";
+      const galeri_all = [...existingGallery, ...galeriNewUrls];
 
       /* ── Build event_data ── */
       const event_data: EventData = {
-        mempelai_pria:   { nama: form.pria_nama,   foto_url: pria_foto_url,   ortu: form.pria_ortu   || undefined },
+        mempelai_pria: { nama: form.pria_nama, foto_url: pria_foto_url, ortu: form.pria_ortu || undefined },
         mempelai_wanita: { nama: form.wanita_nama, foto_url: wanita_foto_url, ortu: form.wanita_ortu || undefined },
-        foto_cover:      foto_cover_url,
-        foto_quote:      foto_quote_url || undefined,
+        foto_cover: foto_cover_url,
+        foto_quote: foto_quote_url || undefined,
         jadwal_akad: {
-          tanggal:     form.akad_tanggal,
-          jam_mulai:   form.akad_jam_mulai,
+          tanggal: form.akad_tanggal,
+          jam_mulai: form.akad_jam_mulai,
           jam_selesai: form.akad_jam_selesai,
         },
         jadwal_resepsi: {
-          tanggal:     form.resepsi_tanggal,
-          jam_mulai:   form.resepsi_jam_mulai,
+          tanggal: form.resepsi_tanggal,
+          jam_mulai: form.resepsi_jam_mulai,
           jam_selesai: form.resepsi_jam_selesai,
         },
         /* Lokasi terpisah per acara */
-        akad_lokasi:       form.akad_lokasi    || undefined,
-        akad_alamat:       form.akad_alamat    || undefined,
-        akad_maps_url:     form.akad_maps_url  || undefined,
-        resepsi_lokasi:    form.resepsi_lokasi    || undefined,
-        resepsi_alamat:    form.resepsi_alamat    || undefined,
-        resepsi_maps_url:  form.resepsi_maps_url  || undefined,
+        akad_lokasi: form.akad_lokasi || undefined,
+        akad_alamat: form.akad_alamat || undefined,
+        akad_maps_url: form.akad_maps_url || undefined,
+        resepsi_lokasi: form.resepsi_lokasi || undefined,
+        resepsi_alamat: form.resepsi_alamat || undefined,
+        resepsi_maps_url: form.resepsi_maps_url || undefined,
         galeri: galeri_all,
         /* Wedding Gift */
-        rek_1_bank:    form.rek_1_bank    || undefined,
-        rek_1_no:      form.rek_1_no      || undefined,
-        rek_1_nama:    form.rek_1_nama    || undefined,
-        rek_2_bank:    form.rek_2_bank    || undefined,
-        rek_2_no:      form.rek_2_no      || undefined,
-        rek_2_nama:    form.rek_2_nama    || undefined,
+        rek_1_bank: form.rek_1_bank || undefined,
+        rek_1_no: form.rek_1_no || undefined,
+        rek_1_nama: form.rek_1_nama || undefined,
+        rek_2_bank: form.rek_2_bank || undefined,
+        rek_2_no: form.rek_2_no || undefined,
+        rek_2_nama: form.rek_2_nama || undefined,
         gift_penerima: form.gift_penerima || undefined,
-        gift_alamat:   form.gift_alamat   || undefined,
+        gift_alamat: form.gift_alamat || undefined,
       };
 
       /* ── DB save ── */
@@ -525,10 +523,10 @@ export default function BasicPackageForm({ initialData }: Props) {
       setProgress({ current: currentStep, total: totalSteps, label: "Menyimpan ke database..." });
 
       const payload = {
-        title:            form.title.trim(),
-        slug:             form.slug.trim(),
-        template:         form.template,
-        whatsapp_number:  form.whatsapp_number.trim() || null,
+        title: form.title.trim(),
+        slug: form.slug.trim(),
+        template: form.template,
+        whatsapp_number: form.whatsapp_number.trim() || null,
         event_data,
       };
 
@@ -566,18 +564,16 @@ export default function BasicPackageForm({ initialData }: Props) {
         err instanceof Error
           ? err.message
           : typeof err === "object" && err !== null && "message" in err
-          ? String((err as { message: unknown }).message)
-          : "Terjadi kesalahan yang tidak diketahui.";
+            ? String((err as { message: unknown }).message)
+            : "Terjadi kesalahan yang tidak diketahui.";
       setGlobalError(msg);
       setProgress(null);
     }
   };
 
-  const isLoading    = progress !== null && progress.label !== "Berhasil disimpan!";
-  const progressPct  = progress ? Math.round((progress.current / progress.total) * 100) : 0;
-  const ALL_TEMPLATES = [...BASIC_TEMPLATES, ...PREMIUM_TEMPLATES];
-  const selectedTmpl = ALL_TEMPLATES.find((t) => t.value === form.template) ?? BASIC_TEMPLATES[0];
-  const isPremium    = form.template.startsWith("premium-");
+  const isLoading = progress !== null && progress.label !== "Berhasil disimpan!";
+  const progressPct = progress ? Math.round((progress.current / progress.total) * 100) : 0;
+  const selectedTmpl = ALL_TEMPLATES.find((t) => t.value === form.template) ?? ALL_TEMPLATES[0];
 
 
   /* ══════════════════════════════════════════════════
@@ -668,11 +664,8 @@ export default function BasicPackageForm({ initialData }: Props) {
                       transition={{ duration: 0.15 }}
                       className="absolute top-full mt-1.5 left-0 right-0 z-50 bg-white border border-[#E8D5A3]/40 rounded-xl shadow-xl overflow-hidden"
                     >
-                      {/* Basic Templates */}
-                      <li className="px-4 py-2">
-                        <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[#5C4A37]/40 font-semibold">Paket Basic</p>
-                      </li>
-                      {BASIC_TEMPLATES.map((t) => (
+                      {ALL_TEMPLATES.map((t) => (
+
                         <li key={t.value}>
                           <button
                             type="button"
@@ -685,24 +678,6 @@ export default function BasicPackageForm({ initialData }: Props) {
                           </button>
                         </li>
                       ))}
-                      {/* Premium Templates */}
-                      <li className="px-4 pt-3 pb-2 border-t border-[#E8D5A3]/40 mt-1">
-                        <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-[#C9A961] font-semibold">✦ Paket Premium</p>
-                      </li>
-                      {PREMIUM_TEMPLATES.map((t) => (
-                        <li key={t.value}>
-                          <button
-                            type="button"
-                            onClick={() => { setForm((f) => ({ ...f, template: t.value })); setTemplateOpen(false); }}
-                            className={`w-full flex items-center gap-3 px-4 py-3 text-left font-sans text-sm transition-colors hover:bg-amber-50 ${form.template === t.value ? "text-[#C9A961] bg-amber-50" : "text-[#3A3429]"}`}
-                          >
-                            <span className="flex-1 font-medium">{t.label}</span>
-                            <span className="text-[#C9A961]/60 text-xs font-light">{t.desc}</span>
-                            {form.template === t.value && <CheckCircle2 size={14} className="text-[#C9A961]" />}
-                          </button>
-                        </li>
-                      ))}
-
                     </motion.ul>
                   )}
                 </AnimatePresence>
@@ -1227,7 +1202,7 @@ export default function BasicPackageForm({ initialData }: Props) {
           <SectionCard
             icon={Users}
             title="RSVP & Notifikasi"
-            subtitle={isPremium ? "⚠️ Wajib diisi — Template Premium menggunakan nomor ini untuk notifikasi RSVP otomatis." : "Konfirmasi kehadiran tamu akan dikirim otomatis ke WhatsApp pengantin."}
+            subtitle="Konfirmasi kehadiran tamu akan dikirim otomatis ke WhatsApp pengantin."
           >
             <div className="space-y-5">
               <div>
@@ -1261,8 +1236,8 @@ export default function BasicPackageForm({ initialData }: Props) {
               {form.whatsapp_number && (
                 <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 border border-emerald-200/60 rounded-xl">
                   <svg className="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.544 4.076 1.497 5.785L0 24l6.335-1.467A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.87 9.87 0 01-5.017-1.362l-.361-.214-3.741.867.928-3.635-.236-.374A9.847 9.847 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z"/>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.544 4.076 1.497 5.785L0 24l6.335-1.467A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.87 9.87 0 01-5.017-1.362l-.361-.214-3.741.867.928-3.635-.236-.374A9.847 9.847 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z" />
                   </svg>
                   <span className="font-sans text-xs text-emerald-700 font-medium">
                     Notifikasi RSVP akan dikirim ke: <strong>+{form.whatsapp_number}</strong>
