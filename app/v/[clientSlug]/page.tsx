@@ -21,11 +21,6 @@ import Premium1Template from "./Premium1Template";
 import Premium2Template from "./Premium2Template";
 import Premium3Template from "./Premium3Template";
 
-
-
-
-
-
 /* ════════════════════════════════════════════════════
    Types
 ════════════════════════════════════════════════════ */
@@ -48,25 +43,22 @@ interface GuestRow {
    Color Palette — Dark Brown × Cream × Gold (Basic-1)
 ════════════════════════════════════════════════════ */
 const C = {
-  // ── Primary palette ─────────────────────────────────
-  maroon:       "#3D2B1F",   // now: dark espresso brown (aksen & bg card)
-  maroonDeep:   "#1A0F07",   // deepest dark brown
-  maroonMid:    "#4E3829",   // mid brown
-  cream:        "#F5EDD8",   // teks utama & elemen terang
-  creamDim:     "#C8B99A",   // teks subdued
+  maroon:       "#3D2B1F",
+  maroonDeep:   "#1A0F07",
+  maroonMid:    "#4E3829",
+  cream:        "#F5EDD8",
+  creamDim:     "#C8B99A",
   creamBorder:  "rgba(245,237,216,0.30)",
-  gold:         "#C9A04A",   // aksen emas premium
+  gold:         "#C9A04A",
   goldDim:      "rgba(201,160,74,0.22)",
   white:        "#FFFFFF",
-  // ── Card / Section ─────────────────────────────────
-  cardBg:       "rgba(26,15,7,0.88)",    // dark brown card
-  cardBorder:   "rgba(201,160,74,0.30)", // gold border
+  cardBg:       "rgba(26,15,7,0.88)",
+  cardBorder:   "rgba(201,160,74,0.30)",
   sectionBg:    "rgba(26,15,7,0.85)",
-  // ── Backward-compat aliases (kode lama tetap compile) ─
   navy:         "#1A0F07",
   navyMid:      "#3D2B1F",
   navyLight:    "#4E3829",
-  lime:         "#C9A04A",   // alias → gold
+  lime:         "#C9A04A",
   limeLight:    "#D4B060",
   purple:       "#3D2B1F",
   purpleLight:  "#4E3829",
@@ -74,7 +66,6 @@ const C = {
   textDark:     "#F5EDD8",
   textMid:      "#C8B99A",
 } as const;
-
 
 const FIXED_BG = "/templates/basic/basic-1/background-basic-1.jpg";
 
@@ -90,16 +81,6 @@ function formatTanggal(iso: string): string {
       month: "long",
       year: "numeric",
     }).format(new Date(iso));
-  } catch { return iso; }
-}
-function formatTanggalShort(iso: string): string {
-  if (!iso) return "";
-  try {
-    const d = new Date(iso);
-    const day = d.getDate().toString().padStart(2, "0");
-    const month = (d.getMonth() + 1).toString().padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day} · ${month} · ${year}`;
   } catch { return iso; }
 }
 function fj(jam: string): string {
@@ -171,7 +152,6 @@ function CoverWithText({ ed }: { ed: EventData }) {
 
   return (
     <div className="relative w-full h-full min-h-screen overflow-hidden">
-      {/* Photo */}
       {ed?.foto_cover ? (
         <Image
           src={ed.foto_cover}
@@ -186,8 +166,6 @@ function CoverWithText({ ed }: { ed: EventData }) {
       ) : (
         <div className="absolute inset-0" style={{ background: C.maroonDeep }} />
       )}
-
-      {/* Gradient overlay: transparent top → dark bottom */}
       <div
         className="absolute inset-0"
         style={{
@@ -195,8 +173,6 @@ function CoverWithText({ ed }: { ed: EventData }) {
             "linear-gradient(to bottom, rgba(0,0,0,0) 35%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.72) 85%, rgba(0,0,0,0.85) 100%)",
         }}
       />
-
-      {/* Text overlay — pinned to bottom */}
       <div className="absolute bottom-0 left-0 right-0 px-12 pb-14 text-center">
         <p
           className="font-sans text-[10px] uppercase tracking-[0.5em] font-light mb-3"
@@ -250,7 +226,6 @@ function OpeningSection({
 
   return (
     <div className="relative flex flex-col items-center justify-between min-h-[100dvh] overflow-hidden">
-      {/* Background: cover photo with dark overlay */}
       {ed?.foto_cover ? (
         <div className="absolute inset-0">
           <Image
@@ -272,7 +247,6 @@ function OpeningSection({
         <div className="absolute inset-0" style={{ background: C.maroonDeep }} />
       )}
 
-      {/* TOP — The Wedding of + Names */}
       <div className="relative z-10 text-center px-8 pt-12">
         <p
           className="font-sans text-[9px] uppercase tracking-[0.45em] font-light mb-3"
@@ -295,7 +269,6 @@ function OpeningSection({
         </h1>
       </div>
 
-      {/* BOTTOM — Kepada Yth + Button */}
       <div className="relative z-10 text-center px-8 pb-16 w-full">
         <p
           className="font-sans text-[9px] uppercase tracking-[0.35em] font-light mb-1.5"
@@ -326,7 +299,7 @@ function OpeningSection({
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION 2 — Card Portrait: Foto Mempelai + Nama + Ayat
+   SECTION 2 — Quote
 ════════════════════════════════════════════════════ */
 function QuoteSection({ ed }: { ed: EventData }) {
   const pria = ed?.mempelai_pria?.nama ?? "";
@@ -334,7 +307,6 @@ function QuoteSection({ ed }: { ed: EventData }) {
 
   return (
     <section className="relative z-10 flex justify-center px-5 pt-10 pb-10">
-      {/* Portrait card */}
       <div
         className="w-full max-w-xs rounded-2xl overflow-hidden text-center"
         style={{
@@ -343,7 +315,6 @@ function QuoteSection({ ed }: { ed: EventData }) {
           boxShadow: "0 16px 60px rgba(10,8,40,0.55)",
         }}
       >
-        {/* Foto mempelai — portrait aspect ratio */}
         {(ed?.foto_quote || ed?.foto_cover) && (
           <div className="relative w-full" style={{ aspectRatio: "3/4" }}>
             <Image
@@ -355,7 +326,6 @@ function QuoteSection({ ed }: { ed: EventData }) {
               quality={100}
               unoptimized
             />
-            {/* Bottom gradient for smooth transition into card body */}
             <div
               className="absolute bottom-0 left-0 right-0 h-24"
               style={{
@@ -365,7 +335,6 @@ function QuoteSection({ ed }: { ed: EventData }) {
           </div>
         )}
 
-        {/* Nama mempelai */}
         <div className="px-6 pt-2 pb-4">
           <h2
             className="font-serif font-bold leading-tight"
@@ -382,10 +351,8 @@ function QuoteSection({ ed }: { ed: EventData }) {
           </h2>
         </div>
 
-        {/* Divider */}
         <GoldLineShort className="mb-5" />
 
-        {/* Ayat */}
         <div className="px-6 pb-8">
           <p
             className="font-sans text-xs leading-[1.9] font-light italic"
@@ -410,7 +377,7 @@ function QuoteSection({ ed }: { ed: EventData }) {
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION 3 — Biodata Mempelai (Arch Photo + Info Ortu)
+   SECTION 3 — Biodata Mempelai
 ════════════════════════════════════════════════════ */
 function BiodataSection({ ed }: { ed: EventData }) {
   const mempelai = [
@@ -428,100 +395,91 @@ function BiodataSection({ ed }: { ed: EventData }) {
     },
   ];
 
-   return (
+  return (
     <div className="w-full px-6 py-8 flex flex-col items-center text-center">
-        {/* Ayat pembuka */}
-        <p
-          className="font-sans text-[11px] italic leading-relaxed max-w-xs mx-auto mb-10"
-          style={{ color: "#5C4A37" }}
-        >
-          Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan.
-          Ya Allah semoga ridho-Mu tercurah mengiringi pernikahan kami:
-        </p>
+      <p
+        className="font-sans text-[11px] italic leading-relaxed max-w-xs mx-auto mb-10"
+        style={{ color: "#5C4A37" }}
+      >
+        Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan.
+        Ya Allah semoga ridho-Mu tercurah mengiringi pernikahan kami:
+      </p>
 
-        {/* Mempelai — stacked, locked width w-[260px] */}
-        <div className="space-y-14 w-[260px] mx-auto">
-          {mempelai.map((m) => (
-            <div key={m.role} className="flex flex-col items-center">
-
-              {/* Wrapper Foto & Nama — width locked at w-[260px] from parent */}
-              <div className="flex flex-col items-center w-full">
-                {/* Kontainer Foto */}
-                <div
-                  className="w-[260px] h-[380px] relative overflow-hidden"
-                  style={{
-                    borderRadius: "24px 24px 0 0",
-                    border: `2px solid ${C.gold}`,
-                    background: "#2D1A0A",
-                  }}
-                >
-                  {m.foto ? (
-                    <Image
-                      src={m.foto}
-                      alt={m.nama}
-                      fill
-                      className="w-full h-full object-cover object-top"
-                      sizes="(max-width: 768px) 260px, 260px"
-                      quality={100}
-                      unoptimized
-                    />
-                  ) : (
-                    <div
-                      className="w-full h-full flex items-center justify-center"
-                      style={{ background: "#2D1A0A" }}
-                    >
-                      <Heart size={32} style={{ color: C.gold }} strokeWidth={1.5} />
-                    </div>
-                  )}
-
-                  {/* Bottom gradient */}
-                  <div
-                    className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
-                    style={{
-                      background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)",
-                    }}
+      <div className="space-y-14 w-[260px] mx-auto">
+        {mempelai.map((m) => (
+          <div key={m.role} className="flex flex-col items-center">
+            <div className="flex flex-col items-center w-full">
+              <div
+                className="w-[260px] h-[380px] relative overflow-hidden"
+                style={{
+                  borderRadius: "24px 24px 0 0",
+                  border: `2px solid ${C.gold}`,
+                  background: "#2D1A0A",
+                }}
+              >
+                {m.foto ? (
+                  <Image
+                    src={m.foto}
+                    alt={m.nama}
+                    fill
+                    className="w-full h-full object-cover object-top"
+                    sizes="(max-width: 768px) 260px, 260px"
+                    quality={100}
+                    unoptimized
                   />
-
-                  {/* Floral ornaments */}
-                  <span className="absolute bottom-2 left-3 text-2xl select-none" style={{ opacity: 0.88 }}>
-                    🌿
-                  </span>
-                  <span
-                    className="absolute bottom-2 right-3 text-2xl select-none"
-                    style={{ opacity: 0.88, display: "inline-block", transform: "scaleX(-1)" }}
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ background: "#2D1A0A" }}
                   >
-                    🌿
-                  </span>
-                </div>
+                    <Heart size={32} style={{ color: C.gold }} strokeWidth={1.5} />
+                  </div>
+                )}
 
-                {/* Kontainer Nama — w-full follows parent w-[260px], wraps neatly */}
-                <div className="w-full mt-4">
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
+                  style={{
+                    background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)",
+                  }}
+                />
+
+                <span className="absolute bottom-2 left-3 text-2xl select-none" style={{ opacity: 0.88 }}>
+                  🌿
+                </span>
+                <span
+                  className="absolute bottom-2 right-3 text-2xl select-none"
+                  style={{ opacity: 0.88, display: "inline-block", transform: "scaleX(-1)" }}
+                >
+                  🌿
+                </span>
+              </div>
+
+              <div className="w-full mt-4">
+                <p
+                  className="font-serif font-bold uppercase tracking-widest text-xl break-words leading-tight"
+                  style={{ color: "#3D2B1F" }}
+                >
+                  {m.nama}
+                </p>
+                {m.ortu && (
                   <p
-                    className="font-serif font-bold uppercase tracking-widest text-xl break-words leading-tight"
-                    style={{ color: "#3D2B1F" }}
+                    className="font-sans text-[11px] font-light leading-relaxed mt-2"
+                    style={{ color: "#5C4A37" }}
                   >
-                    {m.nama}
+                    {m.ortu}
                   </p>
-                  {m.ortu && (
-                    <p
-                      className="font-sans text-[11px] font-light leading-relaxed mt-2"
-                      style={{ color: "#5C4A37" }}
-                    >
-                      {m.ortu}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-
 /* ════════════════════════════════════════════════════
-   SECTION 4 — Save The Date + Countdown + Jadwal
+   SECTION 4 — Jadwal
 ════════════════════════════════════════════════════ */
 function JadwalSection({ ed }: { ed: EventData }) {
   const [countdown, setCountdown] = useState({ hari: 0, jam: 0, menit: 0, detik: 0 });
@@ -574,188 +532,173 @@ function JadwalSection({ ed }: { ed: EventData }) {
 
   return (
     <div className="w-full px-6 py-8 flex flex-col items-center">
+      <div className="text-center mb-7">
+        <h2
+          className="font-serif italic font-bold"
+          style={{
+            color: "#3D2B1F",
+            fontSize: "clamp(2rem, 7vw, 2.5rem)",
+          }}
+        >
+          Save The Date
+        </h2>
+        <div
+          className="h-px mx-auto mt-3 max-w-[140px]"
+          style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
+        />
+      </div>
 
-        {/* ── Save The Date header ── */}
+      <div className="flex justify-center items-center gap-4 w-full mb-8">
+        {([
+          { value: countdown.hari,  label: "Hari"  },
+          { value: countdown.jam,   label: "Jam"   },
+          { value: countdown.menit, label: "Menit" },
+          { value: countdown.detik, label: "Detik" },
+        ] as { value: number; label: string }[]).map((item) => (
+          <div
+            key={item.label}
+            className="min-w-[76px] px-4 py-3 flex flex-col items-center justify-center rounded-xl"
+            style={{ background: C.cream }}
+          >
+            <p
+              className="font-serif text-xl font-bold leading-none"
+              style={{ color: C.maroon }}
+            >
+              {String(item.value).padStart(2, "0")}
+            </p>
+            <p
+              className="font-sans text-[8px] uppercase tracking-wider mt-1.5 font-semibold"
+              style={{ color: C.maroon }}
+            >
+              {item.label}
+            </p>
+          </div>
+        ))}
+      </div>
 
-        <div className="text-center mb-7">
-          <h2
-            className="font-serif italic font-bold"
+      <p
+        className="font-sans text-[11px] italic text-center leading-relaxed max-w-xs mx-auto mb-10"
+        style={{ color: "#5C4A37" }}
+      >
+        Dengan memohon rahmat dan ridho Allah SWT, kami mengundang
+        Bapak/Ibu/Saudara/i, untuk menghadiri acara pernikahan kami:
+      </p>
+
+      <div className="space-y-6 max-w-[300px] mx-auto">
+        {events.map((ev) => (
+          <div
+            key={ev.id}
+            className="rounded-2xl overflow-hidden"
             style={{
-              color: "#3D2B1F",
-              fontSize: "clamp(2rem, 7vw, 2.5rem)",
+              border: `2px solid rgba(201,160,74,0.65)`,
+              boxShadow:
+                `0 0 0 5px rgba(74,15,28,1), 0 0 0 7px rgba(201,160,74,0.22), 0 8px 32px rgba(0,0,0,0.40)`,
             }}
           >
-            Save The Date
-          </h2>
-          <div
-            className="h-px mx-auto mt-3 max-w-[140px]"
-            style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
-          />
-        </div>
-
-        {/* ── Countdown — kotak individual TETAP dipertahankan ── */}
-        <div className="flex justify-center items-center gap-4 w-full mb-8">
-          {([
-            { value: countdown.hari,  label: "Hari"  },
-            { value: countdown.jam,   label: "Jam"   },
-            { value: countdown.menit, label: "Menit" },
-            { value: countdown.detik, label: "Detik" },
-          ] as { value: number; label: string }[]).map((item) => (
             <div
-              key={item.label}
-              className="min-w-[76px] px-4 py-3 flex flex-col items-center justify-center rounded-xl"
-              style={{ background: C.cream }}
-            >
-              <p
-                className="font-serif text-xl font-bold leading-none"
-                style={{ color: C.maroon }}
-              >
-                {String(item.value).padStart(2, "0")}
-              </p>
-              <p
-                className="font-sans text-[8px] uppercase tracking-wider mt-1.5 font-semibold"
-                style={{ color: C.maroon }}
-              >
-                {item.label}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Deskripsi — langsung di dalam unified container, tanpa bg sendiri ── */}
-        <p
-          className="font-sans text-[11px] italic text-center leading-relaxed max-w-xs mx-auto mb-10"
-          style={{ color: "#5C4A37" }}
-        >
-          Dengan memohon rahmat dan ridho Allah SWT, kami mengundang
-          Bapak/Ibu/Saudara/i, untuk menghadiri acara pernikahan kami:
-        </p>
-
-        {/* ── Event cards — desain gelap TETAP dipertahankan ── */}
-        <div className="space-y-6 max-w-[300px] mx-auto">
-          {events.map((ev) => (
-            <div
-              key={ev.id}
-              className="rounded-2xl overflow-hidden"
+              className="px-6 py-8 text-center"
               style={{
-                border: `2px solid rgba(201,160,74,0.65)`,
-                boxShadow:
-                  `0 0 0 5px rgba(74,15,28,1), 0 0 0 7px rgba(201,160,74,0.22), 0 8px 32px rgba(0,0,0,0.40)`,
+                background: "linear-gradient(160deg, #2D1A0A 0%, #1A0A03 50%, #2D1A0A 100%)",
+                outline: "1px solid rgba(245,237,216,0.10)",
+                outlineOffset: "-8px",
               }}
             >
-              <div
-                className="px-6 py-8 text-center"
-                style={{
-                  background: "linear-gradient(160deg, #2D1A0A 0%, #1A0A03 50%, #2D1A0A 100%)",
-                  outline: "1px solid rgba(245,237,216,0.10)",
-                  outlineOffset: "-8px",
-                }}
-              >
-                {/* Akad/Resepsi label */}
-                <div className="mb-5">
-                  <p
-                    className="font-serif font-bold italic leading-none"
-                    style={{ color: C.cream, fontSize: "2rem" }}
-                  >
-                    {ev.label}
-                  </p>
-                  <p
-                    className="font-serif italic font-light leading-none -mt-1"
-                    style={{ color: C.creamDim, fontSize: "1.35rem" }}
-                  >
-                    {ev.labelSub}
-                  </p>
-                </div>
-
-                {/* Gold divider */}
-                <div
-                  className="h-px mx-auto mb-5 max-w-[80px]"
-                  style={{
-                    background: `linear-gradient(to right, transparent, ${C.gold}, transparent)`,
-                  }}
-                />
-
-                {/* Hari */}
-                {ev.hari && (
-                  <p
-                    className="font-sans text-[10px] uppercase tracking-[0.35em] font-bold mb-0.5"
-                    style={{ color: C.cream }}
-                  >
-                    {ev.hari}
-                  </p>
-                )}
-
-                {/* Tanggal */}
-                {ev.tanggal && (
-                  <p
-                    className="font-serif text-base font-bold mb-0.5"
-                    style={{ color: C.cream }}
-                  >
-                    {ev.tanggal}
-                  </p>
-                )}
-
-                {/* Jam */}
-                {(ev.jamMulai || ev.jamSelesai) && (
-                  <p
-                    className="font-sans text-sm font-light mb-6"
-                    style={{ color: C.creamDim }}
-                  >
-                    {ev.jamMulai}
-                    {ev.jamMulai && ev.jamSelesai && " - "}
-                    {ev.jamSelesai}
-                  </p>
-                )}
-
-                {/* Lokasi */}
-                {(ev.namaLokasi || ev.alamat) && (
-                  <div className="mb-5">
-                    <div className="flex justify-center mb-2">
-                      <MapPin size={14} strokeWidth={1.5} style={{ color: C.gold }} />
-                    </div>
-                    {ev.namaLokasi && (
-                      <p
-                        className="font-sans text-sm font-bold uppercase tracking-wide"
-                        style={{ color: C.cream }}
-                      >
-                        {ev.namaLokasi}
-                      </p>
-                    )}
-                    {ev.alamat && (
-                      <p
-                        className="font-sans text-xs font-light leading-relaxed mt-1"
-                        style={{ color: C.creamDim }}
-                      >
-                        {ev.alamat}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Google Map button */}
-                {ev.maps && (
-                  <a
-                    href={ev.maps}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-sans text-[11px] font-semibold tracking-wider transition-all hover:opacity-85"
-                    style={{ background: C.cream, color: C.maroon }}
-                  >
-                    <MapPin size={11} strokeWidth={2} />
-                    Google Map
-                  </a>
-                )}
+              <div className="mb-5">
+                <p
+                  className="font-serif font-bold italic leading-none"
+                  style={{ color: C.cream, fontSize: "2rem" }}
+                >
+                  {ev.label}
+                </p>
+                <p
+                  className="font-serif italic font-light leading-none -mt-1"
+                  style={{ color: C.creamDim, fontSize: "1.35rem" }}
+                >
+                  {ev.labelSub}
+                </p>
               </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Spacer breathing room di akhir section */}
-        <div className="h-12 w-full"></div>
+              <div
+                className="h-px mx-auto mb-5 max-w-[80px]"
+                style={{
+                  background: `linear-gradient(to right, transparent, ${C.gold}, transparent)`,
+                }}
+              />
+
+              {ev.hari && (
+                <p
+                  className="font-sans text-[10px] uppercase tracking-[0.35em] font-bold mb-0.5"
+                  style={{ color: C.cream }}
+                >
+                  {ev.hari}
+                </p>
+              )}
+
+              {ev.tanggal && (
+                <p
+                  className="font-serif text-base font-bold mb-0.5"
+                  style={{ color: C.cream }}
+                >
+                  {ev.tanggal}
+                </p>
+              )}
+
+              {(ev.jamMulai || ev.jamSelesai) && (
+                <p
+                  className="font-sans text-sm font-light mb-6"
+                  style={{ color: C.creamDim }}
+                >
+                  {ev.jamMulai}
+                  {ev.jamMulai && ev.jamSelesai && " - "}
+                  {ev.jamSelesai}
+                </p>
+              )}
+
+              {(ev.namaLokasi || ev.alamat) && (
+                <div className="mb-5">
+                  <div className="flex justify-center mb-2">
+                    <MapPin size={14} strokeWidth={1.5} style={{ color: C.gold }} />
+                  </div>
+                  {ev.namaLokasi && (
+                    <p
+                      className="font-sans text-sm font-bold uppercase tracking-wide"
+                      style={{ color: C.cream }}
+                    >
+                      {ev.namaLokasi}
+                    </p>
+                  )}
+                  {ev.alamat && (
+                    <p
+                      className="font-sans text-xs font-light leading-relaxed mt-1"
+                      style={{ color: C.creamDim }}
+                    >
+                      {ev.alamat}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {ev.maps && (
+                <a
+                  href={ev.maps}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-sans text-[11px] font-semibold tracking-wider transition-all hover:opacity-85"
+                  style={{ background: C.cream, color: C.maroon }}
+                >
+                  <MapPin size={11} strokeWidth={2} />
+                  Google Map
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="h-12 w-full"></div>
     </div>
   );
 }
-
 
 /* ════════════════════════════════════════════════════
    SECTION 5 — Galeri
@@ -765,7 +708,6 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
 
   return (
     <section className="px-5 py-14">
-      {/* Header — glassmorphism card */}
       <div
         className="text-center mb-8 mx-auto max-w-xs px-6 py-4 rounded-xl"
         style={{
@@ -780,7 +722,6 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
         <SectionTitle><span className="text-[#3D2B1F]">Galeri</span></SectionTitle>
       </div>
 
-      {/* Grid — landscape full width */}
       <div className="space-y-3 max-w-md mx-auto">
         {galeri.slice(0, 8).map((url, idx) => (
           <div
@@ -806,7 +747,7 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION 5B — Wedding Gift  (floating card)
+   SECTION 5B — Wedding Gift
 ════════════════════════════════════════════════════ */
 function WeddingGiftSection({
   ed,
@@ -823,10 +764,8 @@ function WeddingGiftSection({
   const hasRek2 = ed?.rek_2_bank || ed?.rek_2_no || ed?.rek_2_nama;
   const hasGift = ed?.gift_penerima || ed?.gift_alamat;
 
-  // Don't render if no gift data at all
   if (!hasRek1 && !hasRek2 && !hasGift) return null;
 
-  /* Ornate corner flourish for premium cards */
   const cornerFlourish = (pos: "tl" | "tr" | "bl" | "br") => {
     const styles: Record<string, React.CSSProperties> = {
       tl: { top: 6, left: 6 },
@@ -846,7 +785,6 @@ function WeddingGiftSection({
     );
   };
 
-  /* Premium ATM card renderer */
   const renderAtmCard = (bank: string, no: string, nama: string) => (
     <div
       className="rounded-2xl p-6 relative overflow-hidden"
@@ -856,21 +794,17 @@ function WeddingGiftSection({
         boxShadow: `0 12px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(201,160,74,0.12), inset 0 -1px 0 rgba(201,160,74,0.06)`,
       }}
     >
-      {/* Gold filigree corner flourishes */}
       {cornerFlourish("tl")}
       {cornerFlourish("tr")}
       {cornerFlourish("bl")}
       {cornerFlourish("br")}
 
-      {/* Subtle center decorative line */}
       <div
         className="absolute left-1/2 -translate-x-1/2 top-14 w-24 h-px opacity-20"
         style={{ background: `linear-gradient(to right, transparent, ${C.gold}, transparent)` }}
       />
 
-      {/* Row: Chip + Bank Name */}
       <div className="flex justify-between items-start mb-8 relative z-10">
-        {/* Premium gold chip */}
         <div
           className="w-11 h-8 rounded-md flex items-center justify-center relative"
           style={{
@@ -882,13 +816,11 @@ function WeddingGiftSection({
             className="w-7 h-4 rounded-sm"
             style={{ border: "1px solid rgba(255,255,255,0.3)" }}
           />
-          {/* Chip circuit lines */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-px h-full" style={{ background: "rgba(255,255,255,0.15)" }} />
           </div>
         </div>
 
-        {/* Bank name — elegant serif */}
         <span
           className="font-serif font-bold text-2xl"
           style={{ color: C.gold, letterSpacing: "0.05em" }}
@@ -897,7 +829,6 @@ function WeddingGiftSection({
         </span>
       </div>
 
-      {/* Account number — clean monospace */}
       <div
         className="font-mono text-lg tracking-[0.2em] mb-2 relative z-10"
         style={{ color: C.cream }}
@@ -905,7 +836,6 @@ function WeddingGiftSection({
         {no}
       </div>
 
-      {/* Account name — uppercase, spaced */}
       <div
         className="text-[11px] uppercase tracking-[0.25em] font-medium relative z-10"
         style={{ color: C.creamDim }}
@@ -913,7 +843,6 @@ function WeddingGiftSection({
         {nama}
       </div>
 
-      {/* Copy button — premium dark + gold */}
       {no && (
         <button
           onClick={() => handleCopy(no)}
@@ -932,7 +861,6 @@ function WeddingGiftSection({
         </button>
       )}
 
-      {/* Bottom decorative line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-1 opacity-40"
         style={{ background: `linear-gradient(to right, transparent 10%, ${C.gold} 50%, transparent 90%)` }}
@@ -942,10 +870,7 @@ function WeddingGiftSection({
 
   return (
     <div className="w-full px-4 py-12 flex justify-center relative z-10">
-
-      {/* THE MAIN CARD — Floating Card */}
       <div className="bg-[#FDFBF7] border border-[#C5A880] rounded-3xl shadow-xl w-full max-w-md p-8 flex flex-col items-center relative overflow-hidden">
-
         <div className="text-center mb-7">
           <h2
             className="font-serif italic font-bold"
@@ -966,7 +891,6 @@ function WeddingGiftSection({
           Bagi Bapak/Ibu/Saudara/i yang ingin mengirimkan hadiah pernikahan dapat melalui virtual account atau e-wallet di bawah ini:
         </p>
 
-        {/* Toggle Button */}
         <button
           onClick={() => setIsGiftOpen(!isGiftOpen)}
           className="bg-[#3D2B1F] hover:bg-[#2A1D15] text-white px-8 py-2.5 rounded-full flex items-center justify-center gap-2 shadow-md transition-all font-medium text-sm tracking-wide mx-auto"
@@ -977,7 +901,6 @@ function WeddingGiftSection({
           {isGiftOpen ? "TUTUP" : "KLIK DISINI"}
         </button>
 
-        {/* EXPANDED CONTENT — vertical stack inside card */}
         <AnimatePresence initial={false}>
           {isGiftOpen && (
             <motion.div
@@ -989,22 +912,18 @@ function WeddingGiftSection({
               className="overflow-hidden w-full"
             >
               <div className="mt-8 flex flex-col gap-4 w-full">
-
-                {/* Kartu Rekening 1 */}
                 {hasRek1 && renderAtmCard(
                   ed.rek_1_bank ?? "",
                   ed.rek_1_no ?? "",
                   ed.rek_1_nama ?? "",
                 )}
 
-                {/* Kartu Rekening 2 */}
                 {hasRek2 && renderAtmCard(
                   ed.rek_2_bank ?? "",
                   ed.rek_2_no ?? "",
                   ed.rek_2_nama ?? "",
                 )}
 
-                {/* Kotak Kirim Hadiah — always visible */}
                 {hasGift && (
                   <div
                     className="rounded-2xl p-6 text-center relative"
@@ -1035,19 +954,17 @@ function WeddingGiftSection({
                     )}
                   </div>
                 )}
-
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </div>
   );
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION 6 — Penutup (foto_cover sebagai background)
+   SECTION 6 — Penutup
 ════════════════════════════════════════════════════ */
 function PenutupSection({
   pria,
@@ -1060,7 +977,6 @@ function PenutupSection({
 }) {
   return (
     <section className="relative overflow-hidden text-center min-h-screen flex flex-col justify-center">
-      {/* Background: foto cover full-bleed */}
       {ed?.foto_cover && (
         <div className="absolute inset-0">
           <Image
@@ -1073,7 +989,6 @@ function PenutupSection({
         </div>
       )}
 
-      {/* Dark gradient overlay — elegan, teks tetap terbaca */}
       <div
         className="absolute inset-0"
         style={{
@@ -1082,9 +997,7 @@ function PenutupSection({
         }}
       />
 
-      {/* Konten — relative di atas overlay */}
       <div className="relative z-10 px-6 py-20">
-        {/* Ornament */}
         <div
           className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-8"
           style={{
@@ -1155,15 +1068,73 @@ export default function InvitationPage() {
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const audioRef      = useRef<HTMLAudioElement>(null);
 
-  /* ── Copy to clipboard ── */
+  /* ── Fungsi Salin Rekening (Menyelesaikan error handleCopy) ── */
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert("Nomor rekening disalin!");
+    alert("Nomor rekening berhasil disalin!");
   };
 
-  /* ── Fetch ── */
+  /* ── 1. CEK APAKAH INI LINK DEMO (Berawalan demo-) ── */
   useEffect(() => {
     if (!clientSlug) return;
+
+    if (clientSlug.startsWith("demo-")) {
+      const templateKey = clientSlug.replace("demo-", "");
+      
+      const dummyInvitation: InvitationRow = {
+        id: "demo-invitation-id",
+        title: "Demo Undangan Pernikahan",
+        slug: clientSlug,
+        template: templateKey,
+        whatsapp_number: "6281234567890",
+        event_data: {
+          mempelai_pria: {
+            nama: "Arkananta Susilo",
+            ortu: "Putra dari Bpk. Budi Susilo & Ibu Anisa",
+            foto_url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80",
+          },
+          mempelai_wanita: {
+            nama: "Kirana Cahaya",
+            ortu: "Putri dari Bpk. Hendra Cahaya & Ibu Maya",
+            foto_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+          },
+          jadwal_akad: {
+            tanggal: "2026-12-25",
+            jam_mulai: "08:00",
+            jam_selesai: "10:00",
+          },
+          jadwal_resepsi: {
+            tanggal: "2026-12-25",
+            jam_mulai: "11:00",
+            jam_selesai: "14:00",
+          },
+          akad_lokasi: "Grand Ballroom Hotel Indonesia",
+          akad_alamat: "Jl. M.H. Thamrin No.1, Jakarta Pusat",
+          akad_maps_url: "https://maps.google.com",
+          resepsi_lokasi: "Grand Ballroom Hotel Indonesia",
+          resepsi_alamat: "Jl. M.H. Thamrin No.1, Jakarta Pusat",
+          resepsi_maps_url: "https://maps.google.com",
+          foto_cover: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+          foto_quote: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+          galeri: [
+            "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80",
+          ],
+          rek_1_bank: "BCA",
+          rek_1_no: "1234567890",
+          rek_1_nama: "Arkananta Susilo",
+          gift_penerima: "Arkananta & Kirana",
+          gift_alamat: "Jl. M.H. Thamrin No.1, Jakarta Pusat",
+        },
+      };
+
+      setInvitation(dummyInvitation);
+      setLoading(false);
+      return;
+    }
+
+    /* ── 2. FETCH DARI DATABASE SUPABASE (Jika bukan demo) ── */
     const run = async () => {
       const { data: inv, error } = await supabase
         .from("invitations")
@@ -1188,10 +1159,8 @@ export default function InvitationPage() {
     run();
   }, [clientSlug, guestName]);
 
-  /* ── Open handler: reveal content + trigger music (bypass autoplay) ── */
   const handleOpen = () => {
     setOpened(true);
-    /* Play music — must be triggered inside user gesture */
     audioRef.current?.play()
       .then(() => setIsPlaying(true))
       .catch(() => {});
@@ -1204,7 +1173,6 @@ export default function InvitationPage() {
     }, 80);
   };
 
-  /* ── FAB music toggle ── */
   const toggleMusic = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -1216,7 +1184,6 @@ export default function InvitationPage() {
     }
   };
 
-  /* ── Loading state ── */
   if (loading) {
     return (
       <div
@@ -1236,7 +1203,6 @@ export default function InvitationPage() {
     );
   }
 
-  /* ── 404 ── */
   if (notFound || !invitation) {
     return (
       <div
@@ -1260,7 +1226,7 @@ export default function InvitationPage() {
   const wanita = ed?.mempelai_wanita?.nama ?? "—";
   const display = guest?.name ?? guestName;
 
-  /* ── Route to Basic-2 template if applicable ── */
+  /* ── Router Template Lainnya (Termasuk Basic 3) ── */
   if (invitation.template === "basic-2") {
     return (
       <Basic2Template
@@ -1271,7 +1237,6 @@ export default function InvitationPage() {
     );
   }
 
-  /* ── Route to Basic-3 template if applicable ── */
   if (invitation.template === "basic-3") {
     return (
       <Basic3Template
@@ -1282,7 +1247,6 @@ export default function InvitationPage() {
     );
   }
 
-  /* ── Route to Premium-1 template ── */
   if (invitation.template === "premium-1") {
     return (
       <Premium1Template
@@ -1293,7 +1257,6 @@ export default function InvitationPage() {
     );
   }
 
-  /* ── Route to Premium-2 template ── */
   if (invitation.template === "premium-2") {
     return (
       <Premium2Template
@@ -1305,29 +1268,22 @@ export default function InvitationPage() {
   }
 
   if (invitation.template === "premium-3") {
-  return (
-    <Premium3Template
-    invitation={invitation}
-    guest={guest}
-    guestName={guestName}
-    />
-  );
-}
+    return (
+      <Premium3Template
+        invitation={invitation}
+        guest={guest}
+        guestName={guestName}
+      />
+    );
+  }
 
-  /* ── Content stack (Sections 2-6) ── */
   const ContentSections = (
     <>
       <div id="sec-quote">
         <QuoteSection ed={ed} />
       </div>
 
-      {/* ═══════════════════════════════════════════════════
-          UNIFIED CONTAINER — Mukaddimah + Save The Date
-          Deep Warm Beige (#E9DCC7) — full-width, no margin
-      ═══════════════════════════════════════════════════ */}
       <div className="w-full bg-[#E9DCC7]/95 pb-0 overflow-hidden flex flex-col relative">
-
-        {/* 1. PEMBATAS ATAS (mentok karena parent px-0) */}
         <img
           src="/templates/basic/basic-1/basic-1-pembatas.png"
           alt="pembatas"
@@ -1335,10 +1291,8 @@ export default function InvitationPage() {
           className="w-full h-6 md:h-8 object-cover"
         />
 
-        {/* Seksi Mukaddimah (Biodata) */}
         <BiodataSection ed={ed} />
 
-        {/* 2. PEMBATAS TENGAH */}
         <img
           src="/templates/basic/basic-1/basic-1-pembatas.png"
           alt="pembatas"
@@ -1346,21 +1300,15 @@ export default function InvitationPage() {
           className="w-full h-6 md:h-8 object-cover"
         />
 
-        {/* Seksi Save The Date (Jadwal) */}
         <JadwalSection ed={ed} />
 
-        {/* Spacer agar tombol/kartu di atasnya tidak nabrak pembatas */}
         <div className="h-10 md:h-14 w-full"></div>
 
-        {/* Gambar Pembatas Mentok Bawah */}
         <img src="/templates/basic/basic-1/basic-1-pembatas.png" className="w-full h-6 md:h-8 object-cover block" alt="pembatas bawah" />
       </div>
 
       <GaleriSection galeri={ed?.galeri ?? []} />
 
-      {/* ═══════════════════════════════════════════════════
-          WEDDING GIFT
-      ═══════════════════════════════════════════════════ */}
       <WeddingGiftSection
         ed={ed}
         isGiftOpen={isGiftOpen}
@@ -1372,13 +1320,8 @@ export default function InvitationPage() {
     </>
   );
 
-  /* ══════════════════════════════════════════════
-     RENDER
-  ══════════════════════════════════════════════ */
   return (
     <div style={{ background: C.cream }}>
-
-      {/* Hidden audio element */}
       <audio
         ref={audioRef}
         src="/templates/basic/basic-1/basic-1-music.mp3"
@@ -1386,7 +1329,6 @@ export default function InvitationPage() {
         preload="auto"
       />
 
-      {/* Floating Music Button (FAB) */}
       {opened && (
         <button
           id="fab-music"
@@ -1406,27 +1348,22 @@ export default function InvitationPage() {
         </button>
       )}
 
-      {/* ═══════════ DESKTOP SPLIT-SCREEN ═══════════ */}
       <div className="hidden lg:flex h-screen w-screen overflow-hidden">
-
-        {/* LEFT — foto cover + teks overlay (flex-1, isi sisa ruang) */}
         <div className="template-left-panel flex-1 relative">
           <CoverWithText ed={ed} />
         </div>
 
-        {/* RIGHT — lebar tetap 414px (ukuran layar HP besar), batik ter-clip otomatis */}
         <div
           ref={rightPanelRef}
           className="template-right-panel w-[414px] shrink-0 scrollbar-hide"
           style={{
             backgroundImage: `url('${FIXED_BG}')`,
-            backgroundAttachment: "scroll", // fixed relative to element, bukan viewport
+            backgroundAttachment: "scroll",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
         >
-          {/* Opening section always at top */}
           <OpeningSection
             invitation={invitation}
             guestName={display}
@@ -1434,30 +1371,26 @@ export default function InvitationPage() {
             opened={opened}
           />
 
-          {/* Content sections revealed after open */}
           {opened && ContentSections}
         </div>
       </div>
 
-      {/* ═══════════ MOBILE — hanya kolom kanan ═══════════ */}
       <div
         className="lg:hidden"
         style={{
           backgroundImage: `url('${FIXED_BG}')`,
-          backgroundAttachment: "fixed",  /* fixed to viewport = tidak scroll, lebar = layar HP */
+          backgroundAttachment: "fixed",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* OpeningSection saja (foto bg + nama + Kepada Yth + button) */}
         <OpeningSection
           invitation={invitation}
           guestName={display}
           onOpen={handleOpen}
           opened={opened}
         />
-        {/* Content sections setelah buka */}
         {opened && ContentSections}
       </div>
     </div>
