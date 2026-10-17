@@ -659,32 +659,32 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
   /* ── 2. Realtime subscription ── */
   useEffect(() => {
     fetchGreetings();
+    
+    // Gunakan nama channel yang unik dan konsisten per invitation
+    const channelName = `greetings-room-${invitation.id}`;
+    
+    // Pastikan jika channel dengan nama yang sama sudah ada, dibersihkan dulu
+    const existingChannel = supabase.getChannels().find(c => c.topic === `realtime:${channelName}`);
+    if (existingChannel) {
+      supabase.removeChannel(existingChannel);
+    }
 
-    /* Unique name per effect run */
-    const channelName = `greetings-${invitation.id}-${Date.now()}`;
     const channel = supabase.channel(channelName);
 
     // 1. DAFTARKAN .on() TERLEBIH DAHULU SEBELUM .subscribe()
     channel.on(
       "postgres_changes",
-      {
-        event: "INSERT",
-        schema: "public",
-        table: "greetings",
-        filter: `invitation_id=eq.${invitation.id}`,
-      },
+      { event: "INSERT", schema: "public", table: "greetings", filter: `invitation_id=eq.${invitation.id}` },
       (payload) => {
         const newG = payload.new as Greeting;
-        setGreetings((prev) => {
-          if (prev.some((g) => g.id === newG.id)) return prev;
-          return [newG, ...prev];
-        });
+        setGreetings((prev) => (prev.some((g) => g.id === newG.id) ? prev : [newG, ...prev]));
       }
     );
 
-    // 2. BARU PANGGIL .subscribe() DI BAGIAN AKHIR
+    // 2. BARU PANGGIL .subscribe()
     channel.subscribe();
 
+    // 3. CLEANUP FUNCTION YANG AMAN
     return () => {
       supabase.removeChannel(channel);
     };

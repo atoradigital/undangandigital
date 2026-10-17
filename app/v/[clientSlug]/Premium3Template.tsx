@@ -11,15 +11,14 @@ import type { EventData } from "@/types/admin";
    Color Palette — Midnight Black & Luxurious Gold (Premium-3)
 ════════════════════════════════════════════════════ */
 const P = {
-  bgDark:      "#0B0B0C", // Pure Obsidian Black
-  bgCard:      "rgba(18, 18, 20, 0.93)", // Dark Translucent Glass Card
-  bgCardLight: "rgba(30, 30, 35, 0.70)", // Secondary Glass Card
-  gold:        "#D4AF37", // Warm Royal Gold
-  goldBright:  "#F3E5AB", // Pale Gold Highlight
-  goldGlow:    "rgba(212, 175, 55, 0.25)", // Glow Shadow
-  textLight:   "#FDFBF7", // Bright Warm White Text
-  textGold:    "#E2D6B5", // Muted Gold Text
-  textSub:     "#A19B8C", // Secondary Subtext
+  bgDark:      "#070708",
+  bgCard:      "rgba(14, 14, 18, 0.85)", 
+  gold:        "#D4AF37", 
+  goldBright:  "#F3E5AB", 
+  goldGlow:    "rgba(212, 175, 55, 0.3)", 
+  textLight:   "#FDFBF7", 
+  textGold:    "#E2D6B5", 
+  textSub:     "#A39B88", 
 } as const;
 
 /* ── Assets ── */
@@ -27,19 +26,18 @@ const BG_P3    = "/templates/premium/premium-3/background-premium-3.jpg";
 const MUSIC_P3 = "/templates/premium/premium-3/premium-3-music.mp3";
 const MUSIC_FB = "/templates/basic/basic-1/basic-1-music.mp3";
 
-/* ── Button classes khusus Premium 3 ── */
 const GOLD_BTN =
   "inline-flex items-center justify-center gap-2 " +
-  "bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#C59B27] text-[#0B0B0C] " +
-  "border border-[#F3E5AB] rounded-xl " +
-  "px-7 py-3 shadow-[0_4px_20px_rgba(212,175,55,0.3)] tracking-[0.2em] uppercase text-[11px] " +
+  "bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#C59B27] text-[#070708] " +
+  "border border-[#F3E5AB] rounded-2xl " +
+  "px-7 py-3.5 shadow-[0_4px_25px_rgba(212,175,55,0.4)] tracking-[0.2em] uppercase text-[10px] " +
   "transition-all duration-300 font-sans font-bold hover:brightness-110";
 
 const OUTLINE_GOLD_BTN =
   "inline-flex items-center justify-center gap-2 " +
   "bg-transparent border border-[#D4AF37]/60 text-[#F3E5AB] " +
-  "hover:bg-[#D4AF37]/10 rounded-xl " +
-  "px-6 py-2.5 text-[11px] tracking-[0.2em] uppercase " +
+  "hover:bg-[#D4AF37]/10 rounded-2xl " +
+  "px-6 py-3 text-[10px] tracking-[0.2em] uppercase " +
   "transition-all duration-300 font-sans font-medium";
 
 /* ════════════════════════════════════════════════════
@@ -133,25 +131,25 @@ function downloadICS(ed: EventData, pria: string, wanita: string) {
 }
 
 /* ════════════════════════════════════════════════════
-   Shared UI Elements (Gold Mandala & Living Animations)
+   Custom Elements & Supporting Visuals
 ════════════════════════════════════════════════════ */
-function GoldDivider() {
+function RoyalDivider() {
   return (
     <motion.div 
       className="flex items-center justify-center gap-3 my-4"
-      animate={{ opacity: [0.6, 1, 0.6] }}
-      transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+      animate={{ opacity: [0.5, 1, 0.5] }}
+      transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
     >
-      <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${P.gold})` }} />
+      <div className="h-px w-10" style={{ background: `linear-gradient(to right, transparent, ${P.gold})` }} />
       <motion.span 
-        className="text-xs select-none" 
+        className="text-[10px] select-none" 
         style={{ color: P.goldBright }}
-        animate={{ scale: [1, 1.2, 1] }}
+        animate={{ scale: [1, 1.25, 1] }}
         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
       >
         ✦ ✧ ✦
       </motion.span>
-      <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${P.gold})` }} />
+      <div className="h-px w-10" style={{ background: `linear-gradient(to left, transparent, ${P.gold})` }} />
     </motion.div>
   );
 }
@@ -159,28 +157,34 @@ function GoldDivider() {
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <motion.div 
-      className="text-center mx-auto max-w-[310px] mb-8 rounded-2xl px-6 py-6 backdrop-blur-md"
+      className="text-center mx-auto max-w-[320px] mb-10 rounded-3xl px-6 py-6 backdrop-blur-md relative overflow-hidden"
       style={{
         background: P.bgCard,
-        border: `1.5px solid rgba(212,175,55,0.35)`,
-        boxShadow: `0 10px 30px rgba(0,0,0,0.8), 0 0 20px ${P.goldGlow}`,
+        border: `1px solid rgba(212,175,55,0.35)`,
+        boxShadow: `0 15px 35px rgba(0,0,0,0.7), inset 0 0 20px rgba(212,175,55,0.05)`,
       }}
       whileInView={{ y: [10, 0] }}
       transition={{ duration: 0.6 }}
     >
-      <p className="font-sans text-[10px] uppercase tracking-[0.4em] font-semibold" style={{ color: P.goldBright }}>
+      {/* Elemen Sudut Estetik */}
+      <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#D4AF37]/60" />
+      <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#D4AF37]/60" />
+      <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#D4AF37]/60" />
+      <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#D4AF37]/60" />
+
+      <p className="font-sans text-[10px] uppercase tracking-[0.45em] font-semibold" style={{ color: P.goldBright }}>
         {eyebrow}
       </p>
-      <h2 className="font-serif font-bold mt-2" style={{ color: P.textLight, fontSize: "clamp(1.8rem, 6vw, 2.3rem)" }}>
+      <h2 className="font-serif font-bold mt-2 tracking-wide" style={{ color: P.textLight, fontSize: "clamp(1.7rem, 5vw, 2.2rem)" }}>
         {title}
       </h2>
-      <GoldDivider />
+      <RoyalDivider />
     </motion.div>
   );
 }
 
 const revealVariants: Variants = {
-  hidden:  { opacity: 0, y: 40, scale: 0.95 },
+  hidden:  { opacity: 0, y: 35, scale: 0.96 },
   visible: { opacity: 1, y: 0,  scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
 };
 function Reveal({ children, delay = 0, className = "" }: {
@@ -216,14 +220,13 @@ function CoverPanel({ ed }: { ed: EventData }) {
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
         >
-          <Image src={ed.foto_cover} alt="Cover" fill
-            className="object-cover object-center" sizes="65vw" priority quality={100} unoptimized />
+          <Image src={ed.foto_cover} alt="Cover" fill className="object-cover object-center" sizes="65vw" priority quality={100} unoptimized />
         </motion.div>
       ) : (
         <div className="absolute inset-0" style={{ background: P.bgDark }} />
       )}
       <div className="absolute inset-0" style={{
-        background: "linear-gradient(to bottom, rgba(11,11,12,0.2) 20%, rgba(11,11,12,0.70) 65%, rgba(11,11,12,0.98) 100%)",
+        background: "linear-gradient(to bottom, rgba(7,7,8,0.15) 20%, rgba(7,7,8,0.75) 65%, rgba(7,7,8,0.98) 100%)",
       }} />
       <motion.div 
         className="absolute bottom-0 left-0 right-0 px-12 pb-16 text-center"
@@ -232,9 +235,9 @@ function CoverPanel({ ed }: { ed: EventData }) {
         transition={{ duration: 0.8, delay: 0.3 }}
       >
         <p className="font-sans text-[10px] tracking-[0.5em] uppercase font-semibold" style={{ color: P.goldBright }}>
-          The Royal Wedding
+          The Royal Celebration
         </p>
-        <GoldDivider />
+        <RoyalDivider />
         <h1 className="font-serif font-bold leading-tight"
           style={{ color: P.textLight, fontSize: "clamp(2.4rem, 4vw, 3.6rem)", textShadow: "0 4px 24px rgba(0,0,0,0.9)" }}>
           {pria}
@@ -243,7 +246,7 @@ function CoverPanel({ ed }: { ed: EventData }) {
           className="font-serif text-2xl my-2" 
           style={{ color: P.goldBright }}
           animate={{ scale: [1, 1.15, 1] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
         >
           &amp;
         </motion.p>
@@ -262,7 +265,7 @@ function CoverPanel({ ed }: { ed: EventData }) {
 }
 
 /* ════════════════════════════════════════════════════
-   OPENING GATE — Layar Pembuka Undangan
+   OPENING GATE
 ════════════════════════════════════════════════════ */
 function OpeningGate({
   invitation, guestName, onOpen, opened,
@@ -282,9 +285,8 @@ function OpeningGate({
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
         >
-          <Image src={ed.foto_cover} alt="BG" fill className="object-cover object-center"
-            sizes="35vw" priority quality={100} unoptimized />
-          <div className="absolute inset-0" style={{ background: "rgba(11,11,12,0.85)" }} />
+          <Image src={ed.foto_cover} alt="BG" fill className="object-cover object-center" sizes="35vw" priority quality={100} unoptimized />
+          <div className="absolute inset-0" style={{ background: "rgba(7,7,8,0.86)" }} />
         </motion.div>
       )}
       {!ed?.foto_cover && <div className="absolute inset-0" style={{ background: P.bgDark }} />}
@@ -296,9 +298,9 @@ function OpeningGate({
         transition={{ duration: 0.7 }}
       >
         <p className="font-sans text-[9px] uppercase tracking-[0.5em] font-semibold" style={{ color: P.goldBright }}>
-          The Wedding Celebration
+          The Wedding Invitation
         </p>
-        <GoldDivider />
+        <RoyalDivider />
         <h1 className="font-serif font-bold leading-none mt-2"
           style={{ color: P.textLight, fontSize: "clamp(2rem, 3.5vw, 3rem)", textShadow: "0 2px 15px rgba(0,0,0,0.8)" }}>
           {pria}
@@ -319,8 +321,8 @@ function OpeningGate({
 
       <div className="relative z-10 pb-16 w-full max-w-[320px]">
         <motion.div 
-          className="p-6 rounded-2xl backdrop-blur-md mb-8 shadow-2xl"
-          style={{ background: "rgba(18,18,20,0.75)", border: `1px solid rgba(212,175,55,0.4)` }}
+          className="p-6 rounded-3xl backdrop-blur-md mb-8 shadow-2xl relative"
+          style={{ background: "rgba(14,14,18,0.8)", border: `1px solid rgba(212,175,55,0.4)` }}
           animate={{ y: [0, -5, 0] }}
           transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
         >
@@ -340,7 +342,7 @@ function OpeningGate({
             transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           >
             <button onClick={onOpen} className={GOLD_BTN + " w-full shadow-2xl"} aria-label="Buka undangan">
-              ✉️ Buka Undangan Eksklusif
+              ✨ Buka Undangan Eksklusif ✨
             </button>
           </motion.div>
         )}
@@ -356,7 +358,7 @@ function OpeningGate({
 }
 
 /* ════════════════════════════════════════════════════
-   VINYL WIDGET — Musik
+   VINYL WIDGET
 ════════════════════════════════════════════════════ */
 function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: () => void }) {
   return (
@@ -364,13 +366,13 @@ function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: ()
       onClick={onToggle}
       aria-label={isPlaying ? "Pause musik" : "Play musik"}
       className="fixed bottom-6 right-5 z-50 w-14 h-14 rounded-full select-none"
-      style={{ filter: `drop-shadow(0 6px 20px rgba(212,175,55,0.3))` }}
+      style={{ filter: "drop-shadow(0 6px 20px rgba(212,175,55,0.4))" }}
       animate={{ y: [0, -8, 0], rotate: [0, 3, -3, 0] }}
       transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
     >
       <motion.div
         className="relative w-14 h-14 rounded-full flex items-center justify-center border-2 border-[#D4AF37]"
-        style={{ background: "#0B0B0C" }}
+        style={{ background: "#070708" }}
         animate={isPlaying ? { rotate: 360 } : { rotate: 0 }}
         transition={isPlaying ? { repeat: Infinity, duration: 3, ease: "linear" } : { duration: 0.3 }}
       >
@@ -390,27 +392,26 @@ function VinylWidget({ isPlaying, onToggle }: { isPlaying: boolean; onToggle: ()
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION — Quote Ayat Suci
+   SECTION — Quote
 ════════════════════════════════════════════════════ */
 function QuoteSection({ ed }: { ed: EventData }) {
   return (
     <Reveal className="flex justify-center px-5 pt-12 pb-10">
-      <div className="w-full max-w-xs rounded-3xl overflow-hidden text-center backdrop-blur-md"
+      <div className="w-full max-w-xs rounded-3xl overflow-hidden text-center backdrop-blur-md relative"
         style={{
           background: P.bgCard,
-          border: `1.5px solid rgba(212,175,55,0.4)`,
-          boxShadow: `0 20px 50px rgba(0,0,0,0.9), 0 0 15px ${P.goldGlow}`,
+          border: `1px solid rgba(212,175,55,0.35)`,
+          boxShadow: "0 20px 50px rgba(0,0,0,0.8)",
         }}>
         {(ed?.foto_quote || ed?.foto_cover) && (
           <div className="relative w-full p-4 pb-0">
             <motion.div 
-              className="relative w-full overflow-hidden rounded-2xl border border-[#D4AF37]/30 shadow-md" 
+              className="relative w-full overflow-hidden rounded-2xl shadow-md border border-[#D4AF37]/30" 
               style={{ aspectRatio: "4/5" }}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.4 }}
             >
-              <Image src={ed.foto_quote ?? ed.foto_cover} alt="Mempelai" fill
-                className="object-cover object-center" sizes="300px" quality={100} unoptimized />
+              <Image src={ed.foto_quote ?? ed.foto_cover} alt="Mempelai" fill className="object-cover object-center" sizes="300px" quality={100} unoptimized />
             </motion.div>
           </div>
         )}
@@ -428,7 +429,7 @@ function QuoteSection({ ed }: { ed: EventData }) {
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION — Biodata Mempelai (Lotus Mandala Frame)
+   SECTION — Biodata (Fluid Arch & Glow Frame)
 ════════════════════════════════════════════════════ */
 function BiodataSection({ ed }: { ed: EventData }) {
   const mempelai = [
@@ -451,22 +452,22 @@ function BiodataSection({ ed }: { ed: EventData }) {
         {mempelai.map((m, i) => (
           <Reveal key={m.role} delay={i * 0.15}>
             <div className="text-center">
-              {/* Bingkai foto melayang dengan border emas */}
+              {/* Bingkai foto gaya Arch melengkung elegan dengan pendaran cahaya */}
               <motion.div 
-                className="relative mx-auto overflow-hidden p-1.5 rounded-t-[140px] rounded-b-3xl"
+                className="relative mx-auto overflow-hidden p-2 rounded-t-[150px] rounded-b-3xl"
                 style={{
-                  width: 270, height: 350,
-                  background: `linear-gradient(135deg, ${P.goldBright}, ${P.gold}, #8B6B18)`,
-                  boxShadow: `0 12px 35px rgba(0,0,0,0.9), 0 0 25px ${P.goldGlow}`,
+                  width: 270, height: 360,
+                  background: `linear-gradient(135deg, ${P.goldBright}, ${P.gold}, #5E4713)`,
+                  boxShadow: `0 15px 40px rgba(0,0,0,0.9), 0 0 25px ${P.goldGlow}`,
                 }}
-                animate={{ y: [0, -8, 0] }}
+                animate={{ y: [0, -6, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: i * 0.7 }}
               >
-                <div className="relative w-full h-full rounded-t-[132px] rounded-b-2xl overflow-hidden bg-[#0B0B0C]">
+                <div className="relative w-full h-full rounded-t-[142px] rounded-b-2xl overflow-hidden bg-[#070708]">
                   {m.foto ? (
                     <Image src={m.foto} alt={m.nama} fill className="object-cover object-top" sizes="270px" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#121214]">
+                    <div className="w-full h-full flex items-center justify-center bg-[#121215]">
                       <Heart size={36} style={{ color: P.goldBright }} strokeWidth={1.5} />
                     </div>
                   )}
@@ -474,7 +475,7 @@ function BiodataSection({ ed }: { ed: EventData }) {
               </motion.div>
 
               {/* Card Nama & Ortu */}
-              <div className="mt-4 px-6 py-5 rounded-2xl backdrop-blur-md"
+              <div className="mt-4 px-6 py-5 rounded-3xl backdrop-blur-md shadow-xl relative"
                 style={{
                   background: P.bgCard,
                   border: `1px solid rgba(212,175,55,0.35)`,
@@ -525,13 +526,13 @@ function SaveTheDateSection({ ed, pria, wanita }: { ed: EventData; pria: string;
   const gCalUrl = buildGCalUrl(ed, pria, wanita);
 
   return (
-    <section className="px-6 py-14" style={{ background: "rgba(0,0,0,0.3)" }}>
+    <section className="px-6 py-14" style={{ background: "rgba(0,0,0,0.35)" }}>
       <Reveal>
-        <div className="text-center mx-auto max-w-[310px] mb-8 rounded-2xl px-6 py-6 backdrop-blur-md"
+        <div className="text-center mx-auto max-w-[310px] mb-8 rounded-3xl px-6 py-6 backdrop-blur-md shadow-xl"
           style={{ background: P.bgCard, border: `1px solid rgba(212,175,55,0.35)` }}>
           <p className="font-sans text-[10px] uppercase tracking-[0.4em] font-semibold" style={{ color: P.goldBright }}>Save The Date</p>
           <h2 className="font-serif font-bold text-3xl mt-1" style={{ color: P.textLight }}>Menuju Hari Bahagia</h2>
-          <GoldDivider />
+          <RoyalDivider />
         </div>
       </Reveal>
 
@@ -545,8 +546,8 @@ function SaveTheDateSection({ ed, pria, wanita }: { ed: EventData; pria: string;
           ] as { value: number; label: string }[]).map((item, idx) => (
             <motion.div 
               key={item.label} 
-              className="text-center py-3.5 rounded-2xl backdrop-blur-md"
-              style={{ background: P.bgCard, border: `1px solid rgba(212,175,55,0.35)` }}
+              className="text-center py-3.5 rounded-2xl backdrop-blur-md shadow-md"
+              style={{ background: P.bgCard, border: `1px solid rgba(212,175,55,0.3)` }}
               animate={{ y: [0, idx % 2 === 0 ? -3 : 3, 0] }}
               transition={{ repeat: Infinity, duration: 3 + idx, ease: "easeInOut" }}
             >
@@ -563,11 +564,11 @@ function SaveTheDateSection({ ed, pria, wanita }: { ed: EventData; pria: string;
 
       <Reveal delay={0.2}>
         <div className="flex flex-col gap-3 items-center max-w-[280px] mx-auto">
-          <a href={gCalUrl} target="_blank" rel="noopener noreferrer" className={GOLD_BTN + " w-full justify-center text-[10px]"}>
-            <Calendar size={13} strokeWidth={2} /> Simpan ke Google Calendar
+          <a href={gCalUrl} target="_blank" rel="noopener noreferrer" className={GOLD_BTN + " w-full justify-center text-[10px] shadow-lg"}>
+            <Calendar size={13} strokeWidth={2}/> Simpan ke Google Calendar
           </a>
           <button onClick={() => downloadICS(ed, pria, wanita)} className={OUTLINE_GOLD_BTN + " w-full justify-center text-[10px]"}>
-            <Calendar size={13} strokeWidth={1.5} /> Download .ics (iCal / Apple)
+            <Calendar size={13} strokeWidth={1.5}/> Download .ics (iCal / Apple)
           </button>
         </div>
       </Reveal>
@@ -604,20 +605,20 @@ function JadwalSection({ ed }: { ed: EventData }) {
 
   return (
     <section className="px-6 py-14">
-      <SectionHeading eyebrow="Rangkaian Acara" title="Waktu &amp; Tempat" />
+      <SectionHeading eyebrow="Rangkaian Acara" title="Waktu &amp; Tempat"/>
 
       <div className="space-y-6 max-w-[310px] mx-auto">
         {events.map((ev, i) => (
           <Reveal key={ev.id} delay={i * 0.15}>
-            <div className="rounded-3xl overflow-hidden backdrop-blur-md"
+            <div className="rounded-3xl overflow-hidden backdrop-blur-md shadow-xl"
               style={{
                 background: P.bgCard,
-                border: `1.5px solid rgba(212,175,55,0.4)`,
+                border: `1px solid rgba(212,175,55,0.35)`,
               }}>
               <div className="h-1.5" style={{ background: `linear-gradient(to right, ${P.gold}, ${P.goldBright}, ${P.gold})` }} />
               <div className="px-6 py-8 text-center">
                 <h3 className="font-serif font-bold text-2xl mb-1" style={{ color: P.textLight }}>{ev.label}</h3>
-                <GoldDivider />
+                <RoyalDivider />
                 {ev.hari && <p className="font-sans text-[10px] uppercase tracking-[0.3em] font-semibold mb-1" style={{ color: P.goldBright }}>{ev.hari}</p>}
                 {ev.tanggal && <p className="font-serif text-base font-bold mb-1" style={{ color: P.textLight }}>{ev.tanggal}</p>}
                 {(ev.jamMulai || ev.jamSelesai) && (
@@ -626,15 +627,15 @@ function JadwalSection({ ed }: { ed: EventData }) {
                   </p>
                 )}
                 {(ev.namaLokasi || ev.alamat) && (
-                  <div className="mb-6 bg-[#0B0B0C]/60 p-4 rounded-2xl border border-[#D4AF37]/20">
+                  <div className="mb-6 bg-[#070708]/60 p-4 rounded-2xl border border-[#D4AF37]/30">
                     <div className="flex justify-center mb-1.5"><MapPin size={16} strokeWidth={1.5} style={{ color: P.goldBright }} /></div>
                     {ev.namaLokasi && <p className="font-sans text-sm font-bold uppercase tracking-wide" style={{ color: P.goldBright }}>{ev.namaLokasi}</p>}
                     {ev.alamat && <p className="font-sans text-xs font-light leading-relaxed mt-1" style={{ color: P.textSub }}>{ev.alamat}</p>}
                   </div>
                 )}
                 {ev.maps && (
-                  <a href={ev.maps} target="_blank" rel="noopener noreferrer" className={GOLD_BTN + " w-full justify-center text-[10px]"}>
-                    <MapPin size={12} strokeWidth={2} /> Buka Google Maps
+                  <a href={ev.maps} target="_blank" rel="noopener noreferrer" className={GOLD_BTN + " w-full justify-center text-[10px] shadow-md"}>
+                    <MapPin size={12} strokeWidth={2}/> Buka Google Maps
                   </a>
                 )}
               </div>
@@ -652,14 +653,14 @@ function JadwalSection({ ed }: { ed: EventData }) {
 function GaleriSection({ galeri }: { galeri: string[] }) {
   if (!galeri?.length) return null;
   return (
-    <section className="px-5 py-14" style={{ background: "rgba(0,0,0,0.3)" }}>
-      <SectionHeading eyebrow="Album Kenangan" title="Galeri Foto" />
+    <section className="px-5 py-14" style={{ background: "rgba(0,0,0,0.35)" }}>
+      <SectionHeading eyebrow="Album Kenangan" title="Galeri Foto"/>
       <div className="space-y-4 max-w-md mx-auto">
         {galeri.slice(0, 8).map((url, idx) => (
           <Reveal key={idx} delay={(idx % 3) * 0.08}>
             <motion.div 
-              className="relative w-full overflow-hidden rounded-2xl shadow-md"
-              style={{ aspectRatio: "16/9", border: `1.5px solid rgba(212,175,55,0.4)` }}
+              className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-[#D4AF37]/35"
+              style={{ aspectRatio: "16/9" }}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
@@ -673,7 +674,7 @@ function GaleriSection({ galeri }: { galeri: string[] }) {
 }
 
 /* ════════════════════════════════════════════════════
-   SECTION — RSVP + Realtime Feed (Order Callback .on Ditulis Terlebih Dahulu)
+   SECTION — RSVP + Realtime Feed
 ════════════════════════════════════════════════════ */
 function RSVPSection({ invitation }: { invitation: InvitationRow }) {
   const [name,        setName]        = useState("");
@@ -701,7 +702,6 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
     const channelName = `greetings-${invitation.id}-${Date.now()}`;
     const channel = supabase.channel(channelName);
 
-    /* Urutan .on() sebelum .subscribe() untuk mencegah Next.js runtime error */
     channel.on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "greetings", filter: `invitation_id=eq.${invitation.id}` },
@@ -761,13 +761,13 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
 
   return (
     <section className="px-5 py-14">
-      <SectionHeading eyebrow="Konfirmasi Kehadiran" title="Buku Tamu &amp; RSVP" />
+      <SectionHeading eyebrow="Konfirmasi Kehadiran" title="Buku Tamu &amp; RSVP"/>
 
       <Reveal delay={0.1}>
-        <div className="max-w-md mx-auto rounded-3xl overflow-hidden backdrop-blur-md mb-10 shadow-lg"
+        <div className="max-w-md mx-auto rounded-3xl overflow-hidden backdrop-blur-md mb-10 shadow-2xl"
           style={{
             background: P.bgCard,
-            border: `1.5px solid rgba(212,175,55,0.4)`,
+            border: `1px solid rgba(212,175,55,0.35)`,
           }}>
           <div className="h-1.5" style={{ background: `linear-gradient(to right, ${P.gold}, ${P.goldBright}, ${P.gold})` }} />
 
@@ -786,8 +786,8 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                   Nama Lengkap *
                 </label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nama Anda" required
-                  className="w-full px-4 py-3 rounded-xl text-sm font-sans focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50"
-                  style={{ background: "#0B0B0C", border: `1px solid rgba(212,175,55,0.3)`, color: P.textLight }} />
+                  className="w-full px-4 py-3 rounded-2xl text-sm font-sans focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50"
+                  style={{ background: "#070708", border: `1px solid rgba(212,175,55,0.3)`, color: P.textLight }} />
               </div>
 
               <div>
@@ -797,10 +797,10 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                 <div className="flex gap-2">
                   {attendanceOptions.map((opt) => (
                     <button key={opt.value} type="button" onClick={() => setAttendance(opt.value)}
-                      className="flex-1 py-2.5 rounded-full text-[11px] font-medium transition-all font-sans"
+                      className="flex-1 py-2.5 rounded-full text-[11px] font-medium transition-all font-sans shadow-sm"
                       style={{
                         background: attendance === opt.value ? P.goldBright : "transparent",
-                        color:      attendance === opt.value ? "#0B0B0C" : P.textGold,
+                        color:      attendance === opt.value ? "#070708" : P.textGold,
                         border:     `1px solid ${attendance === opt.value ? P.goldBright : "rgba(212,175,55,0.4)"}`,
                       }}>
                       {opt.label}
@@ -815,17 +815,13 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                     Jumlah Tamu Hadir
                   </label>
                   <div className="flex items-center gap-3">
-  <button type="button" onClick={() => setPartyCount((p) => Math.max(1, p - 1))}
-    className="w-9 h-9 rounded-full text-lg font-bold flex items-center justify-center border border-[#D4AF37]/40 text-[#F3E5AB]">
-    −
-  </button>
-  <span className="font-serif text-xl font-bold w-8 text-center" style={{ color: P.goldBright }}>{partyCount}</span>
-  <button type="button" onClick={() => setPartyCount((p) => Math.min(10, p + 1))}
-    className="w-9 h-9 rounded-full text-lg font-bold flex items-center justify-center border border-[#D4AF37]/40 text-[#F3E5AB]">
-    +
-  </button>
-  <span className="font-sans text-xs" style={{ color: P.textSub }}>orang</span>
-</div>
+                    <button type="button" onClick={() => setPartyCount((p) => Math.max(1, p - 1))}
+                      className="w-9 h-9 rounded-full text-lg font-bold flex items-center justify-center border border-[#D4AF37]/40 text-[#F3E5AB]">−</button>
+                    <span className="font-serif text-xl font-bold w-8 text-center" style={{ color: P.goldBright }}>{partyCount}</span>
+                    <button type="button" onClick={() => setPartyCount((p) => Math.min(10, p + 1))}
+                      className="w-9 h-9 rounded-full text-lg font-bold flex items-center justify-center border border-[#D4AF37]/40 text-[#F3E5AB]">+</button>
+                    <span className="font-sans text-xs" style={{ color: P.textSub }}>orang</span>
+                  </div>
                 </div>
               )}
 
@@ -835,13 +831,13 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
                 </label>
                 <textarea value={message} onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tuliskan doa terbaik untuk mempelai..." required rows={4}
-                  className="w-full px-4 py-3 rounded-xl text-sm font-sans focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 resize-none leading-relaxed"
-                  style={{ background: "#0B0B0C", border: `1px solid rgba(212,175,55,0.3)`, color: P.textLight }} />
+                  className="w-full px-4 py-3 rounded-2xl text-sm font-sans focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 resize-none leading-relaxed"
+                  style={{ background: "#070708", border: `1px solid rgba(212,175,55,0.3)`, color: P.textLight }} />
               </div>
 
               <button type="submit" disabled={submitting}
-                className={GOLD_BTN + " w-full justify-center"} style={{ opacity: submitting ? 0.7 : 1 }}>
-                {submitting ? "Mengirim..." : <><Send size={13} strokeWidth={2} /> Kirim RSVP &amp; WhatsApp</>}
+                className={GOLD_BTN + " w-full justify-center shadow-lg"} style={{ opacity: submitting ? 0.7 : 1 }}>
+                {submitting ? "Mengirim..." : <><Send size={13} strokeWidth={2}/> Kirim RSVP &amp; WhatsApp</>}
               </button>
             </form>
           )}
@@ -872,8 +868,8 @@ function RSVPSection({ invitation }: { invitation: InvitationRow }) {
               {greetings.map((g, index) => (
                 <motion.div 
                   key={g.id} 
-                  className="rounded-2xl px-5 py-4 backdrop-blur-sm"
-                  style={{ background: P.bgCard, border: `1px solid rgba(212,175,55,0.3)` }}
+                  className="rounded-2xl px-5 py-4 backdrop-blur-sm shadow-md"
+                  style={{ background: P.bgCard, border: `1px solid rgba(212,175,55,0.25)` }}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
@@ -922,8 +918,8 @@ function WeddingGiftSection({ ed, handleCopy }: { ed: EventData; handleCopy: (v:
   if (!hasRek1 && !hasRek2 && !hasGift) return null;
 
   const renderAtm = (bank: string, no: string, nama: string) => (
-    <div className="p-6 relative overflow-hidden rounded-2xl shadow-md" style={{
-      background: `linear-gradient(135deg, #1A1A1E 0%, #0B0B0C 100%)`,
+    <div className="p-6 relative overflow-hidden rounded-2xl shadow-xl" style={{
+      background: `linear-gradient(135deg, #1A1A22 0%, #070708 100%)`,
       border: `1px solid rgba(212,175,55,0.4)`,
     }}>
       <div className="flex justify-between items-start mb-6 z-10 relative">
@@ -934,7 +930,7 @@ function WeddingGiftSection({ ed, handleCopy }: { ed: EventData; handleCopy: (v:
       <div className="text-[10px] uppercase tracking-[0.2em] font-medium z-10 relative" style={{ color: P.textSub }}>{nama}</div>
       {no && (
         <button onClick={() => handleCopy(no)}
-          className="absolute bottom-4 right-4 text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1.5 z-10 border border-[#D4AF37]/40 text-[#F3E5AB] bg-[#0B0B0C]">
+          className="absolute bottom-4 right-4 text-[10px] px-3 py-1.5 rounded-xl flex items-center gap-1.5 z-10 border border-[#D4AF37]/40 text-[#F3E5AB] bg-[#070708]">
           Salin No. Rek
         </button>
       )}
@@ -942,18 +938,18 @@ function WeddingGiftSection({ ed, handleCopy }: { ed: EventData; handleCopy: (v:
   );
 
   return (
-    <section className="px-4 py-14" style={{ background: "rgba(0,0,0,0.3)" }}>
+    <section className="px-4 py-14" style={{ background: "rgba(0,0,0,0.35)" }}>
       <Reveal className="max-w-md mx-auto">
-        <div className="rounded-3xl p-8 flex flex-col items-center backdrop-blur-md shadow-lg"
+        <div className="rounded-3xl p-8 flex flex-col items-center backdrop-blur-md shadow-2xl"
           style={{
             background: P.bgCard,
-            border: `1.5px solid rgba(212,175,55,0.4)`,
+            border: `1px solid rgba(212,175,55,0.35)`,
           }}>
-          <SectionHeading eyebrow="Tanda Kasih" title="Wedding Gift" />
+          <SectionHeading eyebrow="Tanda Kasih" title="Wedding Gift"/>
           <p className="font-sans text-xs font-light leading-[2] text-center max-w-xs mx-auto mb-6 -mt-3" style={{ color: P.textGold }}>
             Doa restu Anda adalah karunia terindah. Namun jika ingin mengirimkan tanda kasih, silakan melalui:
           </p>
-          <button onClick={() => setOpen(!open)} className={GOLD_BTN}>
+          <button onClick={() => setOpen(!open)} className={GOLD_BTN + " shadow-lg"}>
             {open ? "Tutup Info Rekening" : "Klik untuk Lihat Gift"}
           </button>
           <AnimatePresence initial={false}>
@@ -965,7 +961,7 @@ function WeddingGiftSection({ ed, handleCopy }: { ed: EventData; handleCopy: (v:
                   {hasRek1 && renderAtm(ed.rek_1_bank ?? "", ed.rek_1_no ?? "", ed.rek_1_nama ?? "")}
                   {hasRek2 && renderAtm(ed.rek_2_bank ?? "", ed.rek_2_no ?? "", ed.rek_2_nama ?? "")}
                   {hasGift && (
-                    <div className="p-6 text-center rounded-2xl border border-[#D4AF37]/30 bg-[#0B0B0C]">
+                    <div className="p-6 text-center rounded-2xl border border-[#D4AF37]/30 bg-[#070708]">
                       <Heart size={22} className="mx-auto mb-2 text-[#D4AF37]" strokeWidth={1.5} />
                       <h4 className="font-serif font-bold text-base mb-2" style={{ color: P.goldBright }}>Kado Fisik</h4>
                       {ed?.gift_penerima && <p className="text-xs font-sans mb-1" style={{ color: P.textGold }}>Penerima: <strong style={{ color: P.textLight }}>{ed.gift_penerima}</strong></p>}
@@ -994,7 +990,7 @@ function PenutupSection({ pria, wanita, ed }: { pria: string; wanita: string; ed
         </div>
       )}
       <div className="absolute inset-0" style={{
-        background: "linear-gradient(to bottom, rgba(11,11,12,0.8) 0%, rgba(11,11,12,0.95) 60%, rgba(5,5,6,1) 100%)",
+        background: "linear-gradient(to bottom, rgba(7,7,8,0.85) 0%, rgba(7,7,8,0.96) 60%, rgba(3,3,4,1) 100%)",
       }} />
       <div className="relative z-10 py-20 max-w-sm mx-auto">
         <motion.div 
@@ -1005,8 +1001,8 @@ function PenutupSection({ pria, wanita, ed }: { pria: string; wanita: string; ed
         >
           <Heart size={22} strokeWidth={1.5} style={{ color: P.goldBright }} />
         </motion.div>
-        <p className="font-sans text-[10px] tracking-[0.4em] uppercase font-semibold" style={{ color: P.goldBright }}>Terima Kasih</p>
-        <GoldDivider />
+        <p className="font-sans text-[10px] tracking-[0.5em] uppercase font-semibold" style={{ color: P.goldBright }}>Terima Kasih</p>
+        <RoyalDivider />
         <h2 className="font-serif text-3xl font-bold mb-6 mt-2" style={{ color: P.textLight }}>{pria} &amp; {wanita}</h2>
         <p className="font-sans text-xs font-light leading-[2.2] mb-6" style={{ color: P.textGold }}>
           Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
@@ -1103,7 +1099,7 @@ export default function Premium3Template({
           }}
         >
           <div className="absolute inset-0 z-0 pointer-events-none"
-            style={{ background: "rgba(11, 11, 12, 0.82)" }} />
+            style={{ background: "rgba(7, 7, 8, 0.86)" }} />
           <div className="relative z-10">
             <OpeningGate invitation={invitation} guestName={display} onOpen={handleOpen} opened={opened} />
             {opened && ContentSections}
@@ -1123,7 +1119,7 @@ export default function Premium3Template({
           }}
         />
         <div className="fixed inset-0 z-0 pointer-events-none"
-          style={{ background: "rgba(11, 11, 12, 0.82)" }} />
+          style={{ background: "rgba(7, 7, 8, 0.86)" }} />
         <div className="relative z-10">
           <OpeningGate invitation={invitation} guestName={display} onOpen={handleOpen} opened={opened} />
           {opened && ContentSections}

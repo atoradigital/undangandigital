@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { waOrderDigital } from "@/data/contact";
 
 export default function Hero() {
@@ -19,19 +20,21 @@ export default function Hero() {
       <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#E8D5A3]/30 to-transparent"></div>
 
       <div className="container mx-auto relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
-          {/* Headline Section - Asymmetric Layout */}
+        {/* Mengubah perbandingan grid dari 7:5 menjadi 6:6 agar area mockup lebih luas */}
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Headline Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-7 text-center lg:text-left"
+            className="lg:col-span-6 text-center lg:text-left"
           >
             <div className="mb-8">
               <p className="text-[#C9A961] text-sm font-light tracking-[0.2em] uppercase mb-6">
                 Atora — Undangan Digital Premium
               </p>
-              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-[#3A3429] leading-[1.1] mb-8">
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-6xl xl:text-7xl text-[#3A3429] leading-[1.1] mb-8">
                 Rayakan Momen{" "}
                 <span className="italic text-[#C9A961]">Terindah</span>
                 <br />
@@ -48,7 +51,7 @@ export default function Hero() {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-10 py-4 bg-[#3A3429] text-[#F9F7F2] rounded-full font-light text-sm tracking-wider hover:bg-[#5C4A37] transition-all uppercase"
+                className="inline-flex items-center justify-center px-10 py-4 bg-[#3A3429] text-[#F9F7F2] rounded-full font-light text-sm tracking-wider hover:bg-[#5C4A37] transition-all uppercase shadow-md"
               >
                 Pesan Sekarang
               </a>
@@ -61,49 +64,55 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Visual Mockup - Overlapping Design */}
+          {/* Visual Mockup - Perbesar Ukuran Mockup */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 relative"
+            className="lg:col-span-6 relative pb-16 lg:pb-0 pl-0 lg:pl-4"
           >
-            {/* Laptop Mockup - Behind */}
-            <div className="relative transform rotate-[-2deg] mb-8">
-              <div className="bg-[#3A3429] rounded-lg p-2 shadow-2xl">
-                <div className="bg-[#F9F7F2] rounded overflow-hidden">
-                  <div className="bg-[#E8D5A3]/20 h-8 flex items-center px-4 gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#C9A961]/40"></div>
+            {/* Desktop / Laptop Mockup - Diperbesar dengan background dalam gelap */}
+            <div className="relative transform rotate-[-2deg] mb-6 sm:mb-8">
+              <div className="bg-[#3A3429] rounded-xl p-2.5 sm:p-3 shadow-2xl">
+                {/* Mengubah bg-[#F9F7F2] menjadi bg-[#181613] menghilangkan frame garis putih */}
+                <div className="bg-[#181613] rounded-lg overflow-hidden border border-[#5C4A37]/30">
+                  <div className="bg-[#2A241D] h-7 sm:h-8 flex items-center px-3 sm:px-4 gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#C9A961]/60"></div>
                     <div className="w-2.5 h-2.5 rounded-full bg-[#C9A961]/40"></div>
                     <div className="w-2.5 h-2.5 rounded-full bg-[#C9A961]/40"></div>
                   </div>
-                  <div className="aspect-video bg-gradient-to-br from-[#E8D5A3]/20 to-[#C9A961]/10 flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-28 h-28 mx-auto mb-4 bg-gradient-to-br from-[#C9A961] to-[#E8D5A3] rounded-full flex items-center justify-center">
-                        <span className="text-4xl">💍</span>
-                      </div>
-                      <p className="text-[#5C4A37] font-light text-sm">Preview Undangan</p>
-                    </div>
+                  <div className="aspect-[16/10] relative w-full overflow-hidden bg-[#181613]">
+                    <Image
+                      src="/preview/preview-desktop.png"
+                      alt="Preview Desktop Atora"
+                      fill
+                      className="object-cover object-top"
+                      priority
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Phone Mockup - Overlapping */}
-            <div className="absolute -bottom-12 -right-8 w-48 transform rotate-[8deg]">
-              <div className="bg-[#3A3429] rounded-3xl p-2 shadow-2xl">
-                <div className="bg-[#F9F7F2] rounded-2xl overflow-hidden">
-                  <div className="bg-gradient-to-br from-[#E8D5A3]/20 to-[#C9A961]/10 aspect-[9/16] flex items-center justify-center p-4">
-                    <div className="text-center">
-                      <div className="w-20 h-20 mx-auto mb-3 bg-gradient-to-br from-[#C9A961] to-[#E8D5A3] rounded-full flex items-center justify-center">
-                        <span className="text-2xl">💍</span>
-                      </div>
-                      <p className="text-xs text-[#5C4A37] font-light">Mobile View</p>
-                    </div>
+            {/* Phone Mockup - Lebih Tinggi/Panjang & Lebih Besar */}
+            <div className="absolute -bottom-6 right-2 sm:-bottom-10 sm:right-2 w-52 sm:w-60 lg:w-64 transform rotate-[6deg] z-20">
+              <div className="bg-[#3A3429] rounded-[2.5rem] p-2.5 sm:p-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                {/* Mengubah bg-[#F9F7F2] menjadi bg-[#181613] agar tidak ada garis tepi putih */}
+                <div className="bg-[#181613] rounded-[2rem] overflow-hidden border border-[#5C4A37]/30">
+                  {/* Rasio smartphone disesuaikan menjadi 9/19 agar konten lebih panjang & tidak terpotong */}
+                  <div className="relative aspect-[9/19] w-full overflow-hidden bg-[#181613]">
+                    <Image
+                      src="/preview/preview-mobile.png"
+                      alt="Preview Mobile Atora"
+                      fill
+                      className="object-cover object-top"
+                      priority
+                    />
                   </div>
                 </div>
               </div>
             </div>
+
           </motion.div>
         </div>
       </div>
