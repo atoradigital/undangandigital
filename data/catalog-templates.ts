@@ -3,15 +3,13 @@ import { waOrderWithTemplate, waSeeMoreTemplates } from "./contact";
 export type CatalogTemplate = {
   id: string;
   name: string;
-  /** Thumbnail kartu katalog */
   cardImage: string;
-  /** Link langsung untuk melihat demo interaktif (buka di tab baru) */
   demoUrl: string;
-  /** Kategori Paket */
   category: "basic" | "premium";
   description: string;
-  previewMode?: "image" | "live";
+  previewMode?: "image" | "live" | "iframe";
   previewImageSrc?: string;
+  iframeSrc?: string;
 };
 
 /** CTA "Lihat semua template" */
