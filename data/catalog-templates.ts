@@ -10,6 +10,8 @@ export type CatalogTemplate = {
   /** Kategori Paket */
   category: "basic" | "premium";
   description: string;
+  previewMode?: "image" | "live";
+  previewImageSrc?: string;
 };
 
 /** CTA "Lihat semua template" */
