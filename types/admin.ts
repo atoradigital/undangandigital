@@ -96,10 +96,32 @@ export interface Invitation {
   title: string;
   slug: string;
   template: string;
-  whatsapp_number?: string | null;   // nomor WA pengantin — untuk RSVP notifikasi
+  whatsapp_number?: string | null;       // nomor WA pengantin — untuk RSVP notifikasi
+  broadcast_template?: string | null;    // template pesan WA broadcast — placeholder: [nama tamu undangan], [nama pengantin], [link_undangan]
   event_data?: EventData | null;
   created_at: string;
 }
+
+/* ── Default Broadcast Template ── */
+export const DEFAULT_BROADCAST_TEMPLATE = `Assalamu'alaikum Wr. Wb
+Bismillahirrahmanirrahim.
+
+Yth. [nama tamu undangan],
+
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara pernikahan kami:
+
+[nama pengantin]
+
+Berikut link undangan kami untuk info lengkap dari acara bisa kunjungi:
+
+[link_undangan]
+
+Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+
+Mohon maaf perihal undangan hanya dibagikan melalui pesan ini. Terima kasih banyak atas perhatiannya.
+
+Wassalamu'alaikum Wr. Wb.
+Terima Kasih.`;
 
 export type GuestStatus = "belum" | "terkirim" | "dibuka";
 

@@ -8,10 +8,12 @@ import {
   Sparkles, Link2, Layers, ChevronDown, CheckCircle2,
   AlertCircle, Save, Loader2, Upload, X, ImagePlus,
   Heart, Clock, MapPin, Camera, User, Users, Gift,
+  MessageSquare, RotateCcw,
 } from "lucide-react";
 import { supabase } from "@/utils/supabase";
 import {
   ALL_TEMPLATES,
+  DEFAULT_BROADCAST_TEMPLATE,
   type Invitation,
   type EventData,
   type AnyTemplateValue,
@@ -59,6 +61,8 @@ interface FormState {
   gift_alamat: string;
   /* G — RSVP */
   whatsapp_number: string;   // format internasional tanpa +, misal 6281234567890
+  /* H — Broadcast Template */
+  broadcast_template: string;
 }
 
 interface ImageFiles {
@@ -327,6 +331,8 @@ export default function BasicPackageForm({ initialData }: Props) {
     gift_alamat: existing?.gift_alamat ?? "",
     /* RSVP */
     whatsapp_number: initialData?.whatsapp_number ?? "",
+    /* Broadcast Template */
+    broadcast_template: initialData?.broadcast_template ?? DEFAULT_BROADCAST_TEMPLATE,
   });
 
   /* ── Image state ── */
@@ -527,6 +533,7 @@ export default function BasicPackageForm({ initialData }: Props) {
         slug: form.slug.trim(),
         template: form.template,
         whatsapp_number: form.whatsapp_number.trim() || null,
+        broadcast_template: form.broadcast_template.trim() || null,
         event_data,
       };
 
@@ -1244,6 +1251,55 @@ export default function BasicPackageForm({ initialData }: Props) {
                   </span>
                 </div>
               )}
+            </div>
+          </SectionCard>
+        </motion.div>
+
+        {/* ════════════════════════════════════════════
+            SECTION G — Broadcast Template WhatsApp
+        ════════════════════════════════════════════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.5 }}
+        >
+          <SectionCard
+            icon={MessageSquare}
+            title="Template Broadcast WhatsApp"
+            subtitle="Template pesan yang akan digunakan customer untuk mengirim undangan via WhatsApp."
+          >
+            <div className="space-y-5">
+              <div>
+                <FieldLabel htmlFor="f-broadcast-template">Isi Template Pesan</FieldLabel>
+                <p className="font-sans text-[10px] text-[#5C4A37]/45 font-light mb-2">
+                  Gunakan placeholder: <code className="px-1.5 py-0.5 bg-[#F5F1E8] rounded text-[#C9A961] font-mono">[nama tamu undangan]</code>{" "}
+                  <code className="px-1.5 py-0.5 bg-[#F5F1E8] rounded text-[#C9A961] font-mono">[nama pengantin]</code>{" "}
+                  <code className="px-1.5 py-0.5 bg-[#F5F1E8] rounded text-[#C9A961] font-mono">[link_undangan]</code>
+                </p>
+                <textarea
+                  id="f-broadcast-template"
+                  value={form.broadcast_template}
+                  onChange={(e) => setForm((f) => ({ ...f, broadcast_template: e.target.value }))}
+                  placeholder={DEFAULT_BROADCAST_TEMPLATE}
+                  rows={14}
+                  disabled={isLoading}
+                  className="w-full px-4 py-3 bg-[#F9F7F2] border border-[#E8D5A3]/60 rounded-xl font-sans text-sm text-[#3A3429] placeholder-[#5C4A37]/30 focus:outline-none focus:border-[#C9A961] focus:ring-2 focus:ring-[#C9A961]/10 transition-all resize-y disabled:opacity-60 leading-relaxed"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setForm((f) => ({ ...f, broadcast_template: DEFAULT_BROADCAST_TEMPLATE }))}
+                  disabled={isLoading || form.broadcast_template === DEFAULT_BROADCAST_TEMPLATE}
+                  className="flex items-center gap-2 px-4 py-2 border border-[#E8D5A3]/60 hover:border-[#C9A961]/60 text-[#5C4A37] hover:text-[#C9A961] rounded-xl font-sans text-xs font-light transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <RotateCcw size={12} strokeWidth={1.5} />
+                  Reset ke Default
+                </button>
+                <span className="font-sans text-[10px] text-[#5C4A37]/40 font-light">
+                  {form.broadcast_template.length} karakter
+                </span>
+              </div>
             </div>
           </SectionCard>
         </motion.div>

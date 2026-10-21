@@ -7,7 +7,7 @@ import { waAskPackage, waCustomPackage } from "@/data/contact";
 const plans = [
   {
     name: "Basic",
-    price: "299K",
+    price: "69K",
     description: "Cocok untuk acara sederhana",
     features: [
       "1 pilihan template Basic",
@@ -23,7 +23,7 @@ const plans = [
   },
   {
     name: "Premium",
-    price: "499K",
+    price: "99K",
     description: "Paling populer untuk pernikahan",
     features: [
       "Semua Fitur Paket Basic",
@@ -41,7 +41,7 @@ const plans = [
   },
   {
     name: "VIP",
-    price: "799K",
+    price: "K",
     description: "Paket lengkap dengan kustomisasi penuh",
     features: [
       "Semua Fitur Paket Premium",
