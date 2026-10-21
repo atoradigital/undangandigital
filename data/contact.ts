@@ -3,9 +3,9 @@
  */
 export const ATORA = {
   brand: "Atora",
-  waDigits: "6285123342819",
-  phoneDisplay: "+62 851 2334 2819",
-  phoneTel: "+6285123342819",
+  waDigits: "6281818863392",
+  phoneDisplay: "++62 818 1886 3392",
+  phoneTel: "+62 818-1886-3392",
   email: "atoradigital@gmail.com",
   instagram: "https://www.instagram.com",
   facebook: "https://www.facebook.com",
